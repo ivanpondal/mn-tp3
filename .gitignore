@@ -3,6 +3,7 @@
 *.lo
 *.o
 *.obj
+*.pyc
 
 # Precompiled Headers
 *.gch
@@ -25,4 +26,33 @@
 # Executables
 *.exe
 *.out
+!src/exp/*
+!latex/datos/*
 *.app
+
+# Latex
+*.aux
+*.glo
+*.idx
+*.log
+*.toc
+*.ist
+*.acn
+*.acr
+*.alg
+*.bbl
+*.blg
+*.dvi
+*.glg
+*.gls
+*.ilg
+*.ind
+*.lof
+*.lot
+*.maf
+*.mtc
+*.deps
+*.mtc1
+*.synctex.gz
+*.fls
+*.fdb_latexmk
