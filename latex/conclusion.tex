@@ -1,0 +1,39 @@
+\setlength{\parindent}{15.0pt} % algún comando dejó en cero el parindent
+En este trabajo pudimos no solo modelar el problema planteado, sino 
+apreciar y aprovechar las propiedades del mismo para así resolverlo con los
+métodos estudiados observando también las características de ellos.
+
+Así mismo, cabe destacar que al realizar operaciones con aritmética finita,
+tanto para la solución de los sistemas como para el cálculo de los autovectores donde
+ la reutilización de datos arrastra error, no podemos
+garantizar que los resultados obtenidos sean exactos, pero dado que
+realizamos varias instancias de prueba con distintas
+metodologías, pudimos ver que los
+valores que obtuvimos eran coherentes a su contexto.
+
+Por un lado mediante la forma en la que construimos nuestro sistema probamos
+que Page Rank era un método factible para asignar puntajes a un listado de páginas web. Además produjimos
+una versión mejorada del algoritmo para matrices esparzas y así redujimos drásticamente la
+cantidad de operaciones necesarias para resolverla así como la complejidad espacial.
+
+Mediante nuestros experimentos, corroboramos que los resultados de Page Rank varían no solamente según los parámetros
+pasados al algoritmo ($c$ y precisión), sino por las características mismas del grafo. Más precisamente, la cantidad y distribución de
+los ejes es lo que más cambia el autovector respuesta. Esto nos da una idea de la gran utilidad que tiene Page Rank porque a diferencia de otros algoritmos
+como InDeg, donde el resultado es totalmente predecible, Page Rank considera las particularidades y la esparcidad del grafo de links con el método de la potencia. Por ejemplo, cuando una página importante linkea a otra página distinta, esta ultima se ve beneficiada en su propio puntaje de mayor manera que si la hubiese referenciado una página poco importante. De esta manera, el algoritmo logra predecir de una forma mucho mas rica, en cuales sitios web es más probable que el navegante esté a lo largo del tiempo.
+
+A su vez, mediante una implementación del algoritmo GeM, pudimos ver como el concepto de Page Rank va
+más allá de rankear páginas web. Es decir, el modelo en grafos que plantea el algoritmo es extensible
+a diversas aplicaciones y en este caso lo pudimos aplicar para ligas deportivas.
+
+Si bien tuvimos que cambiar los datos de entrada para producir un grafo con pesos que represente la situación de manera más correcta, con esta implementación logramos ver como Page Rank determina resultados lógicos aún en contexto variados.
+
+De una forma similar a lo que pasa con las páginas web, GeM tiene la particularidad de que cuando un equipo gana contra otro
+con un puntaje muy alto, este se beneficia más que al hacerlo contra un equipo de bajo puntaje. En este sentido, se rompe con el 
+concepto, talvez injusto, de que todos los partidos valen lo mismo y no importa contra quién se gane, lo único que importa son los puntos en la tabla de resultados.
+
+Por último, podemos mencionar algunos cosas extra que podrían realizarse a
+futuro, como las diferentes implementaciones de matrices esparzas, 
+junto a su correspondiente estudio de tiempo de ejecución. A su vez, podríamos implementar 
+nuevos algoritmos para rankear páginas web y compararlos con Page Rank como también realizar implementaciones alternativas para rankear los equipos. En el caso de Page Rank, podríamos implementar las optimizaciones avanzadas del trabajo de Kamvar et al.\cite{Kamvar2003} que garantizan un tiempo de convergencia mucho más rápido. 
+Otras mejoras para incorporar a GeM podrían ser considerar otros factores de los partidos como posesión de pelota o corners a favor e ir agregándolos como peso en las aristas entre los nodos de los equipos.
+

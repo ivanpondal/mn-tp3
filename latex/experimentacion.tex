@@ -1,0 +1,852 @@
+% Funcion para poner imagenes que tienen nombre con underscore:
+\newcommand{\imagenB}[2]{%
+\includegraphics[width=#1\textwidth]{#2}
+\endgroup}
+
+\def\imagen{\begingroup
+\catcode`\_=12
+\imagenB}
+% -----------------------------------------
+
+En esta sección, se detallan los diferentes experimentos que realizamos para medir la eficiencia y calidad de resultados de los algoritmos implementados.
+
+\subsection{Page Rank}
+
+\subsubsection{Instancias de prueba}
+
+%Para generar grafos sobre los cuales experimentar tuvimos que obtener varias muestras.
+Las instancias de prueba utilizadas para la experimentación pueden dividirse en tres grupos:
+\begin{itemize}
+    \item Instancias medianas-grandes, que fueron utilizadas para medir tiempo y la convergencia del algoritmo Page Rank.
+        Estas instancias se obtuvieron de la base de datos de SNAP\cite{SNAP} y se detallan a continuación:
+
+        \begin{table}[H]
+            \begin{center}
+                \begin{tabular}{| l | c | c | l |}
+                    \hline
+                    Nombre          &Nodos      &Ejes       & Descripción \\ \hline
+                    p2p-Gnutella08 	&6,301  	&20,777 	& Gnutella peer to peer network from August 8 2002 \\
+                    p2p-Gnutella04 	&10,876  	&39,994 	& Gnutella peer to peer network from August 4 2002 \\
+                    p2p-Gnutella30 	&36,682  	&88,328 	& Gnutella peer to peer network from August 30 2002 \\
+                    p2p-Gnutella31 	&62,586  	&147,892 	& Gnutella peer to peer network from August 31 2002 \\
+                    web-Stanford 	&281,903  	&2,312,497 	& Web graph of Stanford.edu \\
+                    \hline
+                \end{tabular}
+                \captionsetup{justification=centering}
+                \caption{Recursos utilizados de SNAP}
+                \label{recursos_snap}
+            \end{center}
+        \end{table}
+
+
+    \item Instancias chicas, que fueron utilizadas para analizar la calidad de los resultados de PageRank.
+        Estas instancias fueron generadas utilizando las herramientas provistas por la cátedra y otras extra generadas por nosotros.
+        Los detalles particulares se desarrollan en la sección \textbf{Calidad de los resultados}.
+
+    \item Instancias aleatorias, generadas mediante nuestros propios algoritmos. Estas son detalladas en la sección que analiza los \textbf{Tiempos de Ejecución}.
+\end{itemize}
+
+\subsubsection{Convergencia del algoritmo}
+
+Realizamos una serie de experimentos con el propósito de analizar la convergencia de la solución provista por el algoritmo a través de las iteraciones que el mismo realiza en su ciclo principal.\\
+Para hacer esto, modificamos el algoritmo (no su procedimiento) con el fin de ir guardando las soluciones temporales en cada paso.\\
+Con estos datos, medimos la Norma Manhattan (L1) entre las soluciones de cada par de iteraciones sucesivas, definida como:
+
+\begin{center}
+$L_1(x,y) = \sum\limits_{i=1}^n | x[i] - y[i] | $
+\end{center}
+
+Siendo $n$ la cantidad de nodos del grafo siendo estudiado, $x \in \mathbb{R}^{n}$ la solución del algoritmo en una iteración $k$ e $y \in \mathbb{R}^{n}$ la de la iteración $k+1$.\\
+Esta es una forma intuitiva y lógica de estudiar la convergencia, ya que al tomar la suma de los valores absolutos entre los componentes de cada vector, lo que realmente estamos haciendo es calcular cuanto varia la solución que estamos calculando a través de las iteraciones. Además, podemos asegurar que por el procedimiento de nuestro algoritmo esta diferencia va a ir disminuyendo, y cuando sea lo suficientemente chica el algoritmo va a terminar.
+
+Estudiamos la convergencia a través de dos instancias de tamaño mediano-grande obtenidos de SNAP, mas precisamente:
+\begin{itemize}
+    \item Instancia 1: 6301 nodos y 20777 ejes.
+    \item Instancia 2: 10876 nodos y 39994 ejes.
+\end{itemize}
+Por lo que podemos decir que son considerables y relativamente esparsas (por ejemplo, el primero podría tener cerca de 40 millones de ejes si fuera completo, teniendo en cuenta que es un grafo dirigido).\\
+A su vez, fuimos variando el componente $c$ del algoritmo Page Rank entre 0.3, 0.6 y 0.9, el cual controla la importancia del \textit{navegante aleatorio}, es decir, a menor $c$ aumenta la probabilidad de que el usuario vaya a una página aleatoria desde la actual.\\
+Veamos los resultados:
+
+\begin{center}
+    \begin{tikzpicture}
+    \begin{axis}[
+        title={Instancia 1},
+        xlabel={Iteraci\'on $k$},
+        ylabel={$L_1(x_k,x_{k+1})$},
+        ylabel absolute,
+        ylabel style={yshift=.3cm},
+        scaled x ticks=false,
+        scaled y ticks=false,
+        enlargelimits=0.05,
+        width=0.45\textwidth,
+        height=0.45\textwidth
+    ]
+    \addplot[color=black] table[x=instancia,y=l1]{datos/pr-1-1-1.out};
+    \addplot[color=red] table[x=instancia,y=l1]{datos/pr-1-1-2.out};
+    \addplot[color=green] table[x=instancia,y=l1]{datos/pr-1-1-3.out};
+    \legend{c = 0.3, c = 0.6, c = 0.9}
+    \end{axis}
+    \end{tikzpicture}
+    \begin{tikzpicture}
+    \begin{axis}[
+        title={Instancia 2},
+        xlabel={Iteraci\'on $k$},
+        ylabel={$L1(x_k,x_{k+1})$},
+        ylabel absolute,
+        ylabel style={yshift=.3cm},
+        %ylabel shift={3cm},
+        scaled x ticks=false,
+        scaled y ticks=false,
+        enlargelimits=0.05,
+        width=0.45\textwidth,
+        height=0.45\textwidth
+    ]
+    \addplot[color=black] table[x=instancia,y=l1]{datos/pr-1-2-1.out};
+    \addplot[color=red] table[x=instancia,y=l1]{datos/pr-1-2-2.out};
+    \addplot[color=green] table[x=instancia,y=l1]{datos/pr-1-2-3.out};
+    \legend{c = 0.3, c = 0.6, c = 0.9}
+    \end{axis}
+    \end{tikzpicture}
+\end{center}
+
+Siendo $L1(x_k,x_{k+1})$ (el eje y del gráfico) la distancia Manhattan entre los autovectores generados por el algoritmo entre las iteraciones $k$ e $k+1$.\\
+Como podemos ver el algoritmo converge rápidamente, tomando a lo sumo 9 iteraciones para terminar de procesar instancias de datos relativamente grandes. Los resultados son parecidos para ambas instancias.\\
+Adicionalmente, vemos que Page Rank converge de forma más rápida para valores de $c$ más chicos, es decir, casos en los cuales es más probable que el usuario vaya a una página cualquiera desde la actual. Cuando esto sucede, la matriz de transición tiene valores más parejos dentro de cada columna y podemos decir entonces que el algoritmo soluciona el problema más rápido porque el sistema es más estable.
+
+\subsubsection{Tiempo de ejecución}
+
+En esta sección, analizamos el tiempo de cómputo que emplea Page Rank.\\
+Para tomar los tiempos, utilizamos la librería chronos de C++ y pasamos las mediciones a nanosegundos. Todos las medidas fueron hechas bajo las mismas condiciones (procesos abiertos, computadora, alimentación y nivel de optimizaciones del compilador).\\
+Los experimentos pasan por tres variables: la cantidad de nodos y la cantidad de ejes del grafo siendo analizado, y la precisión utilizada en Page Rank (es decir, la diferencia que tomamos como suficiente entre dos iteraciones para dar un resultado en el método de la potencia).\\
+Además, comparamos la versión 'esparza' del algoritmo Page Rank (donde la matriz se guarda de forma diferente) con la versión clásica del mismo algoritmo. En este caso, la precisión del algoritmo esta fija y se va variando la cantidad de vértices.\\
+Para los demás experimentos, cabe destacar que utilizamos la versión esparza del algoritmo ya que por la cantidad de nodos y ejes, la versión normal es muy lenta para evaluar.\\
+Con este fin, generamos instancias de forma dinámica y aleatoria, es decir que dada una cantidad de nodos, asignamos los ejes aleatoriamente hasta llegar a cierta cantidad a través de la librería Random de C++.\\
+Más precisamente, los experimentos consisten en:
+\begin{itemize}
+    \item Una comparación entre el algoritmo para matrices esparsas y Page Rank normal.
+    \item Nodos del grafo: variar la cantidad de nodos entre 1000 y 100,000 con tantos ejes como 2 veces la cantidad de nodos en cuestión.
+    \item Ejes del grafo: dado un grafo con 3000 nodos, vamos variando la cantidad de ejes entre 1000 y 8,000,000 (el grafo completo tendría 8,997,000 ejes).
+    \item Precisión: teniendo un grafo de 3000 nodos y 1,000,000 ejes, variamos la precisión entre 0.1 y 0.000000000000001 (dividiéndola por 10 entre cada iteración).
+\end{itemize}
+El factor $c$ de Page Rank fue configurado en 0.85, ya que no afecta el tiempo de cómputo.\\
+
+Los resultados de los experimentos fueron los siguientes:
+
+\begin{center}
+    \begin{tikzpicture}
+    \begin{axis}[
+        title={esparza vs No esparza},
+        xlabel={cantidad de nodos},
+        ylabel={tiempo (nanosegundos)},
+        ylabel absolute,
+        ylabel style={yshift=.3cm},
+        scaled x ticks=false,
+        scaled y ticks=false,
+        enlargelimits=0.05,
+        width=0.85\textwidth,
+        height=0.45\textwidth
+    ]
+    \addplot[color=green] table[x=nodos,y=esp]{datos/pr-tiempos-esparza.out};
+    \addplot[color=red] table[x=nodos,y=noesp]{datos/pr-tiempos-esparza.out};
+    \legend{esparza, No esparza}
+    \end{axis}
+    \end{tikzpicture}
+\end{center}
+
+Como podemos ver, la versión esparza del algoritmo optimiza el tiempo de cómputo de forma significativa. Por este motivo, para los demás experimentos vamos a utilizar esta versión del algoritmo.\\
+
+En el siguiente experimento podemos ver como varían los tiempos según la cantidad de nodos del grafo:
+
+\begin{center}
+    \begin{tikzpicture}
+    \begin{axis}[
+        title={Variando la cantidad de nodos},
+        xlabel={cantidad de nodos},
+        ylabel={tiempo (nanosegundos)},
+        ylabel absolute,
+        ylabel style={yshift=.3cm},
+        scaled x ticks=false,
+        scaled y ticks=false,
+        enlargelimits=0.05,
+        width=0.85\textwidth,
+        height=0.45\textwidth
+    ]
+    \addplot[color=black] table[x=nodos,y=tiempo]{datos/pr-tiempos-nodos.out};
+    \end{axis}
+    \end{tikzpicture}
+\end{center}
+
+Como vemos, la cantidad de nodos del grafo afecta la rapidez del algoritmo Page Rank. A simple vista, se nota que la curva que sigue el eje 'y' del gráfico tiene pinta de superior a lineal, aun así nos limitamos a decir que es polinomial. Mientras que vamos aumentando la cantidad de nodos, los ejes empleados pasa a ser el doble de la cantidad de nodos en la iteración. Entonces la duda que queda en cuestión es saber si es la cantidad de ejes el factor clave que hace escalar los tiempos o la cantidad de nodos, lo que analizamos a continuación:
+
+\begin{center}
+    \begin{tikzpicture}
+    \begin{axis}[
+        title={Variando la cantidad de ejes},
+        xlabel={cantidad de ejes},
+        ylabel={tiempo (nanosegundos)},
+        ylabel absolute,
+        ylabel style={yshift=.3cm},
+        scaled x ticks=false,
+        scaled y ticks=false,
+        enlargelimits=0.05,
+        width=0.85\textwidth,
+        height=0.45\textwidth
+    ]
+    \addplot[color=black] table[x=ejes,y=tiempo]{datos/pr-tiempos-ejes.out};
+    \end{axis}
+    \end{tikzpicture}
+\end{center}
+
+En este caso, la curva es más pronunciada. Esto es un fuerte indicador de que la cantidad de ejes afecta la rapidez del algoritmo de manera más critica que la cantidad de nodos empleados. Aun así, la curva que sigue el gráfico parece ser polinomial.\\
+
+Esto resultados tienen sentido ya que por las operaciones del algoritmo, sabemos que la mayor parte de la complejidad reside en generar la matriz de transición, lo cual toma una complejidad cúbica derivada de multiplicar matrices (además de sumarlas y escalarlas, lo cuál es cuadrático). \\
+Adicionalmente, en los tests de convergencia, el algoritmo no toma muchas iteraciones en determinar el autovector que queremos como respuesta, por lo que restaría ver como afecta al algoritmo el tiempo que se toma en usar el método de la potencia.
+
+A continuación vemos como la precisión empleada afecta los tiempos del algoritmo:
+
+\begin{center}
+    \begin{tikzpicture}
+    \begin{axis}[
+        title={Variando la precisión},
+        xlabel={precisión},
+        ylabel={tiempo (nanosegundos)},
+        ylabel absolute,
+        ylabel style={yshift=.3cm},
+        scaled x ticks=false,
+        scaled y ticks=false,
+        xtick={1,...,15},
+        xticklabels={10e-1,,10e-3,,10e-5,,10e-7,,10e-9,,10e-11,,10e-13,,10e-15},
+        enlargelimits=0.05,
+        width=0.85\textwidth,
+        height=0.45\textwidth
+    ]
+    \addplot[color=black] table[x=indice,y=tiempo]{datos/pr-tiempos-precision.out};
+    \end{axis}
+    \end{tikzpicture}
+\end{center}
+
+En base a esto, concluimos que la precisión también es un factor considerable al analizar la eficiencia de nuestro algoritmo. Esto era predecible porque cuanta más precisión es requerida en el cálculo del autovector generado por Page Rank, más iteraciones deberá tomar el algoritmo para dar una respuesta.
+
+\subsubsection{Calidad de los resultados}
+
+Para evaluar la calidad de las soluciones provistas por Page Rank las comparamos contra el algoritmo InDeg, que ordena las páginas según la cantidad de links que van hacia ellas.\\
+Por el lado de Page Rank, no utilizamos la versión esparza del algoritmo, ya que el tamaño de la entrada no lo requiere.\\
+Las instancias que usamos para hacer estas comparaciones fueron:
+
+\begin{itemize}
+    \item Instancia 1: 13 nodos y 18 ejes.
+        \begin{center}
+            \begin{tikzpicture}
+                \GraphInit[vstyle=Normal]
+                \SetGraphUnit{2.5}
+                \begin{scope}
+                    \Vertices{circle}{1,2,3,4,5,6,7,8,9,10,11,12,13}
+                \end{scope}
+                \SetUpEdge[style={<-},color=red]
+                \Edge(2)(8)
+                \Edge(2)(9)
+                \Edge(2)(10)
+                \Edge(2)(3)
+                \Edge(3)(8)
+                \Edge(3)(9)
+                \Edge(3)(10)
+                \Edge(3)(2)
+                \Edge[style={<-,bend left}](4)(6)
+                \Edge[style={<-,bend right}](6)(4)
+                \Edge[style={<-,bend left}](4)(7)
+                \Edge[style={<-,bend right}](7)(4)
+                \Edge(7)(6)
+                \Edge[style={<-,bend left}](8)(10)
+                \Edge(8)(2)
+                \Edge(9)(2)
+                \Edge(10)(2)
+                \Edge[style={<-,bend right}](10)(8)
+            \end{tikzpicture}
+        \end{center}
+    \item Instancia 2: 13 nodos y 31 ejes.
+        \begin{center}
+            \begin{tikzpicture}
+                \GraphInit[vstyle=Normal]
+                \SetGraphUnit{2.5}
+                \begin{scope}
+                    \Vertices{circle}{1,2,3,4,5,6,7,8,9,10,11,12,13}
+                \end{scope}
+                \SetUpEdge[style={<-},color=red]
+                \Edge(1)(4)
+                \Edge(1)(5)
+                \Edge(1)(6)
+                \Edge(1)(7)
+                \Edge(1)(8)
+                \Edge(2)(1)
+                \Edge(2)(8)
+                \Edge(2)(9)
+                \Edge(2)(10)
+                \Edge(2)(3)
+                \Edge(3)(1)
+                \Edge(3)(8)
+                \Edge(3)(9)
+                \Edge(3)(10)
+                \Edge(3)(2)
+                \Edge(4)(1)
+                \Edge[style={<-,bend left}](4)(6)
+                \Edge[style={<-,bend right}](6)(4)
+                \Edge[style={<-,bend left}](4)(7)
+                \Edge[style={<-,bend right}](7)(4)
+                \Edge(6)(7)
+                \Edge[style={<-,bend left}](6)(8)
+                \Edge[style={<-,bend left}](6)(9)
+                \Edge(7)(6)
+                \Edge[style={<-,bend left}](8)(10)
+                \Edge(8)(2)
+                \Edge(9)(2)
+                \Edge(10)(2)
+                \Edge[style={<-,bend right}](10)(8)
+                \Edge[style={<-,bend left}](11)(1)
+                \Edge[style={<-,bend left}](12)(1)
+            \end{tikzpicture}
+        \end{center}
+    \item Instancia 3: 5 nodos y 20 ejes (grafo completo).
+        \begin{center}
+            \begin{tikzpicture}
+                \GraphInit[vstyle=Normal]
+                \SetGraphUnit{2.5}
+                \begin{scope}
+                    \Vertices{circle}{1,2,3,4,5}
+                \end{scope}
+                \SetUpEdge[style={<-},color=red]
+                \Edge(5)(1)
+                \Edge(5)(2)
+                \Edge(5)(3)
+                \Edge(5)(4)
+                \Edge(1)(5)
+                \Edge(1)(2)
+                \Edge(1)(3)
+                \Edge(1)(4)
+                \Edge(2)(5)
+                \Edge(2)(1)
+                \Edge(2)(3)
+                \Edge(2)(4)
+                \Edge(3)(5)
+                \Edge(3)(1)
+                \Edge(3)(2)
+                \Edge(3)(4)
+                \Edge(4)(5)
+                \Edge(4)(1)
+                \Edge(4)(2)
+                \Edge(4)(3)
+            \end{tikzpicture}
+        \end{center}
+\end{itemize}
+De forma de poder analizar los resultados fácilmente, nos limitamos a instancias chicas.\\
+
+Para la instancia 1, el valor $c$ del algoritmo Page Rank fue configurado en 0.3, 0.6 y luego en 0.9 con el fin de introducir la posibilidad de que el navegante salte a otra página de forma aleatoria y ver cuánto afecta al resultado final. Esto no es así para la instancia 3 ya que al ser un grafo donde la probabilidad de ir a las demás páginas es igual para todas, el concepto de navegante aleatorio es irrelevante porque es igual de probable que vaya a cualquier página desde el principio.
+
+Los resultados fueron:
+
+\begin{center}
+Instancia 1
+\end{center}
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+      \begin{center}
+        Page Rank(c = 0.3)\\
+            \pgfplotstabletypeset[
+                columns={rank,nodo,valor},
+                columns/rank/.style={column name=Ranking},
+                columns/nodo/.style={column name=Página},
+                columns/valor/.style={column name=Importancia}
+            ]{datos/pr-2-1-1.out}
+      \end{center}
+    \end{subfigure}%
+    ~
+    \begin{subfigure}[t]{0.5\textwidth}
+      \begin{center}
+        Page Rank(c = 0.6)\\
+            \pgfplotstabletypeset[
+                columns={rank,nodo,valor},
+                columns/rank/.style={column name=Ranking},
+                columns/nodo/.style={column name=Página},
+                columns/valor/.style={column name=Importancia}
+            ]{datos/pr-2-1-2.out}
+      \end{center}
+    \end{subfigure}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+      \begin{center}
+        Page Rank(c = 0.9)\\
+            \pgfplotstabletypeset[
+                columns={rank,nodo,valor},
+                columns/rank/.style={column name=Ranking},
+                columns/nodo/.style={column name=Página},
+                columns/valor/.style={column name=Importancia}
+            ]{datos/pr-2-1-3.out}
+      \end{center}
+    \end{subfigure}%
+    ~
+    \begin{subfigure}[t]{0.5\textwidth}
+      \begin{center}
+        InDeg\\
+            \pgfplotstabletypeset[
+                columns={rank,nodo,valor},
+                columns/rank/.style={column name=Ranking},
+                columns/nodo/.style={column name=Página},
+                columns/valor/.style={column name=In Degree}
+            ]{datos/pr-2-1-4.out}
+      \end{center}
+    \end{subfigure}
+\end{figure}
+
+Por un lado, Page Rank obtiene un ranking con valores lógicos en el sentido de que el nodo con mas ejes hacia él es el de mayor importancia y los nodos con cantidad de links parecidos reciben un ranking similar.\\
+Como podemos ver, los resultados de Page Rank no varían mucho, sus valores son afectados pero los rankings varían muy levemente. Esto es debido a que la cantidad de ejes no es de un tamaño tan grande como para que la variación de $c$ afecte el ranking.\\
+A su vez, InDeg da los resultados que esperábamos, ordenando según la cantidad de links entrantes.\\
+En comparación, los algoritmos dan resultados parecidos de a secciones pero sí tiene diferencias en los primeros puestos. Esto se debe a que Page Rank detecta que por las probabilidades del recorrido que un navegante puede hacer, no necesariamente las páginas con mas links entrantes van a ser las más visitadas a futuro.\\
+
+Aun así, veamos otro ejemplo donde la cantidad de ejes sea un poco mayor:
+
+\begin{center}
+Instancia 2
+\end{center}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+      \begin{center}
+        Page Rank(c = 0.3)\\
+            \pgfplotstabletypeset[
+                columns={rank,nodo,valor},
+                columns/rank/.style={column name=Ranking},
+                columns/nodo/.style={column name=Página},
+                columns/valor/.style={column name=Importancia}
+            ]{datos/pr-2-2-1.out}
+      \end{center}
+    \end{subfigure}%
+    ~
+    \begin{subfigure}[t]{0.5\textwidth}
+      \begin{center}
+        Page Rank(c = 0.6)\\
+            \pgfplotstabletypeset[
+                columns={rank,nodo,valor},
+                columns/rank/.style={column name=Ranking},
+                columns/nodo/.style={column name=Página},
+                columns/valor/.style={column name=Importancia}
+            ]{datos/pr-2-2-2.out}
+      \end{center}
+    \end{subfigure}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+      \begin{center}
+        Page Rank(c = 0.9)\\
+            \pgfplotstabletypeset[
+                columns={rank,nodo,valor},
+                columns/rank/.style={column name=Ranking},
+                columns/nodo/.style={column name=Página},
+                columns/valor/.style={column name=Importancia}
+            ]{datos/pr-2-2-3.out}
+      \end{center}
+    \end{subfigure}%
+    ~
+    \begin{subfigure}[t]{0.5\textwidth}
+      \begin{center}
+        InDeg\\
+            \pgfplotstabletypeset[
+                columns={rank,nodo,valor},
+                columns/rank/.style={column name=Ranking},
+                columns/nodo/.style={column name=Página},
+                columns/valor/.style={column name=In Degree}
+            ]{datos/pr-2-2-4.out}
+      \end{center}
+    \end{subfigure}
+\end{figure}
+
+En este caso ya podemos ver que el ranking varía más. Esto se debe a que ahora la cantidad de ejes es mayor con respecto a la cantidad de vértices. Por lo tanto, cuando vamos variando $c$, el algoritmo devuelve diferentes respuestas porque ahora la distribución de los links cobra más relevancia a comparación del factor "navegante aleatorio".\\
+A diferencia del caso anterior, los resultados ya no son tan parecidos a los del algoritmo InDeg. De hecho, en solo un caso coincide PageRank con InDeg en el primer puesto del ranking. Lo que sugiere que la distribución de los ejes y su cantidad afectan la impredecibilidad del resultado.\\
+Además, los ejes están distribuidos de tal manera que no haya grupos grandes aislados o grafos completos donde un grupo de vértices tenga una distribución de probabilidad muy pareja y nada de relación con otras componentes conexas.\\
+Para ilustrar este caso veamos el siguiente ejemplo de un grafo completo:
+
+\begin{center}
+Instancia 3
+\end{center}
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.5\textwidth}
+      \begin{center}
+        Page Rank\\
+            \pgfplotstabletypeset[
+                columns={rank,nodo,valor},
+                columns/rank/.style={column name=Ranking},
+                columns/nodo/.style={column name=Página},
+                columns/valor/.style={column name=Importancia}
+            ]{datos/pr-2-3-1.out}
+      \end{center}
+    \end{subfigure}%
+    ~
+    \begin{subfigure}[t]{0.5\textwidth}
+      \begin{center}
+        InDeg\\
+            \pgfplotstabletypeset[
+                columns={rank,nodo,valor},
+                columns/rank/.style={column name=Ranking},
+                columns/nodo/.style={column name=Página},
+                columns/valor/.style={column name=In Degree}
+            ]{datos/pr-2-3-2.out}
+      \end{center}
+    \end{subfigure}
+\end{figure}
+
+Los resultados indican lo lógico, como es un grafo donde la probabilidad de ir a cualquier lado es igual, tanto Page Rank como InDeg resuelven el problema asignándole igual importancia a cada página.\\
+Por lo tanto concluimos que tanto la cantidad de ejes como la distribución son los factores que más contribuyen a los resultados de Page Rank.
+
+\subsection{GeM}
+
+\subsubsection{Instancias de prueba}
+
+La instancia de prueba utilizada para la experimentación consistió en tomar los resultados de las primeras 26 fechas del Torneo de Primera División
+Argentino, con la salvedad los siguientes resultados para los partidos suspendidos: Fecha 19 - Defensa y Justicia 0:1 River Plate  y Fecha 22 - Godoy Cruz 0:1 Racing Club
+
+\subsubsection{Variando el parámetro $c$}\label{exp_gem_2}
+Este experimento consiste en variar el parámetro $c$ y analizar como impacta esta
+variación en los resultados obtenidos al generar el ranking con GeM.
+
+Recordemos que $c$ es el coeficiente de amortiguación, que regula que tanto afecta
+el \textit{navegante aleatorio} al resultado final.
+
+Como es intuitivo de pensar, nuestra hipótesis en este experimento es que al tender
+$c$ a cero aumenta la influencia del \textit{navegante aleatorio} en el puntaje de
+cada equipo y, por lo tanto, más se parecen los puntajes de todas la equipos.
+Es decir, menos dejan de importar los resultados de cada partido en el grafo original.
+
+Por otro lado, cuando $c$ tiende a uno se debilita la influencia del \textit{navegante
+aleatorio}, causando que el puntaje dependa solo de la matriz $H + au^{t}$, descrita
+en la sección \ref{sec:gem_model}. Esta matriz, tiene únicamente en cuenta los
+resultados de los equipos, con la consideración de que los equipos invictos tienen
+una probabilidad uniforme de perder contra cualquier otro participante.
+
+Se muestran a continuación dichos resultados para diferentes valores de $c$:
+
+\begin{table}[H]
+    \begin{center}
+        \begin{tabular}{| c | l | c |}
+            \hline
+            Posición & Equipo & Puntaje \\ \hline
+            1 & Vélez Sarsfield & 0.033333 \\
+            2 & Unión & 0.033333 \\
+            3 & Gimnasia y Esgrima (LP) & 0.033333 \\
+            4 & Estudiantes (LP) & 0.033333 \\
+            5 & Defensa y Justicia & 0.033333 \\
+            6 & Crucero del Norte & 0.033333 \\
+            7 & Colón & 0.033333 \\
+            \vdots & \quad\vdots & \vdots \\
+            24 & Lanús & 0.033333 \\
+            25 & San Lorenzo & 0.033333 \\
+            26 & Rosario Central & 0.033333 \\
+            27 & River Plate & 0.033333 \\
+            28 & Racing Club & 0.033333 \\
+            29 & Quilmes & 0.033333 \\
+            30 & Olimpo & 0.033333 \\
+            \hline
+        \end{tabular}
+        \begin{tabular}{| c | l | c |}
+            \hline
+            Posición & Equipo & Puntaje \\ \hline
+            1 & Boca Juniors & 0.051301 \\
+            2 & San Lorenzo & 0.044563 \\
+            3 & River Plate & 0.044200 \\
+            4 & Racing Club & 0.040067 \\
+            5 & Aldosivi & 0.039451 \\
+            6 & Rosario Central & 0.039114 \\
+            7 & Quilmes & 0.036699 \\
+            \vdots & \quad\vdots & \vdots \\
+            24 & Godoy Cruz & 0.028356 \\
+            25 & Argentinos Juniors & 0.028208 \\
+            26 & Temperley & 0.027904 \\
+            27 & Crucero del Norte & 0.027353 \\
+            28 & Nueva Chicago & 0.026346 \\
+            29 & Atlético de Rafaela & 0.025776 \\
+            30 & Colón & 0.025577 \\
+            \hline
+        \end{tabular}
+        \captionsetup{justification=centering}
+        \caption{A izquierda: puntajes obtenidos con $c=0$, a derecha: puntajes obtenidos con $c=0.3$}
+        \label{exp_resultados_variar_c_1}
+    \end{center}
+\end{table}
+
+\begin{table}[H]
+    \begin{center}
+        \begin{tabular}{| c | l | c |}
+            \hline
+            Posición & Equipo & Puntaje \\ \hline
+            1 & Boca Juniors & 0.086019 \\
+            2 & Aldosivi & 0.065353 \\
+            3 & River Plate & 0.063500 \\
+            4 & San Lorenzo & 0.062035 \\
+            5 & Rosario Central & 0.048473 \\
+            6 & Racing Club & 0.047878 \\
+            7 & San Martín (SJ) & 0.043956 \\
+            \vdots & \quad\vdots & \vdots \\
+            24 & Godoy Cruz & 0.017516 \\
+            25 & Temperley & 0.016045 \\
+            26 & Crucero del Norte & 0.016039 \\
+            27 & Argentinos Juniors & 0.015398 \\
+            28 & Nueva Chicago & 0.014232 \\
+            29 & Atlético de Rafaela & 0.011388 \\
+            30 & Colón & 0.010276 \\
+            \hline
+        \end{tabular}
+        \begin{tabular}{| c | l | c |}
+            \hline
+            Posición & Equipo & Puntaje \\ \hline
+            1 & Boca Juniors & 0.095290 \\
+            2 & Aldosivi & 0.075151 \\
+            3 & River Plate & 0.068142 \\
+            4 & San Lorenzo & 0.065265 \\
+            5 & Rosario Central & 0.050875 \\
+            6 & Racing Club & 0.048824 \\
+            7 & San Martín (SJ) & 0.047118 \\
+            \vdots & \quad\vdots & \vdots \\
+            24 & Godoy Cruz & 0.014148 \\
+            25 & Crucero del Norte & 0.013132 \\
+            26 & Temperley & 0.012487 \\
+            27 & Argentinos Juniors & 0.011286 \\
+            28 & Nueva Chicago & 0.011239 \\
+            29 & Atlético de Rafaela & 0.007559 \\
+            30 & Colón & 0.006003 \\
+            \hline
+        \end{tabular}
+        \captionsetup{justification=centering}
+        \caption{A izquierda: puntajes obtenidos con $c=0.85$, a derecha: puntajes obtenidos con $c=1$}
+        \label{exp_resultados_variar_c_2}
+    \end{center}
+\end{table}
+
+Analizando los resultados tenemos que:
+
+\begin{itemize}
+    \item Para $c=0$, la tabla de puntajes se condice con la hipótesis planteada.
+        Los puntajes de los equipos no solo son parecidos, sino que son iguales.
+        Y dicho puntaje es $0.0\hat{3} = 1/30 = 1/n$, dónde $n$ es la cantidad de
+        equipos totales.
+    \item A medida que el $c$ aumenta (desde $0.3$ a $1$) las posiciones van convergiendo.
+        Ya con $c=0.3$, 6 de los 7 primeros equipos aparecen en los primeros 7 puestos con $c=1$,
+        y los últimos 7 equipos con $c=0.3$ aparecen en los últimos 7 puestos con $c=1$.
+    \item A su vez, la diferencia entre los resultados con $c=85$ y $c=1$ es muy chica:
+        de los 14 equipos mostrados en el Cuadro \ref{exp_resultados_variar_c_2} solo dos
+        de ellos cambian de posición (Crucero del Norte y Temperley).
+\end{itemize}
+
+Y podemos concluir:
+\begin{itemize}
+    \item Se puede apreciar que el parámetro $c$ tiene un impacto muy importante en
+        el algoritmo, por lo que su correcta elección es fundamental para que el
+        ranking resultante tenga sentido.
+    \item Al utilizar un $c$ cercano a cero el ranking se vuelve aleatorio.
+    \item Y al utilizar un $c$ cercano a uno eliminamos la probabilidad de que
+        un equipo cualquiera pierda contra cualquier otro, sin importar su posición
+        actual en el ranking.
+    \item Tanto Kamvar et al.\cite{Kamvar2003} como Bryan y Leise\cite{Bryan2006}
+        sugieren utilizar un $c=0.85$, ya que este valor fue el utilizado originalmente
+        por Google.
+\end{itemize}
+
+\subsubsection{Evolución del ranking}
+
+Una de las características que nos interesa estudiar con estos modelos de
+ranking es ver cómo evolucionan a lo largo del tiempo ya que es importante
+analizar los casos donde se producen cambios abruptos, para que no exista
+ninguna anomalía en el resultado final. Es por esto que en el siguiente
+experimento lo que hicimos es tomar los dos modelos descritos en la sección \ref{rankings_deportivos}
+ y estudiar en paralelo su evolución a lo largo del tiempo.
+
+Para esto tomamos los equipos que terminaron en los primeros 8 lugares según el modelo
+GeM utilizando un $c = 0.85$ (Cuadro \ref{fig:primeros8}).
+
+La idea es no sólo ver cómo fueron modificándose las posiciones de los
+participantes si no además comparar entre GeM y el sistema establecido por AFA.
+Nuestra intuición es que probablemente veamos resultados que a primera vista
+resulten inesperados en el ranking provisto por GeM, ya que el hecho de
+brindarle pesos a cada equipo produce que no necesariamente el participante con
+más partidos ganados esté arriba en la tabla.
+
+A continuación pasamos a mostrar los gráficos reflejando el comportamiento de
+ambos modelos. Cabe destacar que el sistema de puntaje de la AFA no trabaja
+asignando a cada equipo un peso dónde la suma total da 1. Para subsanar esto,
+y poder comparar los dos métodos, vamos a definir el puntaje de un equipo en una
+fecha particular como el porcentaje de sus puntos sobre el total de puntos en dicha
+fecha.
+
+\textbf{Ejemplo:} Si Boca Juniors acumuló un total de 58 puntos pero el total de
+puntos para esa fecha es 1044, entonces el puntaje ``normalizado'' será de
+0.0556.
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				title={Evolución GeM $(c = 0.85)$},
+			xlabel=Fecha,
+			ylabel=Puntaje,
+			xmin=1,
+			xmax=26,
+			ymin=0,
+			ymax=0.13,
+			width=0.8\textwidth,
+			height=0.5\textwidth,
+			xtick={1,...,26},
+			yticklabel style={/pgf/number format/fixed},
+			legend style={at={(1.015,1)},anchor=north west},
+			no markers,
+			thick,
+			cycle list name=exotic
+		]
+		\addplot table[x index=0,y index=1]{../src/exp/gem-evolution-ranking.out};
+		\addplot table[x index=0,y index=7]{../src/exp/gem-evolution-ranking.out};
+		%\addplot table[x index=0,y index=17]{../src/exp/gem-evolution-ranking.out};
+		\addplot table[x index=0,y index=20]{../src/exp/gem-evolution-ranking.out};
+		\addplot table[x index=0,y index=21]{../src/exp/gem-evolution-ranking.out};
+		\addplot table[x index=0,y index=22]{../src/exp/gem-evolution-ranking.out};
+		\addplot table[x index=0,y index=23]{../src/exp/gem-evolution-ranking.out};
+		\addplot table[x index=0,y index=24]{../src/exp/gem-evolution-ranking.out};
+		\addplot table[x index=0,y index=25]{../src/exp/gem-evolution-ranking.out};
+		%\addplot table[x index=0,y index=30]{../src/exp/gem-evolution-ranking.out};
+		\legend{Aldosivi, Boca Juniors, Quilmes,
+		Racing Club, River Plate, Rosario Central, San Lorenzo, San Martín (SJ)}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Evolución de los equipos que terminaron en los primeros 8 lugares
+	según GeM.}
+	\label{fig:gem_evo}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			title={Evolución ranking AFA},
+			xlabel=Fecha,
+			ylabel=Puntaje,
+			xmin=1,
+			xmax=26,
+			ymin=0,
+			ymax=0.08,
+			width=0.8\textwidth,
+			height=0.5\textwidth,
+			xtick={1,...,26},
+			yticklabel style={/pgf/number format/fixed},
+			scaled y ticks=false,
+			legend style={at={(1.015,1)},anchor=north west},
+			no markers,
+			thick,
+			cycle list name=exotic
+		]
+		\addplot table[x index=0,y index=1]{../src/exp/afa-evolution-ranking.out};
+		\addplot table[x index=0,y index=7]{../src/exp/afa-evolution-ranking.out};
+		%\addplot table[x index=0,y index=17]{../src/exp/afa-evolution-ranking.out};
+		\addplot table[x index=0,y index=20]{../src/exp/afa-evolution-ranking.out};
+		\addplot table[x index=0,y index=21]{../src/exp/afa-evolution-ranking.out};
+		\addplot table[x index=0,y index=22]{../src/exp/afa-evolution-ranking.out};
+		\addplot table[x index=0,y index=23]{../src/exp/afa-evolution-ranking.out};
+		\addplot table[x index=0,y index=24]{../src/exp/afa-evolution-ranking.out};
+		\addplot table[x index=0,y index=25]{../src/exp/afa-evolution-ranking.out};
+		%\addplot table[x index=0,y index=30]{../src/exp/afa-evolution-ranking.out};
+		\legend{Aldosivi, Boca Juniors, Quilmes,
+		Racing Club, River Plate, Rosario Central, San Lorenzo, San Martín (SJ)}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Evolución de los mismos 8 equipos en el modelo que utiliza la AFA.}
+	\label{fig:afa_evo}
+\end{figure}
+
+Tenemos varios puntos para observar en los gráficos generados. Para empezar se
+puede ver cómo en el ranking que generó GeM hay mucha más variación que en el
+provisto por AFA, donde los cambios son mucho más graduales. Esto se debe a que
+el sistema de la AFA tiene un tope para el puntaje que cada participante puede
+ganar por fecha que serían los 3 puntos de ganar su partido correspondiente. Sin
+embargo, con GeM basta que un equipo derrote a otro de mayor peso para
+catapultarlo en la tabla de posiciones.
+
+Otro detalle que podemos notar, es en el resultado final cómo quedó el orden
+para la AFA con respecto a GeM (Cuadro \ref{fig:primeros8}). Acá tenemos que por
+un lado 5 de los 8 primeros equipos según GeM figuran dentro de los primeros 8
+para el puntaje de AFA. Esto en cierta forma nos indica que el resultado de GeM
+no es disparatado, incluso el orden de estos 5 equipos se mantiene bastante
+parecido. Sin embargo, notamos que existen algunas irregularidades, donde la que
+nos va interesar es la de Aldosivi.
+
+\begin{table}[H]
+	\centering
+    \begin{center}
+		\begin{tabular}{| c | l | c |}
+			\hline
+			Posición & Equipo & Puntaje \\ \hline
+			1 & Boca Juniors & 0.086019 \\
+			2 & Aldosivi & 0.065353 \\
+			3 & River Plate & 0.063500 \\
+			4 & San Lorenzo & 0.062035 \\
+			5 & Rosario Central & 0.048473 \\
+			6 & Racing Club & 0.047878 \\
+			7 & San Martín (SJ) & 0.043956 \\
+			8 & Quilmes & 0.042382 \\
+			\hline
+		\end{tabular}
+		\begin{tabular}{| c | l | c |}
+			\hline
+			Posición & Equipo & Puntaje \\ \hline
+			1 & Boca Juniors & 0.055556 \\
+			2 & San Lorenzo & 0.051723 \\
+			3 & Rosario Central & 0.049808 \\
+			4 & Racing Club & 0.046935 \\
+			5 & River Plate & 0.045977 \\
+			11 & Quilmes & 0.037356 \\
+			16 & San Martín (SJ) & 0.030651 \\
+			18 & Aldosivi & 0.028736 \\
+			\hline
+		\end{tabular}
+    \end{center}
+	\caption{A izquierda, primeros 8 lugares según GeM con $c = 0.85$. A derecha
+	la posición de los mismos equipos según el ranking de AFA.}
+	\label{fig:primeros8}
+\end{table}
+
+Aldosivi figura como segundo lugar en la primer tabla, mientras que para el
+ranking estándar está 18º. Si observamos en la Figura \ref{fig:gem_evo},
+Aldosivi pega un salto en la fecha 13, llegando incluso a estar por encima de
+Boca Juniors, pero luego se va estabilizando a lo largo de las fechas hasta
+quedar en su respectiva posición. Esta fecha da la casualidad de que Aldosivi
+jugó contra Boca Juniors, ganándole 3-0. Si observamos, en la fecha 12, Boca se
+encontraba primero, llevándole una diferencia apreciable en puntaje al
+segundo lugar, River Plate, por lo tanto como Aldosivi venció al puntero, sus
+goles tenían el mayor peso posible para una victoria, explicando su repentina
+escalada en la tabla.
+
+Por último, podemos analizar también el salto de Boca de la fecha 10 a la 11.
+Como era de esperarse, en la fecha 11, Boca jugó contra River, ganando 2-0.
+Nuevamente se ve como en la fecha 10 River se encontraba por encima del resto,
+por lo cual era el equipo que más puntos generaba al ganarle.
+
+~
+
+Mediante este experimento, llegamos a observar cómo se comportaban ambos modelos
+a lo largo del tiempo. Por un lado, en el método GeM tenemos los cambios
+abruptos en la tabla de posiciones que son consecuencia de su característica
+principal, el puntaje por pesos. Por otra parte, con el estándar de la AFA el
+avance de los equipos está limitado y por ende resulta mucho más controlado.
+Estas son características claves de cada sistema ya que a la hora de decidir qué
+modelo utilizar es necesario tener en cuenta los efectos secundarios de los
+métodos aplicados.
+
+Es aquí donde el concepto de ranking ``justo'' depende de lo que consideren más
+importante los organizadores. Si se cree que todo equipo posee exactamente el
+mismo nivel, entonces el ranking estándar ofrecerá un resultado simple,
+controlado donde con esa ideología ganará el mejor. Sin embargo, si uno está
+dispuesto a sacrificar el entorno controlado a cuestas de un sistema donde se
+considere que no todo participante tenga las mismas posibilidades de ganar, GeM brindará un
+ranking considerando las diferencias entre ellos.

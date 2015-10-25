@@ -1,0 +1,48 @@
+ El objetivo principal de este Trabajo Práctico es estudiar, implementar y analizar
+ algoritmos de Rankeo en dos escenarios distintos: tanto para páginas Web como para
+ competencias deportivas.
+
+Comenzaremos haciendo una breve introducción al algoritmo \textit{PageRank}, el cual
+es muy conocido por ser utilizado por el buscador Google,
+ para luego pasar a describir el Modelo que lo sostiene,
+donde explicaremos como resuelve este algoritmo el problema de rankear
+páginas web.
+
+Luego, veremos una posible optimización de \textit{PageRank} al modelar
+el problema de una manera equivalente utilizando matrices esparsas. Para esto,
+presentaremos y analizaremos 3 estructuras de datos distintas que nos permitirán mejorar la
+complejidad espacial y temporal de dicho algoritmo. Además, demostraremos que el Algoritmo 1 propuesto en Kamvar et al.\cite{Kamvar2003}
+para trabajar con matrices esparsas es correcto.
+
+A continuación, presentaremos el Modelo del algoritmo \textit{GeM} (Generalized Markov chains Method) basado en
+\textit{PageRank}. \textit{GeM}, a diferencia de su padre, no se orienta a páginas web, sino a competencias
+deportivas, por lo que mostraremos los aspectos en los cuales difieren.
+En particular, mostraremos el problema de considerar deportes con empates al utilizar \textit{GeM} y dos formas
+alternativas de modelar dicho escenario.
+
+Una vez finalizada la parte del Modelo, pasaremos a describir la Implementación de los
+diferentes algoritmos presentados. Dichas implementaciones fueron realizadas algunas en
+\texttt{C++} y otras en \texttt{MATLAB/Octave}.
+
+Ya llegando al final, pasaremos a presentar la Experimentación realizada, a la vez
+que iremos analizando y discutiendo los resultados obtenidos.
+
+Los experimentos realizados para \textit{PageRank} fueron:
+\begin{itemize}
+    \item Comparación Page Rank normal vs Optimización matriz esparsa.
+    \item Convergencia del algoritmo.
+    \item Tiempos de ejecución.
+    \item Calidad de los resultados.
+\end{itemize}
+
+Y para \textit{GeM}:
+\begin{itemize}
+    \item Variación del parámetro $c$.
+    \item Evolución del ranking por cada iteración.
+\end{itemize}
+
+Para finalizar, cerraremos el presente informe con una conclusión, en la cual
+discutiremos acerca de los algoritmos vistos, así como de la experimentación realizada.
+También, contaremos las dificultades encontradas al realizar el Trabajo Práctico,
+las posibles continuaciones que se podrían realizar, y si los objetivos planteados
+fueron alcanzados.
