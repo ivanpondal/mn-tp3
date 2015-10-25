@@ -12,6 +12,7 @@
 using namespace std;
 //using namespace utils;
 
+// ****************************** CHRONO ***************************************
 static chrono::time_point<chrono::high_resolution_clock> start_time;
 
 void start_timer() {
@@ -23,20 +24,31 @@ double stop_timer() {
     return double(chrono::duration_cast<chrono::nanoseconds>(end_time - start_time).count());
 }
 
+// ****************************** AUXILIARES ***********************************
 void video_a_texto(const char* videofile, const char* textfile, int salto = 1) {
     char command[1024];
-    sprintf(command, "octave --path tools/ --eval \"source('videoToTextfile.m'); videoToTextfile(%s, %s, %d);\" >> /dev/null",
+    sprintf(command, "octave --path tools/ --eval \"source('tools/videoToTextfile.m'); videoToTextfile('%s', '%s', %d);\" >> /dev/null",
         videofile, textfile, salto);
     if(system(command)) { cout << "videoToTextfile failed" << endl; };
 }
 
 void texto_a_video(const char* videofile, const char* textfile) {
     char command[1024];
-    sprintf(command, "octave --path tools/ --eval \"source('textfileToVideo.m'); textfileToVideo(%s, %s);\" >> /dev/null",
+    sprintf(command, "octave --path tools/ --eval \"source('tools/textfileToVideo.m'); textfileToVideo('%s', '%s');\" >> /dev/null",
         videofile, textfile);
     if(system(command)) { cout << "textfileToVideo failed" << endl; };
 }
 
+// ************************* TESTS DEL GRUPO ***********************************
+void test_video_a_texto() {
+    video_a_texto("data/baby.avi","data/baby.txt");
+}
+
+void test_texto_a_video() {
+    texto_a_video("data/baby.txt","data/baby_re.avi");
+}
+
+// ****************** FUNCION PARA FORMATO DE LA CATEDRA ***********************
 void resolver(const char* inputfile, const char* outputfile, int metodo, int cuadros) {
     cout << "resolver" << endl;
 }
@@ -56,7 +68,8 @@ int main(int argc, char *argv[])
 		resolver(inputfile, outputfile, metodo, cuadros);
 	} else if(argc == 1){
         // tests grupo
-        cout << "tests grupo" << endl;
+        test_video_a_texto();
+        test_texto_a_video();
 	} else {
         cout << "Usage: ./tp <archivo_entrada> <archivo_salida> <metodo> <cantidad_cuadros_a_agregar>" << endl;
         return 1;
