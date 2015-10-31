@@ -3,6 +3,7 @@
 
 #include "mini_test.h"
 #include "spline.h"
+#include "video.h"
 //#include "utils.h"
 
 #include <string>
@@ -110,6 +111,8 @@ void test_spline_cuadratico(){
 // ****************** FUNCION PARA FORMATO DE LA CATEDRA ***********************
 void resolver(const char* inputfile, const char* outputfile, int metodo, int cuadros) {
     cout << "resolver" << endl;
+	Video video(inputfile);
+	video.guardar(outputfile);
 }
 
 int main(int argc, char *argv[])
