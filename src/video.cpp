@@ -54,3 +54,30 @@ void Video::guardar(const char* salida){
 	}
 	archivo_salida.close();
 }
+
+void Video::aplicarCamaraLenta(MetodoInterpolacion metodo, int cuadrosNuevos){
+	switch(metodo){
+		case VECINOS:
+			break;
+		case LINEAL:
+			break;
+		case SPLINES:
+			interpolarSplines(cuadrosNuevos);
+			break;
+	}
+}
+
+void Video::interpolarSplines(int cuadrosNuevos){
+	vector<vector<int> > frame_vacio (this->alto, vector<int>(this->ancho, 0));
+
+	vector<vector<vector<int> > >::iterator it;
+	it = this->frames.begin();
+	for(int i = 0; i < this->numero_frames - 1; i++){
+		for(int n = 0; n < cuadrosNuevos; n++){
+			it = this->frames.insert(it + 1, frame_vacio);
+		}
+		it++;
+	}
+
+	this->numero_frames = this->frames.size();
+}

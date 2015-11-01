@@ -112,6 +112,7 @@ void test_spline_cuadratico(){
 void resolver(const char* inputfile, const char* outputfile, int metodo, int cuadros) {
     cout << "resolver" << endl;
 	Video video(inputfile);
+	video.aplicarCamaraLenta((MetodoInterpolacion) metodo, cuadros);
 	video.guardar(outputfile);
 }
 
