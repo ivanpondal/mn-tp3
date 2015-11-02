@@ -1,10 +1,19 @@
 import numpy as np
 import cv2
+import sys
+
 #########################
 # Parametros de entrada.#
 #########################
 textFilename = 'funnybaby.txt'
 videoFilename = 'fb.avi'
+
+if len(sys.argv) == 3:
+	textFilename = sys.argv[1]
+	videoFilename = sys.argv[2]
+else:
+	print "Usage: python textfileToVideo.py <input_text_file> <output_video_file>"
+	sys.exit(1)
 
 file = open(textFilename,"r")
 
@@ -36,3 +45,4 @@ for k in range(0,int(nFrames)):
     video.write(frame)
 
 video.release()
+print 'Fin'

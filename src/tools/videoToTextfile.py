@@ -1,14 +1,26 @@
 import numpy as np
 import cv2
+import sys
 
 #########################
 # Parametros de entrada.#
 #########################
 videoFilename = 'funnybaby.avi'
 textFilename = 'funnybaby.txt'
-salto = 1 
+salto = 1
 
-# Abrimos archivo de video. 
+if len(sys.argv) == 4:
+	videoFilename = sys.argv[1]
+	textFilename = sys.argv[2]
+	salto = int(sys.argv[3])
+elif len(sys.argv) == 3:
+	videoFilename = sys.argv[1]
+	textFilename = sys.argv[2]
+else:
+	print "Usage: python videoToTextfile.py <input_video_file> <output_text_file> [salto = 1]"
+	sys.exit(1)
+
+# Abrimos archivo de video.
 video = cv2.VideoCapture(videoFilename)
 
 # Obtenemos informacion basica.
@@ -47,4 +59,3 @@ for k in xrange(0,int(nFrames),salto):
 video.release()
 cv2.destroyAllWindows()
 print 'Fin'
-

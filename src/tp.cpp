@@ -63,15 +63,15 @@ void assert_interpolacion_spline(Spline spline, vector<double> esperados, double
 
 void video_a_texto(const char* videofile, const char* textfile, int salto = 1) {
     char command[1024];
-    sprintf(command, "octave --path tools/ --eval \"source('tools/videoToTextfile.m'); videoToTextfile('%s', '%s', %d);\" >> /dev/null",
+    sprintf(command, "python tools/videoToTextfile.py %s %s %d >> /dev/null",
         videofile, textfile, salto);
     if(system(command)) { cout << "videoToTextfile failed" << endl; };
 }
 
-void texto_a_video(const char* videofile, const char* textfile) {
+void texto_a_video(const char* textfile, const char* videofile) {
     char command[1024];
-    sprintf(command, "octave --path tools/ --eval \"source('tools/textfileToVideo.m'); textfileToVideo('%s', '%s');\" >> /dev/null",
-        videofile, textfile);
+    sprintf(command, "python tools/textfileToVideo.py %s %s >> /dev/null",
+        textfile, videofile);
     if(system(command)) { cout << "textfileToVideo failed" << endl; };
 }
 
