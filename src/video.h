@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <spline.h>
 
 using namespace std;
 
@@ -12,16 +13,19 @@ enum MetodoInterpolacion : int {VECINOS = 0, LINEAL = 1, SPLINES = 2};
 class Video{
 	public:
 		Video();
-		Video(const char* entrada);
+		Video(const char* entrada, int cuadrosNuevos);
 		void guardar(const char* salida);
-		void aplicarCamaraLenta(MetodoInterpolacion metodo, int cuadrosNuevos);
+		void aplicarCamaraLenta(MetodoInterpolacion metodo);
 	private:
 		int numero_frames;
+		int numero_frames_out;
 		int ancho;
 		int alto;
 		int fps;
+		int cuadros_nuevos;
 		vector<vector<vector<int> > > frames;
-		void interpolarSplines(int cuadrosNuevos);
+		vector<vector<vector<int> > > frames_out;
+		void interpolarSplines();
 };
 
 #endif // VIDEO_H_INCLUDED
