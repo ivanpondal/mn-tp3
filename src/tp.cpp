@@ -86,7 +86,7 @@ void test_texto_a_video() {
 
 // f(x) = 42
 void test_spline_constante(){
-	vector<double> y = {42, 42, 42, 42};
+	vector<int> y = {42, 42, 42, 42};
 	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
 	Spline spline(y);
 	assert_interpolacion_spline(spline, esperados, 0.5);
@@ -94,7 +94,7 @@ void test_spline_constante(){
 
 // f(x) = x
 void test_spline_lineal(){
-	vector<double> y = {0, 1, 2, 3};
+	vector<int> y = {0, 1, 2, 3};
 	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
 	Spline spline(y);
 	assert_interpolacion_spline(spline, esperados, 0.5);
@@ -102,7 +102,7 @@ void test_spline_lineal(){
 
 // f(x) = x^2
 void test_spline_cuadratico(){
-	vector<double> y = {0, 1, 4, 9};
+	vector<int> y = {0, 1, 4, 9};
 	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
 	Spline spline(y);
 	assert_interpolacion_spline(spline, esperados, 0.5, 0.5);
@@ -111,8 +111,8 @@ void test_spline_cuadratico(){
 // ****************** FUNCION PARA FORMATO DE LA CATEDRA ***********************
 void resolver(const char* inputfile, const char* outputfile, int metodo, int cuadros) {
     cout << "resolver" << endl;
-	Video video(inputfile);
-	video.aplicarCamaraLenta((MetodoInterpolacion) metodo, cuadros);
+	Video video(inputfile, cuadros);
+	video.aplicarCamaraLenta((MetodoInterpolacion) metodo);
 	video.guardar(outputfile);
 }
 
