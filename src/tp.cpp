@@ -61,6 +61,86 @@ void assert_interpolacion_spline(Spline spline, vector<double> esperados, double
 	assert_interpolacion_spline(spline, esperados, intervalo, DELTA);
 }
 
+double frame_error_cuadratico_medio(const vector<vector<int > > &output, const vector<vector<int > > &real) {
+    ASSERT(output.size() != 0 && output[0].size() != 0)
+    ASSERT(real.size() != 0 && real[0].size() != 0)
+    ASSERT(output.size() == real.size() && output[0].size() == real[0].size())
+    int ancho = output.size();
+    int alto = output[0].size();
+    int sum = 0;
+    for(int x = 0; x < ancho; x++){
+		for(int y = 0; y < alto; y++){
+            sum += pow(real[x][y] - output[x][y], 2);
+        }
+    }
+    return double(sum)/double(ancho)*double(alto);
+}
+
+double frame_peak_to_signal_noise_ratio(const vector<vector<int > > &output, const vector<vector<int > > &real) {
+    ASSERT(output.size() != 0 && output[0].size() != 0)
+    ASSERT(real.size() != 0 && real[0].size() != 0)
+    ASSERT(output.size() == real.size() && output[0].size() == real[0].size())
+
+    double aux = double(pow(255,2));
+    return 10*log10(aux/frame_error_cuadratico_medio(output, real));
+}
+
+int video_error_cuadratico_medio(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real) {
+    ASSERT(output.size() != 0 && output[0].size() != 0 && output[0][0].size() != 0);
+    ASSERT(real.size() != 0 && real[0].size() != 0 && real[0][0].size() != 0);
+    ASSERT(output.size() == real.size() && output[0].size() == real[0].size() && output[0][0].size() == real[0][0].size());
+
+    int ancho = output.size();
+    int alto = output[0].size();
+    int frames = output[0][0].size();
+    double max_error = 0;
+
+    vector<vector<int > > frame_output(ancho, vector<int>(alto, 0));
+    vector<vector<int > > frame_real(ancho, vector<int>(alto, 0));
+    for (int k = 0; k < frames; k++) {
+        for(int x = 0; x < ancho; x++){
+    		for(int y = 0; y < alto; y++){
+                frame_output[x][y] = output[x][y][k];
+                frame_real[x][y] = real[x][y][k];
+            }
+        }
+        double error = frame_error_cuadratico_medio(frame_output, frame_real);
+        if (error > max_error)  {
+            max_error = error;
+        }
+    }
+
+    return max_error;
+}
+
+int video_peak_to_signal_noise_ratio(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real) {
+    ASSERT(output.size() != 0 && output[0].size() != 0 && output[0][0].size() != 0);
+    ASSERT(real.size() != 0 && real[0].size() != 0 && real[0][0].size() != 0);
+    ASSERT(output.size() == real.size() && output[0].size() == real[0].size() && output[0][0].size() == real[0][0].size());
+
+    int ancho = output.size();
+    int alto = output[0].size();
+    int frames = output[0][0].size();
+    double max_error = 0;
+
+    vector<vector<int > > frame_output(ancho, vector<int>(alto, 0));
+    vector<vector<int > > frame_real(ancho, vector<int>(alto, 0));
+    for (int k = 0; k < frames; k++) {
+        for(int x = 0; x < ancho; x++){
+    		for(int y = 0; y < alto; y++){
+                frame_output[x][y] = output[x][y][k];
+                frame_real[x][y] = real[x][y][k];
+            }
+        }
+        double error = frame_peak_to_signal_noise_ratio(frame_output, frame_real);
+        if (error > max_error)  {
+            max_error = error;
+        }
+    }
+
+    return max_error;
+}
+
 void video_a_texto(const char* videofile, const char* textfile, int salto = 1) {
     char command[1024];
     sprintf(command, "python tools/videoToTextfile.py %s %s %d >> /dev/null",
