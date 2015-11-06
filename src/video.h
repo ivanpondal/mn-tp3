@@ -27,6 +27,7 @@ class Video{
 		vector<vector<vector<int> > > frames_out;
 		void interpolarSplines();
 		void interpolarLineal();
+		void interpolarVecinos();
 };
 
 #endif // VIDEO_H_INCLUDED

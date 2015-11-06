@@ -110,7 +110,8 @@ void test_spline_cuadratico(){
 
 // ****************** FUNCION PARA FORMATO DE LA CATEDRA ***********************
 void resolver(const char* inputfile, const char* outputfile, int metodo, int cuadros) {
-    cout << "resolver" << endl;
+    cout << "Input file: " << inputfile << endl;
+    cout << "Output file: " << outputfile << endl;
 	Video video(inputfile, cuadros);
 	video.aplicarCamaraLenta((MetodoInterpolacion) metodo);
 	video.guardar(outputfile);
@@ -134,8 +135,8 @@ int main(int argc, char *argv[])
 		RUN_TEST(test_spline_constante);
 		RUN_TEST(test_spline_lineal);
 		RUN_TEST(test_spline_cuadratico);
-        test_video_a_texto();
-        test_texto_a_video();
+        // test_video_a_texto();
+        // test_texto_a_video();
 	} else {
         cout << "Usage: ./tp <archivo_entrada> <archivo_salida> <metodo> <cantidad_cuadros_a_agregar>" << endl;
         return 1;
