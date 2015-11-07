@@ -96,7 +96,7 @@ double frame_peak_to_signal_noise_ratio(const vector<vector<int > > &output, con
 int video_max_error_cuadratico_medio(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real) {
     ASSERT(output.size() != 0 && output[0].size() != 0 && output[0][0].size() != 0);
     ASSERT(real.size() != 0 && real[0].size() != 0 && real[0][0].size() != 0);
-    ASSERT(output.size() == real.size() && output[0].size() == real[0].size() && output[0][0].size() == real[0][0].size());
+    ASSERT(output.size() == real.size() && output[0].size() == real[0].size() && output[0][0].size() <= real[0][0].size());
 
     int ancho = output.size();
     int alto = output[0].size();
@@ -124,7 +124,7 @@ int video_max_error_cuadratico_medio(const vector<vector<vector<int> > > &output
 int video_max_peak_to_signal_noise_ratio(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real) {
     ASSERT(output.size() != 0 && output[0].size() != 0 && output[0][0].size() != 0);
     ASSERT(real.size() != 0 && real[0].size() != 0 && real[0][0].size() != 0);
-    ASSERT(output.size() == real.size() && output[0].size() == real[0].size() && output[0][0].size() == real[0][0].size());
+    ASSERT(output.size() == real.size() && output[0].size() == real[0].size() && output[0][0].size() <= real[0][0].size());
 
     int ancho = output.size();
     int alto = output[0].size();
@@ -152,7 +152,7 @@ int video_max_peak_to_signal_noise_ratio(const vector<vector<vector<int> > > &ou
 int video_prom_error_cuadratico_medio(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real) {
     ASSERT(output.size() != 0 && output[0].size() != 0 && output[0][0].size() != 0);
     ASSERT(real.size() != 0 && real[0].size() != 0 && real[0][0].size() != 0);
-    ASSERT(output.size() == real.size() && output[0].size() == real[0].size() && output[0][0].size() == real[0][0].size());
+    ASSERT(output.size() == real.size() && output[0].size() == real[0].size() && output[0][0].size() <= real[0][0].size());
 
     int ancho = output.size();
     int alto = output[0].size();
@@ -177,7 +177,7 @@ int video_prom_error_cuadratico_medio(const vector<vector<vector<int> > > &outpu
 int video_prom_peak_to_signal_noise_ratio(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real) {
     ASSERT(output.size() != 0 && output[0].size() != 0 && output[0][0].size() != 0);
     ASSERT(real.size() != 0 && real[0].size() != 0 && real[0][0].size() != 0);
-    ASSERT(output.size() == real.size() && output[0].size() == real[0].size() && output[0][0].size() == real[0][0].size());
+    ASSERT(output.size() == real.size() && output[0].size() == real[0].size() && output[0][0].size() <= real[0][0].size());
 
     int ancho = output.size();
     int alto = output[0].size();
@@ -333,9 +333,15 @@ int main(int argc, char *argv[])
         // test_texto_a_video();
 
         // exp grupo
-        exp_baby_error(SPLINES, 1);
-        exp_baby_error(LINEAL, 1);
-        exp_baby_error(VECINOS, 1);
+        // exp_baby_error(SPLINES, 1);
+        // exp_baby_error(LINEAL, 1);
+        // exp_baby_error(VECINOS, 1);
+        // exp_baby_error(SPLINES, 2);
+        // exp_baby_error(LINEAL, 2);
+        // exp_baby_error(VECINOS, 2);
+        // exp_baby_error(SPLINES, 5);
+        // exp_baby_error(LINEAL, 5);
+        // exp_baby_error(VECINOS, 5);
         // exp_baby_tiempo(SPLINES, 1);
         // exp_baby_tiempo(LINEAL, 1);
         // exp_baby_tiempo(VECINOS, 1);
