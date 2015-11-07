@@ -3,6 +3,7 @@
 
 #include "mini_test.h"
 #include "spline.h"
+#include "vecinos.h"
 #include "video.h"
 //#include "utils.h"
 
@@ -39,6 +40,28 @@ void assert_precision(double valor, double esperado, double precision){
 
 void assert_precision(double valor, double esperado){
 	assert_precision(valor, esperado, DELTA);
+}
+
+void assert_interpolacion_vecinos(InterpolacionVecinos vecinos, vector<double> esperados, double intervalo, double precision){
+	double xj = 0;
+	for(unsigned int i = 0; i < esperados.size(); i++){
+		if(DEBUG){
+			cout << "V" << i << "(" << xj << ") = " << vecinos.evaluar(xj)<< endl;
+		}
+		// Si el intervalo equivale a un punto interpolado, el vecinos TIENE que
+		// darme el "mismo" valor que la función original
+		if(abs(xj - i) < DELTA){
+			assert_precision(vecinos.evaluar(xj), esperados[i]);
+		}
+		else{
+			assert_precision(vecinos.evaluar(xj), esperados[i], precision);
+		}
+		xj += intervalo;
+	}
+}
+
+void assert_interpolacion_vecinos(InterpolacionVecinos vecinos, vector<double> esperados, double intervalo){
+	assert_interpolacion_vecinos(vecinos, esperados, intervalo, DELTA);
 }
 
 void assert_interpolacion_spline(Spline spline, vector<double> esperados, double intervalo, double precision){
@@ -242,6 +265,30 @@ void test_texto_a_video() {
 }
 
 // f(x) = 42
+void test_vecinos_constante(){
+	vector<int> y = {42, 42, 42, 42};
+	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
+	InterpolacionVecinos vecinos(y, 1);
+	assert_interpolacion_vecinos(vecinos, esperados, 0.5);
+}
+
+// f(x) = x
+void test_vecinos_lineal(){
+	vector<int> y = {0, 1, 2, 3};
+	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
+	InterpolacionVecinos vecinos(y, 1);
+	assert_interpolacion_vecinos(vecinos, esperados, 0.5, 2);
+}
+
+// f(x) = x^2
+void test_vecinos_cuadratico(){
+	vector<int> y = {0, 1, 4, 9};
+	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
+	InterpolacionVecinos vecinos(y, 1);
+	assert_interpolacion_vecinos(vecinos, esperados, 0.5, 7);
+}
+
+// f(x) = 42
 void test_spline_constante(){
 	vector<int> y = {42, 42, 42, 42};
 	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
@@ -343,16 +390,20 @@ int main(int argc, char *argv[])
 		resolver(inputfile, outputfile, metodo, cuadros);
 	} else if(argc == 1){
         // tests grupo
+        // test_video_a_texto();
+        // test_texto_a_video();
+        RUN_TEST(test_vecinos_constante);
+		RUN_TEST(test_vecinos_lineal);
+		RUN_TEST(test_vecinos_cuadratico);
 		RUN_TEST(test_spline_constante);
 		RUN_TEST(test_spline_lineal);
 		RUN_TEST(test_spline_cuadratico);
-        // test_video_a_texto();
-        // test_texto_a_video();
+
 
         // exp grupo
         // exp_baby_error(SPLINES, 1);
         // exp_baby_error(LINEAL, 1);
-        // exp_baby_error(VECINOS, 1);
+        exp_baby_error(VECINOS, 1);
         // exp_baby_error(SPLINES, 2);
         // exp_baby_error(LINEAL, 2);
         // exp_baby_error(VECINOS, 2);
@@ -362,6 +413,12 @@ int main(int argc, char *argv[])
         // exp_baby_tiempo(SPLINES, 1);
         // exp_baby_tiempo(LINEAL, 1);
         // exp_baby_tiempo(VECINOS, 1);
+        // exp_baby_tiempo(SPLINES, 2);
+        // exp_baby_tiempo(LINEAL, 2);
+        // exp_baby_tiempo(VECINOS, 2);
+        // exp_baby_tiempo(SPLINES, 5);
+        // exp_baby_tiempo(LINEAL, 5);
+        // exp_baby_tiempo(VECINOS, 5);
 
 	} else {
         cout << "Usage: ./tp <archivo_entrada> <archivo_salida> <metodo> <cantidad_cuadros_a_agregar>" << endl;

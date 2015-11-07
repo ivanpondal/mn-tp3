@@ -1,0 +1,19 @@
+#ifndef VECINOS_H_
+#define VECINOS_H_
+
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+class InterpolacionVecinos {
+	public:
+		InterpolacionVecinos();
+		InterpolacionVecinos(const vector<int> &y, int valores_a_agregar);
+		void recalcular(const vector<int> &y, int valores_a_agregar);
+		double evaluar(double x);
+	private:
+		vector<int> datos_generados;
+};
+
+#endif // VECINOS_H_INCLUDED

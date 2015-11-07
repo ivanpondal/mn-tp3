@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <spline.h>
+#include <vecinos.h>
 
 using namespace std;
 

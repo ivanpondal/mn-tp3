@@ -146,13 +146,9 @@ void Video::interpolarLineal(){
 void Video::interpolarVecinos() {
 	for(int x = 0; x < this->ancho; x++){
 		for(int y = 0; y < this->alto; y++){
-			for(int i = 0; i < this->numero_frames_out - this->cuadros_nuevos; i += this->cuadros_nuevos + 1){
-				for(int k = 0; k < this->cuadros_nuevos/2; k++){
-					this->frames_out[x][y][i + k + 1] = this->frames_out[x][y][i];
-				}
-				for(int k = this->cuadros_nuevos/2; k < this->cuadros_nuevos; k++){
-					this->frames_out[x][y][i + k + 1] = this->frames_out[x][y][i + this->cuadros_nuevos + 1];
-				}
+			InterpolacionVecinos vecinos(this->frames[x][y], this->cuadros_nuevos);
+			for (int k = 0; k < this->numero_frames_out; k++) {
+				this->frames_out[x][y][k] = vecinos.evaluar(k);
 			}
 		}
 	}
