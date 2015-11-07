@@ -59,4 +59,5 @@
 !src/exp/*
 src/data/*test*.txt
 src/data/*exp*.txt
+src/data/baby_re.avi
 !latex/datos/*
