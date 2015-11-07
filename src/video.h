@@ -14,6 +14,8 @@ class Video{
 	public:
 		Video();
 		Video(const char* entrada, int cuadrosNuevos);
+		vector<vector<vector<int> > > obtenerFramesOriginales();
+		vector<vector<vector<int> > > obtenerFramesCalculados();
 		void guardar(const char* salida);
 		void aplicarCamaraLenta(MetodoInterpolacion metodo);
 	private:

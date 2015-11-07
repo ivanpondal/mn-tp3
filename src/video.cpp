@@ -43,6 +43,13 @@ Video::Video(const char* entrada, int cuadrosNuevos){
 	}
 }
 
+vector<vector<vector<int> > > Video::obtenerFramesOriginales() {
+	return frames;
+}
+vector<vector<vector<int> > > Video::obtenerFramesCalculados() {
+	return frames_out;
+}
+
 void Video::guardar(const char* salida){
 	ofstream archivo_salida;
 	archivo_salida.open(salida);
