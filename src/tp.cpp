@@ -87,6 +87,7 @@ double frame_peak_to_signal_noise_ratio(const vector<vector<int > > &output, con
     double aux = double(pow(255,2));
     double ecm = frame_error_cuadratico_medio(output, real);
     if (ecm < DELTA) {
+        // el frame output es igual al frame real
         return 0;
     } else {
         return 10*log10(aux/ecm);
@@ -157,6 +158,7 @@ int video_prom_error_cuadratico_medio(const vector<vector<vector<int> > > &outpu
     int ancho = output.size();
     int alto = output[0].size();
     int frames = output[0][0].size();
+    int frames_iguales = 0;
     double sum_error = 0;
 
     vector<vector<int > > frame_output(ancho, vector<int>(alto, 0));
@@ -168,10 +170,17 @@ int video_prom_error_cuadratico_medio(const vector<vector<vector<int> > > &outpu
                 frame_real[x][y] = real[x][y][k];
             }
         }
-        sum_error += frame_error_cuadratico_medio(frame_output, frame_real);
+        double error = frame_error_cuadratico_medio(frame_output, frame_real);
+        if (error < DELTA) {
+            // el frame output es igual al frame real
+            frames_iguales++;
+        } else {
+            sum_error += error;
+        }
     }
 
-    return sum_error/double(frames);
+    cout << "Hay " << frames_iguales << " frames iguales de " << frames << ", o: " << setprecision(4) << double(frames_iguales)/double(frames) << "%" << endl;
+    return sum_error/double(frames - frames_iguales);
 }
 
 int video_prom_peak_to_signal_noise_ratio(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real) {
@@ -182,6 +191,7 @@ int video_prom_peak_to_signal_noise_ratio(const vector<vector<vector<int> > > &o
     int ancho = output.size();
     int alto = output[0].size();
     int frames = output[0][0].size();
+    int frames_iguales = 0;
     double sum_error = 0;
 
     vector<vector<int > > frame_output(ancho, vector<int>(alto, 0));
@@ -193,10 +203,17 @@ int video_prom_peak_to_signal_noise_ratio(const vector<vector<vector<int> > > &o
                 frame_real[x][y] = real[x][y][k];
             }
         }
-        sum_error += frame_peak_to_signal_noise_ratio(frame_output, frame_real);
+        double error = frame_peak_to_signal_noise_ratio(frame_output, frame_real);
+        if (error < DELTA) {
+            // el frame output es igual al frame real
+            frames_iguales++;
+        } else {
+            sum_error += error;
+        }
     }
 
-    return sum_error/double(frames);
+    cout << "Hay " << frames_iguales << " frames iguales de " << frames << ", o: " << setprecision(4) << double(frames_iguales)/double(frames) << "%" << endl;
+    return sum_error/double(frames - frames_iguales);
 }
 
 void video_a_texto(const char* videofile, const char* textfile, int salto = 1) {
