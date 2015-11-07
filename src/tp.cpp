@@ -164,7 +164,7 @@ int video_prom_error_cuadratico_medio(const vector<vector<vector<int> > > &outpu
         sum_error += frame_error_cuadratico_medio(frame_output, frame_real);
     }
 
-    return sum_error/double(ancho)*double(alto);
+    return sum_error/(double(ancho)*double(alto));
 }
 
 int video_prom_peak_to_signal_noise_ratio(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real) {
@@ -189,10 +189,11 @@ int video_prom_peak_to_signal_noise_ratio(const vector<vector<vector<int> > > &o
         sum_error += frame_peak_to_signal_noise_ratio(frame_output, frame_real);
     }
 
-    return sum_error/double(ancho)*double(alto);
+    return sum_error/(double(ancho)*double(alto));
 }
 
 void video_a_texto(const char* videofile, const char* textfile, int salto = 1) {
+    cout << "Convirtiendo video " << videofile << " a texto " <<  textfile << " con salto " << salto << endl;
     char command[1024];
     sprintf(command, "python tools/videoToTextfile.py %s %s %d >> /dev/null",
         videofile, textfile, salto);
@@ -200,6 +201,7 @@ void video_a_texto(const char* videofile, const char* textfile, int salto = 1) {
 }
 
 void texto_a_video(const char* textfile, const char* videofile) {
+    cout << "Convirtiendo texto " << textfile << " a video " <<  videofile << endl;
     char command[1024];
     sprintf(command, "python tools/textfileToVideo.py %s %s >> /dev/null",
         textfile, videofile);
@@ -239,8 +241,8 @@ void test_spline_cuadratico(){
 	assert_interpolacion_spline(spline, esperados, 0.5, 0.5);
 }
 
-void test_baby_spline() {
-    cout << "Error al interpolar usando Spline, quitando al video original 1 frame de cada 2: " << endl;
+void test_baby_spline_error(int cuadros_a_agregar) {
+    cout << "Calculando error al interpolar usando Spline, tomando del video original 1 frame de cada " << cuadros_a_agregar + 1 << ": " << endl;
 
     string input_video = "data/baby.avi";
     string real_text = "data/baby_test_spline_real.txt";
@@ -253,10 +255,10 @@ void test_baby_spline() {
     int ancho = frames_real.size();
     int alto = frames_real[0].size();
 
-    // convierto a texto el video original, salteandome un frame de cada 2
-    video_a_texto(input_video.c_str(), aux_text.c_str(), 2);
+    // convierto a texto el video original, tomando un cuadro de cada 1 + cuadros_a_agregar frames
+    video_a_texto(input_video.c_str(), aux_text.c_str(), 1 + cuadros_a_agregar);
     // agrego un frame entre cada frame del output_text
-    Video video(aux_text.c_str(), 1);
+    Video video(aux_text.c_str(), cuadros_a_agregar);
 	video.aplicarCamaraLenta(SPLINES);
     vector<vector<vector<int> > > frames_out = video.obtenerFramesCalculados();
 
@@ -264,7 +266,7 @@ void test_baby_spline() {
     double prom_err_frame_psnr = video_prom_peak_to_signal_noise_ratio(frames_out, frames_real);
 	cout << "ECM promedio por frame: " << setprecision(15) << prom_err_frame_ecm << endl;
     cout << "PSNR promedio por frame: " << setprecision(15) << prom_err_frame_psnr << endl;
-    cout << "ECM promedio por pixel: " << setprecision(15) << prom_err_frame_ecm/double(ancho)*double(alto) << endl;
+    cout << "ECM promedio por pixel: " << setprecision(15) << prom_err_frame_ecm/(double(ancho)*double(alto)) << endl;
 }
 
 // ****************** FUNCION PARA FORMATO DE LA CATEDRA ***********************
@@ -296,7 +298,8 @@ int main(int argc, char *argv[])
 		RUN_TEST(test_spline_cuadratico);
         // test_video_a_texto();
         // test_texto_a_video();
-        test_baby_spline();
+        test_baby_spline_error(1);
+        // test_baby_spline_error(2);
 	} else {
         cout << "Usage: ./tp <archivo_entrada> <archivo_salida> <metodo> <cantidad_cuadros_a_agregar>" << endl;
         return 1;
