@@ -1,9 +1,10 @@
 #define DELTA 0.0001
-#define DEBUG false
+#define DEBUG true
 
 #include "mini_test.h"
-#include "spline.h"
 #include "vecinos.h"
+#include "lineal.h"
+#include "spline.h"
 #include "video.h"
 //#include "utils.h"
 
@@ -62,6 +63,28 @@ void assert_interpolacion_vecinos(InterpolacionVecinos vecinos, vector<double> e
 
 void assert_interpolacion_vecinos(InterpolacionVecinos vecinos, vector<double> esperados, double intervalo){
 	assert_interpolacion_vecinos(vecinos, esperados, intervalo, DELTA);
+}
+
+void assert_interpolacion_lineal(InterpolacionLineal lineal, vector<double> esperados, double intervalo, double precision){
+	double xj = 0;
+	for(unsigned int i = 0; i < esperados.size(); i++){
+		if(DEBUG){
+			cout << "L" << i << "(" << xj << ") = " << lineal.evaluar(xj)<< endl;
+		}
+		// Si el intervalo equivale a un punto interpolado, el lineal TIENE que
+		// darme el "mismo" valor que la función original
+		if(abs(xj - i) < DELTA){
+			assert_precision(lineal.evaluar(xj), esperados[i]);
+		}
+		else{
+			assert_precision(lineal.evaluar(xj), esperados[i], precision);
+		}
+		xj += intervalo;
+	}
+}
+
+void assert_interpolacion_lineal(InterpolacionLineal lineal, vector<double> esperados, double intervalo){
+	assert_interpolacion_lineal(lineal, esperados, intervalo, DELTA);
 }
 
 void assert_interpolacion_spline(Spline spline, vector<double> esperados, double intervalo, double precision){
@@ -289,6 +312,30 @@ void test_vecinos_cuadratico(){
 }
 
 // f(x) = 42
+void test_lineal_constante(){
+	vector<int> y = {42, 42, 42, 42};
+	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
+	InterpolacionLineal lineal(y, 1);
+	assert_interpolacion_lineal(lineal, esperados, 0.5);
+}
+
+// f(x) = x
+void test_lineal_lineal(){
+	vector<int> y = {0, 1, 2, 3};
+	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
+	InterpolacionLineal lineal(y, 1);
+	assert_interpolacion_lineal(lineal, esperados, 0.5, 0.5);
+}
+
+// f(x) = x^2
+void test_lineal_cuadratico(){
+	vector<int> y = {0, 1, 4, 9};
+	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
+	InterpolacionLineal lineal(y, 1);
+	assert_interpolacion_lineal(lineal, esperados, 0.5, 0.5);
+}
+
+// f(x) = 42
 void test_spline_constante(){
 	vector<int> y = {42, 42, 42, 42};
 	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
@@ -395,6 +442,9 @@ int main(int argc, char *argv[])
         RUN_TEST(test_vecinos_constante);
 		RUN_TEST(test_vecinos_lineal);
 		RUN_TEST(test_vecinos_cuadratico);
+        RUN_TEST(test_lineal_constante);
+		RUN_TEST(test_lineal_lineal);
+		RUN_TEST(test_lineal_cuadratico);
 		RUN_TEST(test_spline_constante);
 		RUN_TEST(test_spline_lineal);
 		RUN_TEST(test_spline_cuadratico);
@@ -403,7 +453,7 @@ int main(int argc, char *argv[])
         // exp grupo
         // exp_baby_error(SPLINES, 1);
         // exp_baby_error(LINEAL, 1);
-        exp_baby_error(VECINOS, 1);
+        // exp_baby_error(VECINOS, 1);
         // exp_baby_error(SPLINES, 2);
         // exp_baby_error(LINEAL, 2);
         // exp_baby_error(VECINOS, 2);
