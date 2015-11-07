@@ -9,6 +9,10 @@
 using namespace std;
 
 enum MetodoInterpolacion : int {VECINOS = 0, LINEAL = 1, SPLINES = 2};
+static const char * MetodoInterpolacionStrings[] = { "Vecinos", "Lineal", "Splines" };
+static const char * getTextForMetodo(MetodoInterpolacion metodo) {
+  return MetodoInterpolacionStrings[metodo];
+}
 
 class Video{
 	public:

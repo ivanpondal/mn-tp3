@@ -8,6 +8,7 @@
 
 #include <string>
 #include <sstream>
+#include <iostream>
 #include <math.h>
 #include <ctime>
 #include <cstdio>
@@ -241,12 +242,18 @@ void test_spline_cuadratico(){
 	assert_interpolacion_spline(spline, esperados, 0.5, 0.5);
 }
 
-void test_baby_spline_error(int cuadros_a_agregar) {
-    cout << "Calculando error al interpolar usando Spline, tomando del video original 1 frame de cada " << cuadros_a_agregar + 1 << ": " << endl;
+// ********************** EXPERIMENTACION DEL GRUPO ****************************
+void exp_baby_error(MetodoInterpolacion metodo, int cuadros_a_agregar) {
+    cout << "Calculando error al interpolar usando " << getTextForMetodo(metodo) << ", tomando del video original 1 frame de cada " << cuadros_a_agregar + 1 << ": " << endl;
 
     string input_video = "data/baby.avi";
-    string real_text = "data/baby_test_spline_real.txt";
-    string aux_text = "data/baby_test_spline_aux.txt";
+    ostringstream os_real;
+    os_real << "data/baby_exp_" << getTextForMetodo(metodo) << "_real.txt";
+    string real_text = os_real.str();
+
+    ostringstream os_aux;
+    os_aux << "data/baby_exp_" << getTextForMetodo(metodo) << "_aux.txt";
+    string aux_text = os_aux.str();
 
     // convierto a texto el video original
     video_a_texto(input_video.c_str(), real_text.c_str(), 1);
@@ -257,9 +264,9 @@ void test_baby_spline_error(int cuadros_a_agregar) {
 
     // convierto a texto el video original, tomando un cuadro de cada 1 + cuadros_a_agregar frames
     video_a_texto(input_video.c_str(), aux_text.c_str(), 1 + cuadros_a_agregar);
-    // agrego un frame entre cada frame del output_text
+    // agrego cuadros_a_agregar frames entre cada frame del output_text
     Video video(aux_text.c_str(), cuadros_a_agregar);
-	video.aplicarCamaraLenta(SPLINES);
+	video.aplicarCamaraLenta(metodo);
     vector<vector<vector<int> > > frames_out = video.obtenerFramesCalculados();
 
     double prom_err_frame_ecm = video_prom_error_cuadratico_medio(frames_out, frames_real);
@@ -267,6 +274,27 @@ void test_baby_spline_error(int cuadros_a_agregar) {
 	cout << "ECM promedio por frame: " << setprecision(15) << prom_err_frame_ecm << endl;
     cout << "PSNR promedio por frame: " << setprecision(15) << prom_err_frame_psnr << endl;
     cout << "ECM promedio por pixel: " << setprecision(15) << prom_err_frame_ecm/(double(ancho)*double(alto)) << endl;
+}
+
+void exp_baby_tiempo(MetodoInterpolacion metodo, int cuadros_a_agregar) {
+    cout << "Calculando tiempo de computo al interpolar usando " << getTextForMetodo(metodo) << ", agregando " << cuadros_a_agregar << " frames: " << endl;
+
+    string input_video = "data/baby.avi";
+    ostringstream os_aux;
+    os_aux << "data/baby_exp_" << getTextForMetodo(metodo) << "_aux.txt";
+    string aux_text = os_aux.str();
+
+    // convierto a texto el video original
+    video_a_texto(input_video.c_str(), aux_text.c_str());
+    // agrego cuadros_a_agregar frames entre cada frame del output_text
+    start_timer();
+    Video video(aux_text.c_str(), cuadros_a_agregar);
+	video.aplicarCamaraLenta(SPLINES);
+    double time = stop_timer();
+    cout << "Tiempo de computo para todo el video: " << setprecision(15) << time << " ns." << endl;
+    vector<vector<vector<int> > > frames_out = video.obtenerFramesCalculados();
+    cout << "Tiempo de computo promedio por frame: " << setprecision(15) << time/double(frames_out[0][0].size()) << " ns." << endl;
+    cout << "Tiempo de computo promedio por pixel: " << setprecision(15) << time/double(frames_out.size() * frames_out[0].size() *frames_out[0][0].size()) << " ns." << endl;
 }
 
 // ****************** FUNCION PARA FORMATO DE LA CATEDRA ***********************
@@ -298,8 +326,15 @@ int main(int argc, char *argv[])
 		RUN_TEST(test_spline_cuadratico);
         // test_video_a_texto();
         // test_texto_a_video();
-        test_baby_spline_error(1);
-        // test_baby_spline_error(2);
+
+        // exp grupo
+        // exp_baby_error(SPLINES, 1);
+        // exp_baby_error(LINEAL, 1);
+        // exp_baby_error(VECINOS, 1);
+        exp_baby_tiempo(SPLINES, 1);;
+        exp_baby_tiempo(LINEAL, 1);;
+        exp_baby_tiempo(VECINOS, 1);;
+
 	} else {
         cout << "Usage: ./tp <archivo_entrada> <archivo_salida> <metodo> <cantidad_cuadros_a_agregar>" << endl;
         return 1;

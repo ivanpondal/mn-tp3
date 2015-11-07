@@ -26,8 +26,6 @@
 # Executables
 *.exe
 *.out
-!src/exp/*
-!latex/datos/*
 *.app
 
 # Latex
@@ -56,3 +54,9 @@
 *.synctex.gz
 *.fls
 *.fdb_latexmk
+
+# Otros
+!src/exp/*
+src/data/*test*.txt
+src/data/*exp*.txt
+!latex/datos/*
