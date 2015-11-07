@@ -64,27 +64,33 @@ void assert_interpolacion_spline(Spline spline, vector<double> esperados, double
 }
 
 double frame_error_cuadratico_medio(const vector<vector<int > > &output, const vector<vector<int > > &real) {
-    ASSERT(output.size() != 0 && output[0].size() != 0)
-    ASSERT(real.size() != 0 && real[0].size() != 0)
-    ASSERT(output.size() == real.size() && output[0].size() == real[0].size())
+    ASSERT(output.size() != 0 && output[0].size() != 0);
+    ASSERT(real.size() != 0 && real[0].size() != 0);
+    ASSERT(output.size() == real.size() && output[0].size() == real[0].size());
+
     int ancho = output.size();
     int alto = output[0].size();
-    int sum = 0;
+    unsigned long sum = 0;
     for(int x = 0; x < ancho; x++){
 		for(int y = 0; y < alto; y++){
             sum += pow(real[x][y] - output[x][y], 2);
         }
     }
-    return double(sum)/double(ancho)*double(alto);
+    return double(sum)/(double(ancho)*double(alto));
 }
 
 double frame_peak_to_signal_noise_ratio(const vector<vector<int > > &output, const vector<vector<int > > &real) {
-    ASSERT(output.size() != 0 && output[0].size() != 0)
-    ASSERT(real.size() != 0 && real[0].size() != 0)
-    ASSERT(output.size() == real.size() && output[0].size() == real[0].size())
+    ASSERT(output.size() != 0 && output[0].size() != 0);
+    ASSERT(real.size() != 0 && real[0].size() != 0);
+    ASSERT(output.size() == real.size() && output[0].size() == real[0].size());
 
     double aux = double(pow(255,2));
-    return 10*log10(aux/frame_error_cuadratico_medio(output, real));
+    double ecm = frame_error_cuadratico_medio(output, real);
+    if (ecm < DELTA) {
+        return 0;
+    } else {
+        return 10*log10(aux/ecm);
+    }
 }
 
 int video_max_error_cuadratico_medio(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real) {
@@ -165,7 +171,7 @@ int video_prom_error_cuadratico_medio(const vector<vector<vector<int> > > &outpu
         sum_error += frame_error_cuadratico_medio(frame_output, frame_real);
     }
 
-    return sum_error/(double(ancho)*double(alto));
+    return sum_error/double(frames);
 }
 
 int video_prom_peak_to_signal_noise_ratio(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real) {
@@ -190,7 +196,7 @@ int video_prom_peak_to_signal_noise_ratio(const vector<vector<vector<int> > > &o
         sum_error += frame_peak_to_signal_noise_ratio(frame_output, frame_real);
     }
 
-    return sum_error/(double(ancho)*double(alto));
+    return sum_error/double(frames);
 }
 
 void video_a_texto(const char* videofile, const char* textfile, int salto = 1) {
@@ -273,7 +279,6 @@ void exp_baby_error(MetodoInterpolacion metodo, int cuadros_a_agregar) {
     double prom_err_frame_psnr = video_prom_peak_to_signal_noise_ratio(frames_out, frames_real);
 	cout << "ECM promedio por frame: " << setprecision(15) << prom_err_frame_ecm << endl;
     cout << "PSNR promedio por frame: " << setprecision(15) << prom_err_frame_psnr << endl;
-    cout << "ECM promedio por pixel: " << setprecision(15) << prom_err_frame_ecm/(double(ancho)*double(alto)) << endl;
 }
 
 void exp_baby_tiempo(MetodoInterpolacion metodo, int cuadros_a_agregar) {
@@ -328,12 +333,12 @@ int main(int argc, char *argv[])
         // test_texto_a_video();
 
         // exp grupo
-        // exp_baby_error(SPLINES, 1);
-        // exp_baby_error(LINEAL, 1);
-        // exp_baby_error(VECINOS, 1);
-        exp_baby_tiempo(SPLINES, 1);;
-        exp_baby_tiempo(LINEAL, 1);;
-        exp_baby_tiempo(VECINOS, 1);;
+        exp_baby_error(SPLINES, 1);
+        exp_baby_error(LINEAL, 1);
+        exp_baby_error(VECINOS, 1);
+        // exp_baby_tiempo(SPLINES, 1);
+        // exp_baby_tiempo(LINEAL, 1);
+        // exp_baby_tiempo(VECINOS, 1);
 
 	} else {
         cout << "Usage: ./tp <archivo_entrada> <archivo_salida> <metodo> <cantidad_cuadros_a_agregar>" << endl;
