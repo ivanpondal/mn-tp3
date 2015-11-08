@@ -1,30 +1,96 @@
-\subsection{Page Rank}
+\subsection{Interpolación por vecinos}
 
-\begin{itemize}
-	\item Cantidad de nodos ($n$) y cantidad de links salientes ($m$).
-	\item $m$ lineas con pares $i$, $j$, donde $i$ tiene un link hacia $j$.
-\end{itemize}
+Este método consiste en reemplazar los cuadros intermedios a ser rellenados por el cuadro original mas cercano en el tiempo.
+Es decir, dados los cuadros del video sin camara lenta, generamos otro video en camara lenta copiando los cuadros originales de la siguiente manera:
 
-\subsubsection{Page Rank sin matriz esparza}
-\begin{enumerate}
-	\item Leemos los datos de entrada y luego generamos $P$
-	\begin{lstlisting}
-	Leer n, m del input
-	Crear un vector de vectores, P, de tamanio n*n
-	Para k=0 hasta m-1 hacer:
-		Leer i,j del input
-		P[j-1][i-1] = 1
-	Fin Para
-	Crear un vector, links_salientes, de tamanio n
-	Para j=0 hasta n-1 hacer:
-		Para i=0 hasta n-1 hacer:
-			links_salientes[j] = links_salientes[j] + P[i][j]
-		Fin Para
-		Para i=0 hasta n-1 hacer:
-			Si links_salientes[j] > 0 entonces:
-				P[i][j] = P[i][j] / links_salientes[j]
-			Fin Si
-		Fin Para
-	Fin Para
-	\end{lstlisting}
-\end{enumerate}
+% \begin{bytefield}{16}
+% \wordbox{1}{A 16-bit field} \\
+% \bitbox{8}{8 bits} & \bitbox{8}{8 more bits} \\
+% \wordbox{2}{A 32-bit field. Note that text wraps within the box.}
+% \end{bytefield}
+
+Sean Frame1 y Frame2 dos cuadros consecutivos del video original:
+
+\begin{centering}
+\begin{bytefield}{8}
+\bitbox{4}{Frame1} & \bitbox{4}{Frame2}
+\end{bytefield}
+\end{centering}
+
+Si queremos ahora 6 cuadros entre cada 2 del archivo original lo transformamos a:
+
+\begin{centering}
+\begin{bytefield}{32}
+\bitbox{4}{Frame1} & \bitbox{4}{Frame1} & \bitbox{4}{Frame1} & \bitbox{4}{Frame1} & \bitbox{4}{Frame2} & \bitbox{4}{Frame2} & \bitbox{4}{Frame2} & \bitbox{4}{Frame2}
+\end{bytefield}
+\end{centering}
+
+El pseudocódigo sería el siguiente:
+
+\begin{lstlisting}
+Sean W,H,I el ancho, alto y la cantidad de frames del video original
+Sea video[W][H][I] el triple vector de numeros enteros que representa el video original
+Sea K la cantidad de frames que queremos agregar entre cuadro y cuadro
+Crear un triple vector de enteros new_video[W][H][I+(I-1)*K]
+Para w = 0 hasta W-1 hacer
+	Para h = 0 hasta H-1 hacer
+		Para i = 0 hasta I-2 hacer
+			Para j = 0 hasta K/2 hacer
+				new_video[w][h].push_back(video[w][h][i])
+			Fin para
+			Para j = (K/2)+1 hasta K hacer
+				new_video[w][h].push_back(video[w][h][i+1])
+			Fin para
+		Fin para
+		new_video[w][h].push_back(video[w][h][I-1])
+	Fin para
+Fin para
+Devolver new_video
+\end{lstlisting}
+
+\subsection{Interpolación lineal}
+
+En este caso, usamos el polinomio interpolador de Lagrange entre cada par de puntos/pixeles consecutivos para aproximar los valores intermedios que irían en el video de camara lenta. Esto genera una función lineal para los pixeles consecutivos en la misma posición.
+
+Por ejemplo, sean dos pixeles con valores 1 y 4:
+
+\begin{bytefield}{8}
+\begin{centering}
+\bitbox{4}{1} & \bitbox{4}{4}
+\end{centering}
+\end{bytefield}
+
+Si queremos un video en camara lenta con 5 cuadros intermedios por cada 2 del original, estos se replicarán de la siguiente forma:
+
+\begin{bytefield}{28}
+\begin{centering}
+\bitbox{4}{1} & \bitbox{4}{1.5} & \bitbox{4}{2} & \bitbox{4}{2.5} & \bitbox{4}{3} & \bitbox{4}{3.5} & \bitbox{4}{4}
+\end{centering}
+\end{bytefield}
+
+El procedimiento es el siguiente:
+
+\begin{lstlisting}
+Sean W,H,I el ancho, alto y la cantidad de frames del video original
+Sea video[W][H][I] el triple vector de numeros enteros que representa el video original
+Sea K la cantidad de frames que queremos agregar entre cuadro y cuadro
+Crear un triple vector de enteros new_video[W][H][I+(I-1)*K]
+Para w = 0 hasta W-1 hacer
+	Para h = 0 hasta H-1 hacer
+		Para i = 0 hasta I-2 hacer
+			coef_cero = video[w][h][i]
+			coef_uno = (video[w][h][i+1] - video[w][h][i]) / (K+1);
+			Para k = 0 hasta K hacer
+				pixel = coef_cero + coef_uno*k;
+				Si (pixel < 0) pixel = 0
+				Si (pixel > 255) pixel = 255
+				new_video.push_back(pixel)
+		Fin para
+		new_video.push_back(video[w][h][I-1])
+	Fin para
+Fin para
+Devolver new_video
+\end{lstlisting}
+
+
+
