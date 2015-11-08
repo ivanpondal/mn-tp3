@@ -47,7 +47,7 @@ void Spline::generarSpline(const vector<int> &y){
 	}
 
 	// Resuelvo triangular superior (Uc = x)
-	this->c = vector<double>(n - 1, 0);
+	this->c = vector<double>(n, 0);
 	for(int i = n - 2; i > 0; i--){
 		this->c[i] = x[i];
 		this->c[i] -= this->c[i + 1];
@@ -55,8 +55,8 @@ void Spline::generarSpline(const vector<int> &y){
 	}
 
 	// Calculo mis coeficientes "b" y "d"
-	this->b = vector<double>(n - 1, 0);
-	this->d = vector<double>(n - 1, 0);
+	this->b = vector<double>(n, 0);
+	this->d = vector<double>(n, 0);
 	for(int i = 0; i < n - 1; i++){
 		this->b[i] = this->a[i + 1] - this->a[i] - (2*this->c[i] + this->c[i + 1])/3;
 		this->d[i] = (c[i + 1] - c[i])/3;

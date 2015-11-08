@@ -11,7 +11,7 @@ LDFLAGS=
 INCDIR=. #../../../../../Modulos-CPP
 
 # Agregar acá los archivos .cpp a compilar
-SOURCES=tp.cpp spline.cpp video.cpp
+SOURCES=tp.cpp spline.cpp multi_spline.cpp video.cpp
 
 # Objetos que serán generados (no tocar)
 OBJECTS=$(SOURCES:.cpp=.o)
