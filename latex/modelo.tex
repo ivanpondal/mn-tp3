@@ -51,6 +51,26 @@ $g_0, \dots, g_{c-1}$ los nuevos frames. Tenemos que:
 \end{equation*}
 
 \subsection{Interpolación Lineal}\label{Lineal}
+En este método, buscaremos interpolar los píxeles de frames contiguos con una función
+lineal. Para ello, construiremos un Polinomio Interpolante de grado 1 utilizando
+\textit{diferencias divididas}, ya que ofrece una construcción más sencilla que al seguir
+el método de Lagrange.
+
+Luego, si llamamos $f$ a la función (desconocida excepto en los puntos $x_j$), definimos:
+\begin{itemize}
+    \item Diferencia dividida de orden cero en $x_j$:
+        \begin{equation*}
+            f[x_j] = f(x_j)
+        \end{equation*}
+    \item Diferencia dividida de orden uno en $x_j$, $x_{j+1}$:
+        \begin{equation*}
+            f[x_j,x_{j+1}]= \frac{f[x_{j+1}] - f[x_j]}{x_{j+1} - x_j} = \frac{f(x_{j+1}) - f(x_j)}{x_{j+1} - x_j}
+        \end{equation*}
+    \item Polinomio Interpolante de grado 1 para $x_j$, $x_{j+1}$:
+        \begin{equation*}
+            P_1(x) = f[x_j] + f[x_j,x_{j+1}](x-x_j) = f(x_j) + \frac{f(x_{j+1}) - f(x_j)}{x_{j+1} - x_j}*(x-x_j)
+        \end{equation*}
+\end{itemize}
 
 \subsection{Interpolación por Splines}\label{Splines}
 

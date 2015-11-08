@@ -436,6 +436,7 @@ void exp_baby_tiempo(MetodoInterpolacion metodo, int cuadros_a_agregar) {
     cout << "Tiempo de computo promedio por pixel: " << setprecision(15) << time/double(frames_out.size() * frames_out[0].size() *frames_out[0][0].size()) << " ns." << endl;
 }
 
+
 // ****************** FUNCION PARA FORMATO DE LA CATEDRA ***********************
 void resolver(const char* inputfile, const char* outputfile, int metodo, int cuadros) {
     cout << "Input file: " << inputfile << endl;
