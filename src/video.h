@@ -4,6 +4,8 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <vecinos.h>
+#include <lineal.h>
 #include <spline.h>
 
 using namespace std;

@@ -3,6 +3,8 @@
 
 #include "mini_test.h"
 #include "interpolador.h"
+#include "vecinos.h"
+#include "lineal.h"
 #include "spline.h"
 #include "multi_spline.h"
 #include "video.h"
@@ -245,6 +247,54 @@ void test_texto_a_video() {
 
 
 // f(x) = 42
+void test_vecinos_constante(){
+	vector<int> y = {42, 42, 42, 42};
+	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
+	InterpolacionVecinos vecinos(y, 1);
+	assert_interpolacion(&vecinos, esperados, 0.5);
+}
+
+// f(x) = x
+void test_vecinos_lineal(){
+	vector<int> y = {0, 1, 2, 3};
+	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
+	InterpolacionVecinos vecinos(y, 1);
+	assert_interpolacion(&vecinos, esperados, 0.5, 2);
+}
+
+// f(x) = x^2
+void test_vecinos_cuadratico(){
+	vector<int> y = {0, 1, 4, 9};
+	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
+	InterpolacionVecinos vecinos(y, 1);
+	assert_interpolacion(&vecinos, esperados, 0.5, 7);
+}
+
+// f(x) = 42
+void test_lineal_constante(){
+	vector<int> y = {42, 42, 42, 42};
+	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
+	InterpolacionLineal lineal(y, 1);
+	assert_interpolacion(&lineal, esperados, 0.5);
+}
+
+// f(x) = x
+void test_lineal_lineal(){
+	vector<int> y = {0, 1, 2, 3};
+	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
+	InterpolacionLineal lineal(y, 1);
+	assert_interpolacion(&lineal, esperados, 0.5, 0.5);
+}
+
+// f(x) = x^2
+void test_lineal_cuadratico(){
+	vector<int> y = {0, 1, 4, 9};
+	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
+	InterpolacionLineal lineal(y, 1);
+	assert_interpolacion(&lineal, esperados, 0.5, 0.5);
+}
+
+// f(x) = 42
 void test_spline_constante(){
 	vector<int> y = {42, 42, 42, 42};
 	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
@@ -391,18 +441,25 @@ int main(int argc, char *argv[])
 		resolver(inputfile, outputfile, metodo, cuadros);
 	} else if(argc == 1){
         // tests grupo
-		/*RUN_TEST(test_spline_constante);
+
+		// test_video_a_texto();
+        // test_texto_a_video();
+
+		RUN_TEST(test_vecinos_constante);
+		RUN_TEST(test_vecinos_lineal);
+		RUN_TEST(test_vecinos_cuadratico);
+        RUN_TEST(test_lineal_constante);
+		RUN_TEST(test_lineal_lineal);
+		RUN_TEST(test_lineal_cuadratico);
+		RUN_TEST(test_spline_constante);
 		RUN_TEST(test_spline_lineal);
 		RUN_TEST(test_spline_cuadratico);
 		RUN_TEST(test_multi_spline_un_tramo_constante);
 		RUN_TEST(test_multi_spline_dos_tramos_constante);
 		RUN_TEST(test_multi_spline_un_tramo_lineal);
-		*/
 		RUN_TEST(test_multi_spline_dos_tramos_lineal);
 		RUN_TEST(test_multi_spline_un_tramo_cuadratico);
 		RUN_TEST(test_multi_spline_dos_tramos_cuadratico);
-        // test_video_a_texto();
-        // test_texto_a_video();
 
         // exp grupo
         // exp_baby_error(SPLINES, 1);
@@ -417,6 +474,12 @@ int main(int argc, char *argv[])
         // exp_baby_tiempo(SPLINES, 1);
         // exp_baby_tiempo(LINEAL, 1);
         // exp_baby_tiempo(VECINOS, 1);
+        // exp_baby_tiempo(SPLINES, 2);
+        // exp_baby_tiempo(LINEAL, 2);
+        // exp_baby_tiempo(VECINOS, 2);
+        // exp_baby_tiempo(SPLINES, 5);
+        // exp_baby_tiempo(LINEAL, 5);
+        // exp_baby_tiempo(VECINOS, 5);
 
 	} else {
         cout << "Usage: ./tp <archivo_entrada> <archivo_salida> <metodo> <cantidad_cuadros_a_agregar>" << endl;
