@@ -332,6 +332,13 @@ void test_multi_spline_dos_tramos_constante(){
 	assert_interpolacion(&multi_spline, esperados, 0.5);
 }
 
+void test_multi_spline_tres_tramos_constante(){
+	vector<int> y = {42, 42, 42, 42};
+	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
+	MultiSpline multi_spline(y, 3);
+	assert_interpolacion(&multi_spline, esperados, 0.5);
+}
+
 // f(x) = x
 void test_multi_spline_un_tramo_lineal(){
 	vector<int> y = {0, 1, 2, 3};
@@ -342,8 +349,15 @@ void test_multi_spline_un_tramo_lineal(){
 
 void test_multi_spline_dos_tramos_lineal(){
 	vector<int> y = {0, 1, 2, 3};
-	vector<double> esperados = {0, 0.5, 1, 1.5, 2};
+	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
 	MultiSpline multi_spline(y, 2);
+	assert_interpolacion(&multi_spline, esperados, 0.5);
+}
+
+void test_multi_spline_tres_tramos_lineal(){
+	vector<int> y = {0, 1, 2, 3};
+	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
+	MultiSpline multi_spline(y, 3);
 	assert_interpolacion(&multi_spline, esperados, 0.5);
 }
 
@@ -357,11 +371,17 @@ void test_multi_spline_un_tramo_cuadratico(){
 
 void test_multi_spline_dos_tramos_cuadratico(){
 	vector<int> y = {0, 1, 4, 9};
-	vector<double> esperados = {0, 0.25, 1, 2.25, 4};
+	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
 	MultiSpline multi_spline(y, 2);
 	assert_interpolacion(&multi_spline, esperados, 0.5, 0.5);
 }
 
+void test_multi_spline_tres_tramos_cuadratico(){
+	vector<int> y = {0, 1, 4, 9};
+	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
+	MultiSpline multi_spline(y, 3);
+	assert_interpolacion(&multi_spline, esperados, 0.5, 0.5);
+}
 // ********************** EXPERIMENTACION DEL GRUPO ****************************
 void exp_baby_error(MetodoInterpolacion metodo, int cuadros_a_agregar) {
     cout << "Calculando error al interpolar usando " << getTextForMetodo(metodo) << ", tomando del video original 1 frame de cada " << cuadros_a_agregar + 1 << ": " << endl;
@@ -416,6 +436,7 @@ void exp_baby_tiempo(MetodoInterpolacion metodo, int cuadros_a_agregar) {
     cout << "Tiempo de computo promedio por pixel: " << setprecision(15) << time/double(frames_out.size() * frames_out[0].size() *frames_out[0][0].size()) << " ns." << endl;
 }
 
+
 // ****************** FUNCION PARA FORMATO DE LA CATEDRA ***********************
 void resolver(const char* inputfile, const char* outputfile, int metodo, int cuadros) {
     cout << "Input file: " << inputfile << endl;
@@ -444,7 +465,7 @@ int main(int argc, char *argv[])
 		// test_video_a_texto();
         // test_texto_a_video();
 
-		RUN_TEST(test_vecinos_constante);
+/*		RUN_TEST(test_vecinos_constante);
 		RUN_TEST(test_vecinos_lineal);
 		RUN_TEST(test_vecinos_cuadratico);
         RUN_TEST(test_lineal_constante);
@@ -453,13 +474,16 @@ int main(int argc, char *argv[])
 		RUN_TEST(test_spline_constante);
 		RUN_TEST(test_spline_lineal);
 		RUN_TEST(test_spline_cuadratico);
+		*/
 		RUN_TEST(test_multi_spline_un_tramo_constante);
 		RUN_TEST(test_multi_spline_dos_tramos_constante);
+		RUN_TEST(test_multi_spline_tres_tramos_constante);
 		RUN_TEST(test_multi_spline_un_tramo_lineal);
 		RUN_TEST(test_multi_spline_dos_tramos_lineal);
+		RUN_TEST(test_multi_spline_tres_tramos_lineal);
 		RUN_TEST(test_multi_spline_un_tramo_cuadratico);
 		RUN_TEST(test_multi_spline_dos_tramos_cuadratico);
-
+		RUN_TEST(test_multi_spline_tres_tramos_cuadratico);
         // exp grupo
         // exp_baby_error(SPLINES, 1);
         // exp_baby_error(LINEAL, 1);

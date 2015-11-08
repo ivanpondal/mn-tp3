@@ -85,7 +85,7 @@ void Video::aplicarCamaraLenta(MetodoInterpolacion metodo){
 			break;
 		case MULTI_SPLINES:
 			cout << "Aplicando interpolación cúbica de a tramos" << endl;
-			interpolarMultiSplines();
+			interpolarMultiSplines(4);
 			break;
 
 	}
@@ -116,7 +116,29 @@ void Video::interpolarSplines(){
 	}
 }
 
-void Video::interpolarMultiSplines(){
+void Video::interpolarMultiSplines(int longitud_tramo){
+	MultiSpline multi_spline_xy (this->numero_frames, longitud_tramo);
+
+	double multi_spline_x;
+	int multi_spline_y;
+	for(int x = 0; x < this->ancho; x++){
+		for(int y = 0; y < this->alto; y++){
+			multi_spline_xy.recalcular(this->frames[x][y]);
+			for(int i = 1; i < this->numero_frames_out; i += this->cuadros_nuevos + 1){
+				for(int n = 0; n < this->cuadros_nuevos; n++){
+					multi_spline_x = (i - 1)/(this->cuadros_nuevos + 1) + float(n + 1)/(this->cuadros_nuevos + 1);
+					multi_spline_y = round(multi_spline_xy.evaluar(multi_spline_x));
+					if(multi_spline_y < 0){
+						multi_spline_y = 0;
+					}
+					else if(multi_spline_y > 255){
+						multi_spline_y = 255;
+					}
+					this->frames_out[x][y][i + n] = multi_spline_y;
+				}
+			}
+		}
+	}
 }
 
 void Video::interpolarLineal(){
