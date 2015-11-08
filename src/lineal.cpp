@@ -21,7 +21,6 @@ void InterpolacionLineal::recalcular(const vector<int> &y, int valores_a_agregar
 		double dif_dividida_uno = double(y[i+1] - y[i]) / double(valores_a_agregar+1);
 
 		for(int k = 0; k < valores_a_agregar; k++){
-			// int pixel = (int)(polinomio_lineal[1][0] + polinomio_lineal[1][1]*(i + k));
 			double pixel = dif_dividida_cero + dif_dividida_uno*double(k + 1);
 			if(pixel < 0){
 				pixel = 0;
@@ -33,14 +32,11 @@ void InterpolacionLineal::recalcular(const vector<int> &y, int valores_a_agregar
 		}
 	}
 	datos_generados.push_back(double(y[y.size()-1]));
-	// cout << endl;
-	// for (unsigned int i = 0; i < datos_generados.size()-1; i++) {
-	// 	cout << datos_generados[i] << ", ";
-	// }
-	// cout << datos_generados[datos_generados.size()-1] << endl;
 }
 
 double InterpolacionLineal::evaluar(double x){
 	double aux = x * double(valores_a_agregar+1);
-	return datos_generados[(int)floor(aux)];
+	int xj = (int)floor(aux);
+	//cout << x << " -> " << xj << endl;
+	return datos_generados[xj];
 }

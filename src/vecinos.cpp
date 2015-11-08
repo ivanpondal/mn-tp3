@@ -26,5 +26,7 @@ void InterpolacionVecinos::recalcular(const vector<int> &y, int valores_a_agrega
 
 double InterpolacionVecinos::evaluar(double x){
 	double aux = x * double(valores_a_agregar+1);
-	return datos_generados[(int)floor(aux)];
+	int xj = (int)floor(aux);
+	// cout << x << " -> " << xj << endl;
+	return datos_generados[xj];
 }
