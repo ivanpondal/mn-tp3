@@ -7,6 +7,7 @@
 #include <vecinos.h>
 #include <lineal.h>
 #include <spline.h>
+#include <multi_spline.h>
 
 using namespace std;
 
@@ -34,7 +35,7 @@ class Video{
 		vector<vector<vector<int> > > frames;
 		vector<vector<vector<int> > > frames_out;
 		void interpolarSplines();
-		void interpolarMultiSplines();
+		void interpolarMultiSplines(int longitud_tramo);
 		void interpolarLineal();
 		void interpolarVecinos();
 };
