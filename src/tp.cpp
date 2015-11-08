@@ -49,14 +49,13 @@ void assert_interpolacion(Interpolador* interpolador, vector<double> esperados, 
 	double xj = 0;
 	for(unsigned int i = 0; i < esperados.size(); i++){
 		if(DEBUG){
-			cout << "P(" << xj << ") = " << interpolador->evaluar(xj) << endl;
+			cout << "P(" << xj << ") = " << interpolador->evaluar(xj) << ", Expected(" << xj <<") = " << esperados[i] << endl;
 		}
 		// Si el intervalo equivale a un punto interpolado, el interpolador TIENE que
 		// darme el "mismo" valor que la función original
 		if(abs(xj - i) < DELTA){
 			assert_precision(interpolador->evaluar(xj), esperados[i]);
-		}
-		else{
+		} else{
 			assert_precision(interpolador->evaluar(xj), esperados[i], precision);
 		}
 		xj += intervalo;
@@ -259,7 +258,7 @@ void test_vecinos_lineal(){
 	vector<int> y = {0, 1, 2, 3};
 	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
 	InterpolacionVecinos vecinos(y, 1);
-	assert_interpolacion(&vecinos, esperados, 0.5, 2);
+	assert_interpolacion(&vecinos, esperados, 0.5, 1);
 }
 
 // f(x) = x^2
@@ -267,7 +266,7 @@ void test_vecinos_cuadratico(){
 	vector<int> y = {0, 1, 4, 9};
 	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
 	InterpolacionVecinos vecinos(y, 1);
-	assert_interpolacion(&vecinos, esperados, 0.5, 7);
+	assert_interpolacion(&vecinos, esperados, 0.5, 3);
 }
 
 // f(x) = 42
@@ -283,7 +282,7 @@ void test_lineal_lineal(){
 	vector<int> y = {0, 1, 2, 3};
 	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
 	InterpolacionLineal lineal(y, 1);
-	assert_interpolacion(&lineal, esperados, 0.5, 0.5);
+	assert_interpolacion(&lineal, esperados, 0.5);
 }
 
 // f(x) = x^2

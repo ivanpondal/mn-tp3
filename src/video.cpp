@@ -130,38 +130,6 @@ void Video::interpolarLineal(){
 	}
 }
 
-// void Video::interpolarLineal(){
-// 	// Matriz 2x2 que uso para calcular los coeficientes de cada grado del polinimio interpolador
-// 	vector<vector<double>> polinomio_lineal(2, vector<double>(2, 0));
-//
-// 	int pixel = 0;
-// 	for(int x = 0; x < this->ancho; x++){
-// 		for(int y = 0; y < this->alto; y++){
-// 			for(int i = 1; i < this->numero_frames_out - this->cuadros_nuevos; i += this->cuadros_nuevos + 1){
-// 				// Calculo polinimio usando dif divididas, posible problema con el ultimo
-// 				polinomio_lineal[0][0] = this->frames_out[x][y][i-1];
-// 				int segundo_x = i + this->cuadros_nuevos + 1;
-// 				double diverencia_divida = (this->frames_out[x][y][segundo_x-1] - this->frames_out[x][y][i-1]) / (double)(segundo_x - i);
-// 				polinomio_lineal[1][0] = diverencia_divida*(-1*i);
-// 				polinomio_lineal[1][1] = diverencia_divida;
-// 				// Los coeficientes quedan en la segunda fila de la matriz
-// 				polinomio_lineal[1][0] += polinomio_lineal[0][0];
-// 				for(int n = 0; n < this->cuadros_nuevos; n++){
-// 					pixel = (int)(polinomio_lineal[1][0] + polinomio_lineal[1][1]*(i + n));
-//
-// 					if(pixel < 0){
-// 						pixel = 0;
-// 					}
-// 					else if(pixel > 255){
-// 						pixel = 255;
-// 					}
-// 					this->frames_out[x][y][i + n] = pixel;
-// 				}
-// 			}
-// 		}
-// 	}
-// }
-
 void Video::interpolarVecinos() {
 	for(int x = 0; x < this->ancho; x++){
 		for(int y = 0; y < this->alto; y++){

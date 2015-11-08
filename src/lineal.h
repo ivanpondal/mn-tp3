@@ -23,7 +23,9 @@ class InterpolacionLineal: public Interpolador{
 		void recalcular(const vector<int> &y, int valores_a_agregar);
 		double evaluar(double x);
 	private:
-		vector<int> datos_generados;
+		vector<double> datos_generados;
+		int valores_a_agregar;
+		int cant_datos_originales;
 };
 
 #endif // LINEAL_H_INCLUDED

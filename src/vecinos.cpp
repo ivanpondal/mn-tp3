@@ -8,6 +8,9 @@ InterpolacionVecinos::InterpolacionVecinos(const vector<int> &y, int valores_a_a
 }
 
 void InterpolacionVecinos::recalcular(const vector<int> &y, int valores_a_agregar){
+	this->cant_datos_originales = y.size();
+	this->valores_a_agregar = valores_a_agregar;
+
 	datos_generados.clear();
 	for(unsigned int i = 0; i < y.size() - 1; i++){
 		datos_generados.push_back(y[i]);
@@ -22,6 +25,6 @@ void InterpolacionVecinos::recalcular(const vector<int> &y, int valores_a_agrega
 }
 
 double InterpolacionVecinos::evaluar(double x){
-	int xj = (int)floor(x);
-	return datos_generados[xj];
+	double aux = x * double(valores_a_agregar+1);
+	return datos_generados[(int)floor(aux)];
 }

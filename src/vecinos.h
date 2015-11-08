@@ -16,6 +16,8 @@ class InterpolacionVecinos: public Interpolador{
 		double evaluar(double x);
 	private:
 		vector<int> datos_generados;
+		int valores_a_agregar;
+		int cant_datos_originales;
 };
 
 #endif // VECINOS_H_INCLUDED
