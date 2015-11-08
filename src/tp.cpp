@@ -153,7 +153,7 @@ double video_max_peak_to_signal_noise_ratio(const vector<vector<vector<int> > > 
     return max_error;
 }
 
-double video_prom_error_cuadratico_medio(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real, vector<int>* resultados) {
+double video_prom_error_cuadratico_medio(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real) {
     ASSERT(output.size() != 0 && output[0].size() != 0 && output[0][0].size() != 0);
     ASSERT(real.size() != 0 && real[0].size() != 0 && real[0][0].size() != 0);
     ASSERT(output.size() == real.size() && output[0].size() == real[0].size() && output[0][0].size() <= real[0][0].size());
@@ -180,7 +180,7 @@ double video_prom_error_cuadratico_medio(const vector<vector<vector<int> > > &ou
         } else {
             sum_error += error;
         }
-        resultados[k] = (int) error;
+
     }
 
     cout << "Hay " << frames_iguales << " frames iguales de " << frames << ", o: " << setprecision(4) << double(frames_iguales)/double(frames) << "%" << endl;
@@ -215,6 +215,7 @@ double video_prom_peak_to_signal_noise_ratio(const vector<vector<vector<int> > >
         } else {
             sum_error += error;
         }
+
     }
 
     cout << "Hay " << frames_iguales << " frames iguales de " << frames << ", o: " << setprecision(4) << double(frames_iguales)/double(frames) << "%" << endl;
@@ -222,7 +223,7 @@ double video_prom_peak_to_signal_noise_ratio(const vector<vector<vector<int> > >
     return sum_error/double(frames - frames_iguales);
 }
 
-void error_cuadratico_medio_per_frame(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real) {
+void error_cuadratico_medio_per_frame(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real, vector<double> &resultados) {
     /*
     ASSERT(output.size() != 0 && output[0].size() != 0 && output[0][0].size() != 0);
     ASSERT(real.size() != 0 && real[0].size() != 0 && real[0][0].size() != 0);
@@ -231,8 +232,8 @@ void error_cuadratico_medio_per_frame(const vector<vector<vector<int> > > &outpu
     int ancho = output.size();
     int alto = output[0].size();
     int frames = output[0][0].size();
-    int frames_iguales = 0;
-    double sum_error = 0;
+    //int frames_iguales = 0;
+    //double sum_error = 0;
 
     vector<vector<int > > frame_output(ancho, vector<int>(alto, 0));
     vector<vector<int > > frame_real(ancho, vector<int>(alto, 0));
@@ -246,17 +247,53 @@ void error_cuadratico_medio_per_frame(const vector<vector<vector<int> > > &outpu
         double error = frame_error_cuadratico_medio(frame_output, frame_real);
         if (error < DELTA) {
             // el frame output es igual al frame real
-            frames_iguales++;
+            //frames_iguales++;
         } else {
-            sum_error += error;
+            //sum_error += error;
+            resultados[k] = error;
         }
     }
 
-    cout << "Hay " << frames_iguales << " frames iguales de " << frames << ", o: " << setprecision(4) << double(frames_iguales)/double(frames) << "%" << endl;
+    //cout << "Hay " << frames_iguales << " frames iguales de " << frames << ", o: " << setprecision(4) << double(frames_iguales)/double(frames) << "%" << endl;
 
-    return sum_error/double(frames - frames_iguales);
+    //return sum_error/double(frames - frames_iguales);
 }
 
+void peak_to_signal_noise_per_frame(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real, vector<double> &resultados) {
+    ASSERT(output.size() != 0 && output[0].size() != 0 && output[0][0].size() != 0);
+    ASSERT(real.size() != 0 && real[0].size() != 0 && real[0][0].size() != 0);
+    ASSERT(output.size() == real.size() && output[0].size() == real[0].size() && output[0][0].size() <= real[0][0].size());
+
+    int ancho = output.size();
+    int alto = output[0].size();
+    int frames = output[0][0].size();
+    //int frames_iguales = 0;
+    //double sum_error = 0;
+
+    vector<vector<int > > frame_output(ancho, vector<int>(alto, 0));
+    vector<vector<int > > frame_real(ancho, vector<int>(alto, 0));
+    for (int k = 0; k < frames; k++) {
+        for(int x = 0; x < ancho; x++){
+    		for(int y = 0; y < alto; y++){
+                frame_output[x][y] = output[x][y][k];
+                frame_real[x][y] = real[x][y][k];
+            }
+        }
+        double error = frame_peak_to_signal_noise_ratio(frame_output, frame_real);
+        if (error < DELTA) {
+            // el frame output es igual al frame real
+            //frames_iguales++;
+        } else {
+            //sum_error += error;
+            resultados[k] = error;
+        }
+
+    }
+
+    //cout << "Hay " << frames_iguales << " frames iguales de " << frames << ", o: " << setprecision(4) << double(frames_iguales)/double(frames) << "%" << endl;
+
+    //return sum_error/double(frames - frames_iguales);
+}
 
 void video_a_texto(const char* videofile, const char* textfile, int salto = 1) {
     cout << "Convirtiendo video " << videofile << " a texto " <<  textfile << " con salto " << salto << endl;
@@ -423,10 +460,10 @@ void test_multi_spline_tres_tramos_cuadratico(){
 }
 // ********************** EXPERIMENTACION DEL GRUPO ****************************
 
-void exp_error(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * video, const char * file) {
+void exp_error(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * input_text, const char * out) {
     //cout << "Calculando error al interpolar usando " << getTextForMetodo(metodo) << ", tomando del video original 1 frame de cada " << cuadros_a_agregar + 1 << ": " << endl;
     FILE *file = fopen(out, "w+");
-    string input_video = video;
+    string input_video = input_text;
     ostringstream os_real;
     os_real << "data/video_exp_" << getTextForMetodo(metodo) << "_real.txt";
     string real_text = os_real.str();
@@ -449,16 +486,22 @@ void exp_error(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * v
 	  video.aplicarCamaraLenta(metodo);
     vector<vector<vector<int> > > frames_out = video.obtenerFramesCalculados();
 
-    vector<int> err_per_frame_ecm(frames_out, 0);
-    vector<int> err_per_frame_psnr(frames_out, 0);
+    int frames = frames_out[0][0].size();
 
-    error_cuadratico_medio_per_frame(frames_out, frames_real, &err_per_frame_ecm);
-    peak_to_signal_noise_per_frame(frames_out, frames_real, &err_per_frame_psnr);
+    vector<double> err_per_frame_ecm(frames, 0);
+    vector<double> err_per_frame_psnr(frames, 0);
 
-    for(unsigned int i = 0; i < frames_out; i++) {
-        fprintf(file, "%d %d %d \n", i, err_per_frame_ecm[i], err_per_frame_psnr[i]);
+    error_cuadratico_medio_per_frame(frames_out, frames_real, err_per_frame_ecm);
+    peak_to_signal_noise_per_frame(frames_out, frames_real, err_per_frame_psnr);
+
+
+    //fprintf(file, "%s\n", metodo);
+    //fprintf(file, "%s %s %s\n", frame, err_per_frame_ecm, err_per_frame_psnr);
+    for(int i = 0; i < frames; i++) {
+        if(err_per_frame_ecm[i] != 0) {
+              fprintf(file, "%d %.4f %.4f \n", i, err_per_frame_ecm[i], err_per_frame_psnr[i]);
+        }
     }
-
 
     //double err_frame_ecm = video_prom_error_cuadratico_medio(frames_out, frames_real);
     //double err_frame_psnr = video_prom_peak_to_signal_noise_ratio(frames_out, frames_real);
@@ -467,10 +510,10 @@ void exp_error(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * v
     // cout << "PSNR promedio por frame: " << setprecision(15) << prom_err_frame_psnr << endl;
 }
 
-void exp_tiempo(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * video, const char * file) {
+void exp_tiempo(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * input_text, const char * out) {
     //cout << "Calculando tiempo de computo al interpolar usando " << getTextForMetodo(metodo) << ", agregando " << cuadros_a_agregar << " frames: " << endl;
     FILE *file = fopen(out, "w+");
-    string input_video = video;
+    string input_video = input_text;
     ostringstream os_aux;
     os_aux << "data/video_exp_" << getTextForMetodo(metodo) << "_aux.txt";
     string aux_text = os_aux.str();
@@ -482,7 +525,7 @@ void exp_tiempo(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * 
     Video video(aux_text.c_str(), cuadros_a_agregar);
 	  video.aplicarCamaraLenta(metodo);
     double time = stop_timer();
-    fprintf(file, "%s %.6f \n", metodo, time);
+    fprintf(file, "%d %.6f \n", metodo, time);
     //cout << "Tiempo de computo para todo el video: " << setprecision(15) << time << " ns." << endl;
     vector<vector<vector<int> > > frames_out = video.obtenerFramesCalculados();
     //cout << "Tiempo de computo promedio por frame: " << setprecision(15) << time/double(frames_out[0][0].size()) << " ns." << endl;
