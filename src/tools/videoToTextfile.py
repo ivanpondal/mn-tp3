@@ -38,7 +38,8 @@ print '   Width:\t' + str(width)
 
 # Guardamos informacion general en el archivo de salida.
 f = open(textFilename,'w')
-f.write(str(int(nFrames)) + '\n')
+
+f.write(str((int(nFrames)+salto-1)/salto) + '\n')
 f.write(str(int(height)) + ',' + str(int(width)) + '\n')
 f.write(str(int(frameRate)) + '\n')
 

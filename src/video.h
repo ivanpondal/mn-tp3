@@ -4,16 +4,24 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <vecinos.h>
+#include <lineal.h>
 #include <spline.h>
 
 using namespace std;
 
-enum MetodoInterpolacion : int {VECINOS = 0, LINEAL = 1, SPLINES = 2};
+enum MetodoInterpolacion : int {VECINOS = 0, LINEAL = 1, SPLINES = 2, MULTI_SPLINES = 3};
+static const char * MetodoInterpolacionStrings[] = { "Vecinos", "Lineal", "Splines", "Multi-Splines"};
+static const char * getTextForMetodo(MetodoInterpolacion metodo) {
+  return MetodoInterpolacionStrings[metodo];
+}
 
 class Video{
 	public:
 		Video();
 		Video(const char* entrada, int cuadrosNuevos);
+		vector<vector<vector<int> > > obtenerFramesOriginales();
+		vector<vector<vector<int> > > obtenerFramesCalculados();
 		void guardar(const char* salida);
 		void aplicarCamaraLenta(MetodoInterpolacion metodo);
 	private:
@@ -26,6 +34,7 @@ class Video{
 		vector<vector<vector<int> > > frames;
 		vector<vector<vector<int> > > frames_out;
 		void interpolarSplines();
+		void interpolarMultiSplines();
 		void interpolarLineal();
 		void interpolarVecinos();
 };

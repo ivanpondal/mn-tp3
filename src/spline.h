@@ -4,9 +4,11 @@
 #include <vector>
 #include <cmath>
 
+#include <interpolador.h>
+
 using namespace std;
 
-class Spline{
+class Spline: public Interpolador{
 	public:
 		Spline();
 		Spline(int n);
