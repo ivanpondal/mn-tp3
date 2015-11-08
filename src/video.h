@@ -10,8 +10,8 @@
 
 using namespace std;
 
-enum MetodoInterpolacion : int {VECINOS = 0, LINEAL = 1, SPLINES = 2};
-static const char * MetodoInterpolacionStrings[] = { "Vecinos", "Lineal", "Splines" };
+enum MetodoInterpolacion : int {VECINOS = 0, LINEAL = 1, SPLINES = 2, MULTI_SPLINES = 3};
+static const char * MetodoInterpolacionStrings[] = { "Vecinos", "Lineal", "Splines", "Multi-Splines"};
 static const char * getTextForMetodo(MetodoInterpolacion metodo) {
   return MetodoInterpolacionStrings[metodo];
 }
@@ -34,6 +34,7 @@ class Video{
 		vector<vector<vector<int> > > frames;
 		vector<vector<vector<int> > > frames_out;
 		void interpolarSplines();
+		void interpolarMultiSplines();
 		void interpolarLineal();
 		void interpolarVecinos();
 };

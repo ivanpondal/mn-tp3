@@ -4,9 +4,11 @@
 #include <vector>
 #include <cmath>
 
+#include <interpolador.h>
+
 using namespace std;
 
-class InterpolacionVecinos {
+class InterpolacionVecinos: public Interpolador{
 	public:
 		InterpolacionVecinos();
 		InterpolacionVecinos(const vector<int> &y, int valores_a_agregar);

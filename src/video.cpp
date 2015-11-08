@@ -83,6 +83,11 @@ void Video::aplicarCamaraLenta(MetodoInterpolacion metodo){
 			cout << "Aplicando interpolación cúbica" << endl;
 			interpolarSplines();
 			break;
+		case MULTI_SPLINES:
+			cout << "Aplicando interpolación cúbica de a tramos" << endl;
+			interpolarMultiSplines();
+			break;
+
 	}
 }
 
@@ -109,6 +114,9 @@ void Video::interpolarSplines(){
 			}
 		}
 	}
+}
+
+void Video::interpolarMultiSplines(){
 }
 
 void Video::interpolarLineal(){

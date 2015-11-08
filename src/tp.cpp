@@ -1,10 +1,12 @@
 #define DELTA 0.0001
-#define DEBUG true
+#define DEBUG false
 
 #include "mini_test.h"
+#include "interpolador.h"
 #include "vecinos.h"
 #include "lineal.h"
 #include "spline.h"
+#include "multi_spline.h"
 #include "video.h"
 //#include "utils.h"
 
@@ -43,70 +45,26 @@ void assert_precision(double valor, double esperado){
 	assert_precision(valor, esperado, DELTA);
 }
 
-void assert_interpolacion_vecinos(InterpolacionVecinos vecinos, vector<double> esperados, double intervalo, double precision){
+void assert_interpolacion(Interpolador* interpolador, vector<double> esperados, double intervalo, double precision){
 	double xj = 0;
 	for(unsigned int i = 0; i < esperados.size(); i++){
 		if(DEBUG){
-			cout << "V" << i << "(" << xj << ") = " << vecinos.evaluar(xj)<< endl;
+			cout << "P(" << xj << ") = " << interpolador->evaluar(xj) << endl;
 		}
-		// Si el intervalo equivale a un punto interpolado, el vecinos TIENE que
+		// Si el intervalo equivale a un punto interpolado, el interpolador TIENE que
 		// darme el "mismo" valor que la función original
 		if(abs(xj - i) < DELTA){
-			assert_precision(vecinos.evaluar(xj), esperados[i]);
+			assert_precision(interpolador->evaluar(xj), esperados[i]);
 		}
 		else{
-			assert_precision(vecinos.evaluar(xj), esperados[i], precision);
+			assert_precision(interpolador->evaluar(xj), esperados[i], precision);
 		}
 		xj += intervalo;
 	}
 }
 
-void assert_interpolacion_vecinos(InterpolacionVecinos vecinos, vector<double> esperados, double intervalo){
-	assert_interpolacion_vecinos(vecinos, esperados, intervalo, DELTA);
-}
-
-void assert_interpolacion_lineal(InterpolacionLineal lineal, vector<double> esperados, double intervalo, double precision){
-	double xj = 0;
-	for(unsigned int i = 0; i < esperados.size(); i++){
-		if(DEBUG){
-			cout << "L" << i << "(" << xj << ") = " << lineal.evaluar(xj)<< endl;
-		}
-		// Si el intervalo equivale a un punto interpolado, el lineal TIENE que
-		// darme el "mismo" valor que la función original
-		if(abs(xj - i) < DELTA){
-			assert_precision(lineal.evaluar(xj), esperados[i]);
-		}
-		else{
-			assert_precision(lineal.evaluar(xj), esperados[i], precision);
-		}
-		xj += intervalo;
-	}
-}
-
-void assert_interpolacion_lineal(InterpolacionLineal lineal, vector<double> esperados, double intervalo){
-	assert_interpolacion_lineal(lineal, esperados, intervalo, DELTA);
-}
-
-void assert_interpolacion_spline(Spline spline, vector<double> esperados, double intervalo, double precision){
-	double xj = 0;
-	for(unsigned int i = 0; i < esperados.size(); i++){
-		if(DEBUG){
-			cout << "S" << i << "(" << xj << ") = " << spline.evaluar(xj)<< endl;
-		}
-		// Si el intervalo equivale a un punto interpolado, el spline TIENE que
-		// darme el "mismo" valor que la función original
-		if(abs(xj - i) < DELTA){
-			assert_precision(spline.evaluar(xj), esperados[i]);
-		}
-		else{
-			assert_precision(spline.evaluar(xj), esperados[i], precision);
-		}
-		xj += intervalo;
-	}
-}
-
-void assert_interpolacion_spline(Spline spline, vector<double> esperados, double intervalo){
-	assert_interpolacion_spline(spline, esperados, intervalo, DELTA);
+void assert_interpolacion(Interpolador* interpolador, vector<double> esperados, double intervalo){
+	assert_interpolacion(interpolador, esperados, intervalo, DELTA);
 }
 
 double frame_error_cuadratico_medio(const vector<vector<int > > &output, const vector<vector<int > > &real) {
@@ -287,12 +245,13 @@ void test_texto_a_video() {
     texto_a_video("data/baby.txt","data/baby_re.avi");
 }
 
+
 // f(x) = 42
 void test_vecinos_constante(){
 	vector<int> y = {42, 42, 42, 42};
 	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
 	InterpolacionVecinos vecinos(y, 1);
-	assert_interpolacion_vecinos(vecinos, esperados, 0.5);
+	assert_interpolacion(&vecinos, esperados, 0.5);
 }
 
 // f(x) = x
@@ -300,7 +259,7 @@ void test_vecinos_lineal(){
 	vector<int> y = {0, 1, 2, 3};
 	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
 	InterpolacionVecinos vecinos(y, 1);
-	assert_interpolacion_vecinos(vecinos, esperados, 0.5, 2);
+	assert_interpolacion(&vecinos, esperados, 0.5, 2);
 }
 
 // f(x) = x^2
@@ -308,7 +267,7 @@ void test_vecinos_cuadratico(){
 	vector<int> y = {0, 1, 4, 9};
 	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
 	InterpolacionVecinos vecinos(y, 1);
-	assert_interpolacion_vecinos(vecinos, esperados, 0.5, 7);
+	assert_interpolacion(&vecinos, esperados, 0.5, 7);
 }
 
 // f(x) = 42
@@ -316,7 +275,7 @@ void test_lineal_constante(){
 	vector<int> y = {42, 42, 42, 42};
 	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
 	InterpolacionLineal lineal(y, 1);
-	assert_interpolacion_lineal(lineal, esperados, 0.5);
+	assert_interpolacion(&lineal, esperados, 0.5);
 }
 
 // f(x) = x
@@ -324,7 +283,7 @@ void test_lineal_lineal(){
 	vector<int> y = {0, 1, 2, 3};
 	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
 	InterpolacionLineal lineal(y, 1);
-	assert_interpolacion_lineal(lineal, esperados, 0.5, 0.5);
+	assert_interpolacion(&lineal, esperados, 0.5, 0.5);
 }
 
 // f(x) = x^2
@@ -332,7 +291,7 @@ void test_lineal_cuadratico(){
 	vector<int> y = {0, 1, 4, 9};
 	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
 	InterpolacionLineal lineal(y, 1);
-	assert_interpolacion_lineal(lineal, esperados, 0.5, 0.5);
+	assert_interpolacion(&lineal, esperados, 0.5, 0.5);
 }
 
 // f(x) = 42
@@ -340,7 +299,7 @@ void test_spline_constante(){
 	vector<int> y = {42, 42, 42, 42};
 	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
 	Spline spline(y);
-	assert_interpolacion_spline(spline, esperados, 0.5);
+	assert_interpolacion(&spline, esperados, 0.5);
 }
 
 // f(x) = x
@@ -348,7 +307,7 @@ void test_spline_lineal(){
 	vector<int> y = {0, 1, 2, 3};
 	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
 	Spline spline(y);
-	assert_interpolacion_spline(spline, esperados, 0.5);
+	assert_interpolacion(&spline, esperados, 0.5);
 }
 
 // f(x) = x^2
@@ -356,7 +315,52 @@ void test_spline_cuadratico(){
 	vector<int> y = {0, 1, 4, 9};
 	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
 	Spline spline(y);
-	assert_interpolacion_spline(spline, esperados, 0.5, 0.5);
+	assert_interpolacion(&spline, esperados, 0.5, 0.5);
+}
+
+// f(x) = 42
+void test_multi_spline_un_tramo_constante(){
+	vector<int> y = {42, 42, 42, 42};
+	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
+	MultiSpline multi_spline(y, 1);
+	assert_interpolacion(&multi_spline, esperados, 0.5);
+}
+
+void test_multi_spline_dos_tramos_constante(){
+	vector<int> y = {42, 42, 42, 42};
+	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
+	MultiSpline multi_spline(y, 2);
+	assert_interpolacion(&multi_spline, esperados, 0.5);
+}
+
+// f(x) = x
+void test_multi_spline_un_tramo_lineal(){
+	vector<int> y = {0, 1, 2, 3};
+	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
+	MultiSpline multi_spline(y, 1);
+	assert_interpolacion(&multi_spline, esperados, 0.5);
+}
+
+void test_multi_spline_dos_tramos_lineal(){
+	vector<int> y = {0, 1, 2, 3};
+	vector<double> esperados = {0, 0.5, 1, 1.5, 2};
+	MultiSpline multi_spline(y, 2);
+	assert_interpolacion(&multi_spline, esperados, 0.5);
+}
+
+// f(x) = x^2
+void test_multi_spline_un_tramo_cuadratico(){
+	vector<int> y = {0, 1, 4, 9};
+	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
+	MultiSpline multi_spline(y, 1);
+	assert_interpolacion(&multi_spline, esperados, 0.5, 0.5);
+}
+
+void test_multi_spline_dos_tramos_cuadratico(){
+	vector<int> y = {0, 1, 4, 9};
+	vector<double> esperados = {0, 0.25, 1, 2.25, 4};
+	MultiSpline multi_spline(y, 2);
+	assert_interpolacion(&multi_spline, esperados, 0.5, 0.5);
 }
 
 // ********************** EXPERIMENTACION DEL GRUPO ****************************
@@ -437,9 +441,11 @@ int main(int argc, char *argv[])
 		resolver(inputfile, outputfile, metodo, cuadros);
 	} else if(argc == 1){
         // tests grupo
-        // test_video_a_texto();
+
+		// test_video_a_texto();
         // test_texto_a_video();
-        RUN_TEST(test_vecinos_constante);
+
+		RUN_TEST(test_vecinos_constante);
 		RUN_TEST(test_vecinos_lineal);
 		RUN_TEST(test_vecinos_cuadratico);
         RUN_TEST(test_lineal_constante);
@@ -448,7 +454,12 @@ int main(int argc, char *argv[])
 		RUN_TEST(test_spline_constante);
 		RUN_TEST(test_spline_lineal);
 		RUN_TEST(test_spline_cuadratico);
-
+		RUN_TEST(test_multi_spline_un_tramo_constante);
+		RUN_TEST(test_multi_spline_dos_tramos_constante);
+		RUN_TEST(test_multi_spline_un_tramo_lineal);
+		RUN_TEST(test_multi_spline_dos_tramos_lineal);
+		RUN_TEST(test_multi_spline_un_tramo_cuadratico);
+		RUN_TEST(test_multi_spline_dos_tramos_cuadratico);
 
         // exp grupo
         // exp_baby_error(SPLINES, 1);

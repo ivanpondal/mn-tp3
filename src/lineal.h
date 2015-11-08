@@ -12,9 +12,11 @@
 #include <random>
 #include <iomanip>
 
+#include <interpolador.h>
+
 using namespace std;
 
-class InterpolacionLineal {
+class InterpolacionLineal: public Interpolador{
 	public:
 		InterpolacionLineal();
 		InterpolacionLineal(const vector<int> &y, int valores_a_agregar);
