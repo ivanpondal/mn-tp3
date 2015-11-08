@@ -490,6 +490,7 @@ void exp_tiempo(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * 
     fclose(file);
 }
 
+
 // ****************** FUNCION PARA FORMATO DE LA CATEDRA ***********************
 void resolver(const char* inputfile, const char* outputfile, int metodo, int cuadros) {
     cout << "Input file: " << inputfile << endl;

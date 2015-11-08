@@ -1,331 +1,96 @@
-\subsection{Page Rank}
+\subsection{Interpolación por vecinos}
 
-A la hora de implementar Page Rank, en ambas versiones, utilizamos \textsc{C++}, lenguaje que nos permite realizar mediciones temporales precisas, como así también utilizar nuestras propias estructuras de datos.
-A su vez es necesario tener en cuenta que los datos de entrada nos son provistos de la siguiente forma:
-\begin{itemize}
-	\item Cantidad de nodos ($n$) y cantidad de links salientes ($m$).
-	\item $m$ lineas con pares $i$, $j$, donde $i$ tiene un link hacia $j$.
-\end{itemize}
+Este método consiste en reemplazar los cuadros intermedios a ser rellenados por el cuadro original mas cercano en el tiempo.
+Es decir, dados los cuadros del video sin camara lenta, generamos otro video en camara lenta copiando los cuadros originales de la siguiente manera:
 
-\subsubsection{Page Rank sin matriz esparza}
-En esta versión del Page Rank utilizamos un vector de vector para representar la matriz $P_2$, la cual es necesaria para utilizar el método de la potencia en su formulación clásica.
-Los paso para realizar Page Rank sin matriz esparza son los siguientes:
-\begin{enumerate}
-	\item Leemos los datos de entrada y luego generamos $P$
-	\begin{lstlisting}
-	Leer n, m del input
-	Crear un vector de vectores, P, de tamanio n*n
-	Para k=0 hasta m-1 hacer:
-		Leer i,j del input
-		P[j-1][i-1] = 1
-	Fin Para
-	Crear un vector, links_salientes, de tamanio n
-	Para j=0 hasta n-1 hacer:
-		Para i=0 hasta n-1 hacer:
-			links_salientes[j] = links_salientes[j] + P[i][j]
-		Fin Para
-		Para i=0 hasta n-1 hacer:
-			Si links_salientes[j] > 0 entonces:
-				P[i][j] = P[i][j] / links_salientes[j]
-			Fin Si
-		Fin Para
-	Fin Para
-	\end{lstlisting}
-	Vale la pena aclarar que utilizamos \textit{links_salientes} para calcular los $n_j$ necesarios para luego calcular los valores de $P$.
-	\item A partir de $P$ y \textit{links_salientes} generamos $P_2$
-	\begin{lstlisting}
-	Definir c como el factor de teletransportacion
-	Crear un vector, v, de tamanio n iniciliazado en 1/n
-	Crear un vector, d, de tamanio 0 inicializado en 0
-	Para j=0 hasta n-1 hacer:
-		Si links_salientes[j] = 0 hacer:
-			d[j] = 1
-		Fin Si
-	Fin Para
-	Crear vector de vectores, D = multiplicarVectores(v, d)
-	Crear vector de vectores, P1 = sumaMatrices(P, D)
-	Crear vector, uno, inicializado en 1
-	Crear vector de vectores, E = multiplicarVectores(v, uno)
-	Crear vector de vectores, P2 = sumaMatrices(escalarPorMatriz(P1, c), escalarPorMatriz(E, 1-c)
-	\end{lstlisting}
-	Los procedimientos auxiliares multiplicarVectores, sumaMatrices y escalarPorMatriz son procedimientos estándar, por lo cual no los detallamos.
-	\item Calculamos el autovector asociado a 1 con el método de la Potencia con $P_2$, normalizando el autovector obtenido.
-	\begin{lstlisting}
-	Definir una precision
-	Crear un vector, x, con valores aleatorios de 1 a 50 de tamanio n
-	Crear vector de vectores, B = multiplicarMatrices(P2, P2)
-	Crear vector de vectores, C = P2
-	delta = phi(multiplicarMatrizPorVector(B, x)) / phi(multiplicarMatrizPorVector(C, x))
-	ultimo_delta = INFINITY
-	Mientras (delta - ultimo_delta) > precision hacer:
-		C = B
-		B = multiplicarMatrices(B, P2)
-		ultimo_delta = delta
-		delta = phi(multiplicarMatrizPorVector(B, x)) / phi(multiplicarMatrizPorVector(C, x))
-	Fin Mientras
-	y = multiplicarMatrizPorVector(B, x)
-	Normalizar y
-	\end{lstlisting}
-	El procedimiento phi consiste en calcular la norma infinito del vector pasado por parámetro, con la variación de no tomar el modulo de las componentes del vector.
+% \begin{bytefield}{16}
+% \wordbox{1}{A 16-bit field} \\
+% \bitbox{8}{8 bits} & \bitbox{8}{8 more bits} \\
+% \wordbox{2}{A 32-bit field. Note that text wraps within the box.}
+% \end{bytefield}
 
-	Los procedimientos auxiliares multiplicarMatrices, multiplicarMatrizPorVector y phi son procedimientos estándar, por lo cual no los detallamos.
+Sean Frame1 y Frame2 dos cuadros consecutivos del video original:
 
-	Normalizar un vector, en nuestra implementación, implica dividir cada componente del vector por la norma 1 del mismo.
-	\item Una vez obtenido el autovector estacionario, $y$, generamos el ranking de las paginas y lo imprimimos:
-	\begin{lstlisting}
-	Crear un vector de pares posición-valor, llamado ranking, de tamanio n inicializado en 0
-	Para i=0 hasta n-1 hacer:
-		ranking[i] = par(i, y[i])
-	Fin Para
-	Ordenar ranking según la segundo componente de los pares, valor
-	imprimir(ranking)
-	\end{lstlisting}
-	Para ordenar el vector ranking utilizamos el procedimiento que nos provee \textit{C++},  \texttt{sort}\footnote{http://en.cppreference.com/w/cpp/algorithm/sort}.
+\begin{centering}
+\begin{bytefield}{8}
+\bitbox{4}{Frame1} & \bitbox{4}{Frame2}
+\end{bytefield}
+\end{centering}
 
-	El procedimiento consiste, simplemente, en recorrer el vector ranking e ir imprimiendo sus pares.
-\end{enumerate}
+Si queremos ahora 6 cuadros entre cada 2 del archivo original lo transformamos a:
 
-\subsubsection{Page Rank con matriz esparza}\label{imp_esparza}
-Recordemos que elegimos el \textit{Dictionary of Keys (dok)} para representar las matrices esparsas. El mismo consiste en un vector de diccionarios, en donde las posiciones del vector representan filas y las keys de los diccionarios las columnas.
-Los paso para realizar Page Rank con matriz esparza son los siguientes:
-\begin{enumerate}
-	\item Leemos los datos de entrada y luego generamos $P$.
-	\begin{lstlisting}
-	Leer n, m del input
-	Crear un vector de diccionarios vacíos, P, de tamano n
-	Crear un vector tamano n, links_salientes, inicializado en 0
-	Para k=0 hasta m-1 hacer:
-		Leer i,j del input
-		Crear la key i-1 con 1 como valor asociado en el diccionario de P[j-1]
-		Sumar 1 al contenido de links_salientes[i-1]
-	Fin Para
-	Para i=0 hasta n-1 hacer:
-		Iterar en el diccionario de P[i]:
-			Actualizar los valores asociados a las keys con el valor 1 / links_salientes[key]
-		Fin Iteracion
-	Fin Para
-	\end{lstlisting}
-	Al igual que en la versión sin matriz esparza utilizamos \textit{links_salientes} para calcular los $n_j$ necesarios para luego calcular los valores de $P$.
+\begin{centering}
+\begin{bytefield}{32}
+\bitbox{4}{Frame1} & \bitbox{4}{Frame1} & \bitbox{4}{Frame1} & \bitbox{4}{Frame1} & \bitbox{4}{Frame2} & \bitbox{4}{Frame2} & \bitbox{4}{Frame2} & \bitbox{4}{Frame2}
+\end{bytefield}
+\end{centering}
 
-	\item Calculamos el autovector asociado a 1 con el método de la Potencia con $P$, normalizando el autovector obtenido.
-	\begin{lstlisting}
-	Definir una precision
-	Definir c como el factor de teletransportacion
-	Crear un vector, x, con valores aleatorios de 1 a 50 de tamanio n
-	Crear un vector, v, con 1/n como valores de tamanio n
-	Crear un vector, y, igual a x
-	delta =  INFINITY
-	ultimo_delta = 0.
-	Hacer:
-		x = y
-		y = esparzaPorVector(P, x)
-		y = escalarPorVector(y, c)
-		w = normaUno(x) - normaUno(y)
-		y = sumaVectores(y + escalarPorVector(w, v))
-		ultimo_delta = delta
-		delta = phi(x) / phi(y)
-	Mientras (delta - utimo_delta) > precision
-	Normalizar y
-	\end{lstlisting}
-	A continuación describimos el procedimiento auxiliar esparzaPorVector:
-	\begin{lstlisting}
-	esparzaPorVector(matriz esparza P, vector x):
-		Crear vector, y, de tamano n
-		Para i = 0 hasta n-1 hacer:
-			suma = 0
-			Itero sobre las keys del diccionario en P[i]:
-				entero j = key
-				suma = (valor de la key)*x[j]
-			Fin de la Iteracion
-			y[i] = suma
-		Fin del Para
-		Devolver y
-	\end{lstlisting}
-	El procedimiento phi es igual de la versión sin matriz esparza.
+El pseudocódigo sería el siguiente:
 
-	Los procedimientos auxiliares escalarPorVector, sumaVectores y normaUno son procedimientos estándar, por lo cual no los detallamos.
-
-	Por ultimo Normalizar un vector consiste el realizar el mismo procedimiento descripto en la versión sin matriz esparza.
-	\item A partir de este punto, los pasos son idénticos a los que realizamos en la versión sin matriz esparza.
-
-\end{enumerate}
-
-\subsection{Scripts Rankings Deportivos}
-
-Para los dos modelos siendo estudiados, GeM y el sistema de puntaje de la AFA,
-decidimos implementarlos con scripts para \textsc{MATLAB/Octave}, dado que lo que nos
-interesaba era analizar los resultados de los mismos y no analizar su tiempo de
-cómputo u otro atributo relacionado a su implementación.
-
-\subsubsection{GeM}
-
-El script posee varios parámetros de entrada que pasamos a describir a
-continuación:
-
-\begin{itemize}
-	\item \textbf{in_filename:} Dirección de archivo con datos de entrada.
-	\item \textbf{out_filename:} Dirección de archivo donde escribir el
-	resultado final.
-	\item \textbf{team_codes_filename:} Archivo opcional con el número de equipo
-	asociado a su nombre correspondiente.
-	\item \textbf{c:} Parámetro de amortiguación descrito en la
-	sección \ref{sec:gem_model} (Por defecto 0.85).
-	\item \textbf{date_limit:} Campo opcional con la cantidad de fechas a tomar
-	en cuenta (Por defecto toma todas las fechas disponibles).
-\item \textbf{precision:} Campo opcional con el nivel de precisión a utilizar en
-	las comparaciones (Por defecto 0.0001).
-\end{itemize}
-
-Ahora explicaremos el código desarrollado:
-
-\begin{enumerate}
-	\item Leemos la cantidad de equipos y partidos para después cargar todos los
-	partidos disponibles y generar nuestra matriz $A$.
-	\begin{lstlisting}
-	Cargar numero de partidos y equipos
-	Crear matriz A de tamanio equipos*equipos llena de 0s
-	Mientras partidos > 0
-		Cargo numero de fecha del partido junto a los equipos y el resultado
-		Si había limite de fecha y ya se cumplió
-			partidos = 0
-		Si no
-			Si el primer equipo perdió
-				A[numero primer equipo][numero segundo equipo] += diferencia de puntos
-			Si el segundo equipo perdió
-				A[numero segundo equipo][numero primer equipo] += diferencia de puntos
-			Fin si
-		Fin si
-		Decremento partidos en uno
-	Fin mientras
-	\end{lstlisting}
-
-	\item Generamos la matriz $H$.
-	\begin{lstlisting}
-	Crear matriz H de tamanio equipos*equipos llena de 0s
-	Crear vector a de tamanio equipos lleno de 0s
-	Para i de 1 a equipos
-		sumaFila = suma total de elementos en fila i de A
-		Si la suma > 0
-			La fila i de H serán todos los elementos de la fila i de A
-			cada uno dividido por sumaFila
-		Si no
-			Pongo un 1 en la posición i del vector a
-		Fin si
+\begin{lstlisting}
+Sean W,H,I el ancho, alto y la cantidad de frames del video original
+Sea video[W][H][I] el triple vector de numeros enteros que representa el video original
+Sea K la cantidad de frames que queremos agregar entre cuadro y cuadro
+Crear un triple vector de enteros new_video[W][H][I+(I-1)*K]
+Para w = 0 hasta W-1 hacer
+	Para h = 0 hasta H-1 hacer
+		Para i = 0 hasta I-2 hacer
+			Para j = 0 hasta K/2 hacer
+				new_video[w][h].push_back(video[w][h][i])
+			Fin para
+			Para j = (K/2)+1 hasta K hacer
+				new_video[w][h].push_back(video[w][h][i+1])
+			Fin para
+		Fin para
+		new_video[w][h].push_back(video[w][h][I-1])
 	Fin para
-	\end{lstlisting}
+Fin para
+Devolver new_video
+\end{lstlisting}
 
-	\item Generamos la matriz $G$.
-	\begin{lstlisting}
-	Crear vector e de tamanio equipos lleno de 1s
-	Crear vector u para equipos invictos con todos elementos 1/equipos
-	Crear vector v para teletransportacion con todos elementos 1/equipos
-	Crear matriz G como resultado de hacer
-	G = c*[H + a*transponer(u)] + (1 - c)*e*transponer(v)
-	\end{lstlisting}
+\subsection{Interpolación lineal}
 
-	\item Busco el autovector asociado al autovalor $\lambda = 1$.
-	\begin{lstlisting}
-	Generar matrices V y l de autovectores y autovalores de mi matriz G transpuesta
-	V es una matriz con autovectores como columnas
-	l es una matriz con autovalores en su diagonal
-	i = 1
-	Mientras valorAbsoluto(l[i][i] - 1) > precision
-		Incremento i en una unidad
-	Fin mientras
-	Crear vector x correspondiente a la columna i de la matriz V
-	\end{lstlisting}
+En este caso, usamos el polinomio interpolador de Lagrange entre cada par de puntos/pixeles consecutivos para aproximar los valores intermedios que irían en el video de camara lenta. Esto genera una función lineal para los pixeles consecutivos en la misma posición.
 
-	\item Normalizo el vector solución.
-	\begin{lstlisting}
-	x = valorAbsolutoACadaElemento(x)/sumaElementos(valorAbsolutoACadaElemento(x))
-	\end{lstlisting}
+Por ejemplo, sean dos pixeles con valores 1 y 4:
 
-	\item Genero matriz de solución.
-	\begin{lstlisting}
-	Crear matriz S de tamanio equipos*2 y llena de 0s
-	Para i de 1 a equipos
-		S[i][1] = i
-		S[i][2] = x[i]
+\begin{bytefield}{8}
+\begin{centering}
+\bitbox{4}{1} & \bitbox{4}{4}
+\end{centering}
+\end{bytefield}
+
+Si queremos un video en camara lenta con 5 cuadros intermedios por cada 2 del original, estos se replicarán de la siguiente forma:
+
+\begin{bytefield}{28}
+\begin{centering}
+\bitbox{4}{1} & \bitbox{4}{1.5} & \bitbox{4}{2} & \bitbox{4}{2.5} & \bitbox{4}{3} & \bitbox{4}{3.5} & \bitbox{4}{4}
+\end{centering}
+\end{bytefield}
+
+El procedimiento es el siguiente:
+
+\begin{lstlisting}
+Sean W,H,I el ancho, alto y la cantidad de frames del video original
+Sea video[W][H][I] el triple vector de numeros enteros que representa el video original
+Sea K la cantidad de frames que queremos agregar entre cuadro y cuadro
+Crear un triple vector de enteros new_video[W][H][I+(I-1)*K]
+Para w = 0 hasta W-1 hacer
+	Para h = 0 hasta H-1 hacer
+		Para i = 0 hasta I-2 hacer
+			coef_cero = video[w][h][i]
+			coef_uno = (video[w][h][i+1] - video[w][h][i]) / (K+1);
+			Para k = 0 hasta K hacer
+				pixel = coef_cero + coef_uno*k;
+				Si (pixel < 0) pixel = 0
+				Si (pixel > 255) pixel = 255
+				new_video.push_back(pixel)
+		Fin para
+		new_video.push_back(video[w][h][I-1])
 	Fin para
-	\end{lstlisting}
+Fin para
+Devolver new_video
+\end{lstlisting}
 
-	\item Ordeno y escribo la matriz solución.
-	\begin{lstlisting}
-	Ordenar crecientemente por segundo elemento de filas la matriz S (ranking)
-	Si tengo archivo con nombres de equipos
-		Creo mapa teamcodes con cada numero de equipo asociado a su nombre
-	Fin si
 
-	Si tengo nombres de equipos cargados
-		Para i de 0 a equipos - 1
-			Escribo numero, nombre y ranking del equipo numero equipos - i
-		Fin para
-	Si no
-		Para i de 0 a equipos - 1
-			Escribo numero y ranking del equipo numero equipos - i
-		Fin para
-	Fin si
-	\end{lstlisting}
 
-\end{enumerate}
-
-\subsubsection{Puntaje AFA}
-
-Para el script utilizado para calcular el puntaje según el criterio de la AFA
-los parámetros son los siguientes:
-
-\begin{itemize}
-	\item \textbf{in_filename:} Dirección de archivo con datos de entrada.
-	\item \textbf{out_filename:} Dirección de archivo donde escribir el
-	resultado final.
-	\item \textbf{team_codes_filename:} Archivo opcional con el número de equipo
-	asociado a su nombre correspondiente.
-	\item \textbf{date_limit:} Campo opcional con la cantidad de fechas a tomar
-	en cuenta (Por defecto toma todas las fechas disponibles).
-\end{itemize}
-
-Pasamos a describir el código:
-
-\begin{enumerate}
-	\item Leemos la cantidad de equipos y partidos para después cargar todos los
-	partidos disponibles y generar nuestra matriz $S$.
-	\begin{lstlisting}
-	Cargar numero de partidos y equipos
-	Crear matriz S de tamanio equipos*2 llena de 0s
-	Mientras partidos > 0
-		Cargo numero de fecha del partido junto a los equipos y el resultado
-		Si había limite de fecha y ya se cumplió
-			partidos = 0
-		Si no
-			Si hubo empate
-				S[numero primer equipo] += 1
-				S[numero segundo equipo] += 1
-			Si gano el primer equipo
-				S[numero primer equipo] += 3
-			Si gano el segundo equipo
-				S[numero segundo equipo] += 3
-			Fin si
-		Fin si
-		Decremento partidos en uno
-	Fin mientras
-	\end{lstlisting}
-
-	\item Ordeno y escribo la matriz solución.
-	\begin{lstlisting}
-	Ordenar crecientemente por segundo elemento de filas la matriz S (ranking)
-	Si tengo archivo con nombres de equipos
-		Creo mapa teamcodes con cada numero de equipo asociado a su nombre
-	Fin si
-
-	Si tengo nombres de equipos cargados
-		Para i de 0 a equipos - 1
-			Escribo numero, nombre y ranking del equipo numero equipos - i
-		Fin para
-	Si no
-		Para i de 0 a equipos - 1
-			Escribo numero y ranking del equipo numero equipos - i
-		Fin para
-	Fin si
-	\end{lstlisting}
-
-\end{enumerate}

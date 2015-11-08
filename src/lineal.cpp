@@ -11,7 +11,6 @@ void InterpolacionLineal::recalcular(const vector<int> &y, int valores_a_agregar
 	this->cant_datos_originales = y.size();
 	this->valores_a_agregar = valores_a_agregar;
 
-	// Matriz 2x2 que uso para calcular los coeficientes de cada grado del polinimio interpolador
 	datos_generados.clear();
 
 	for(unsigned int i = 0; i < y.size() - 1; i++){
