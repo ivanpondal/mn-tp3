@@ -1,5 +1,5 @@
-#ifndef UTILS_H_
-#define UTILS_H_
+#ifndef TEST_UTILS_H_
+#define TEST_UTILS_H_
 
 #define DELTA 0.0001
 #define DEBUG false
@@ -137,7 +137,7 @@ namespace utils {
         return max_error;
     }
 
-    static double video_prom_error_cuadratico_medio(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real, vector<int>* resultados) {
+    static double video_prom_error_cuadratico_medio(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real) {
         ASSERT(output.size() != 0 && output[0].size() != 0 && output[0][0].size() != 0);
         ASSERT(real.size() != 0 && real[0].size() != 0 && real[0][0].size() != 0);
         ASSERT(output.size() == real.size() && output[0].size() == real[0].size() && output[0][0].size() <= real[0][0].size());
@@ -164,7 +164,6 @@ namespace utils {
             } else {
                 sum_error += error;
             }
-            resultados[k] = (int) error;
         }
 
         cout << "Hay " << frames_iguales << " frames iguales de " << frames << ", o: " << setprecision(4) << double(frames_iguales)/double(frames) << "%" << endl;
@@ -206,7 +205,7 @@ namespace utils {
         return sum_error/double(frames - frames_iguales);
     }
 
-    static void error_cuadratico_medio_per_frame(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real) {
+    static void error_cuadratico_medio_per_frame(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real, vector<double> &resultados) {
         /*
         ASSERT(output.size() != 0 && output[0].size() != 0 && output[0][0].size() != 0);
         ASSERT(real.size() != 0 && real[0].size() != 0 && real[0][0].size() != 0);
@@ -215,8 +214,8 @@ namespace utils {
         int ancho = output.size();
         int alto = output[0].size();
         int frames = output[0][0].size();
-        int frames_iguales = 0;
-        double sum_error = 0;
+        //int frames_iguales = 0;
+        //double sum_error = 0;
 
         vector<vector<int > > frame_output(ancho, vector<int>(alto, 0));
         vector<vector<int > > frame_real(ancho, vector<int>(alto, 0));
@@ -230,17 +229,53 @@ namespace utils {
             double error = frame_error_cuadratico_medio(frame_output, frame_real);
             if (error < DELTA) {
                 // el frame output es igual al frame real
-                frames_iguales++;
+                //frames_iguales++;
             } else {
-                sum_error += error;
+                //sum_error += error;
+                resultados[k] = error;
             }
         }
 
-        cout << "Hay " << frames_iguales << " frames iguales de " << frames << ", o: " << setprecision(4) << double(frames_iguales)/double(frames) << "%" << endl;
+        //cout << "Hay " << frames_iguales << " frames iguales de " << frames << ", o: " << setprecision(4) << double(frames_iguales)/double(frames) << "%" << endl;
 
-        return sum_error/double(frames - frames_iguales);
+        //return sum_error/double(frames - frames_iguales);
     }
 
+    static void peak_to_signal_noise_per_frame(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real, vector<double> &resultados) {
+        ASSERT(output.size() != 0 && output[0].size() != 0 && output[0][0].size() != 0);
+        ASSERT(real.size() != 0 && real[0].size() != 0 && real[0][0].size() != 0);
+        ASSERT(output.size() == real.size() && output[0].size() == real[0].size() && output[0][0].size() <= real[0][0].size());
+
+        int ancho = output.size();
+        int alto = output[0].size();
+        int frames = output[0][0].size();
+        //int frames_iguales = 0;
+        //double sum_error = 0;
+
+        vector<vector<int > > frame_output(ancho, vector<int>(alto, 0));
+        vector<vector<int > > frame_real(ancho, vector<int>(alto, 0));
+        for (int k = 0; k < frames; k++) {
+            for(int x = 0; x < ancho; x++){
+        		for(int y = 0; y < alto; y++){
+                    frame_output[x][y] = output[x][y][k];
+                    frame_real[x][y] = real[x][y][k];
+                }
+            }
+            double error = frame_peak_to_signal_noise_ratio(frame_output, frame_real);
+            if (error < DELTA) {
+                // el frame output es igual al frame real
+                //frames_iguales++;
+            } else {
+                //sum_error += error;
+                resultados[k] = error;
+            }
+
+        }
+
+        //cout << "Hay " << frames_iguales << " frames iguales de " << frames << ", o: " << setprecision(4) << double(frames_iguales)/double(frames) << "%" << endl;
+
+        //return sum_error/double(frames - frames_iguales);
+    }
 
     static void video_a_texto(const char* videofile, const char* textfile, int salto = 1) {
         cout << "Convirtiendo video " << videofile << " a texto " <<  textfile << " con salto " << salto << endl;
@@ -258,7 +293,7 @@ namespace utils {
         if(system(command)) { cout << "textfileToVideo failed" << endl; };
     }
 
-    static enum Funcion : int {CONSTANTE = 0, LINEAL = 1, CUADRATICA = 2, CUBICA = 3};
+    enum Funcion : int {CONSTANTE = 0, LINEAL = 1, CUADRATICA = 2, CUBICA = 3};
 
     static int random_in_range(int min, int max) {
         srand (time(NULL));
@@ -299,3 +334,5 @@ namespace utils {
         }
     }
 }
+
+#endif // TEST_UTILS_H_INCLUDED
