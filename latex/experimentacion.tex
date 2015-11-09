@@ -21,19 +21,54 @@ Es importante mencionar que cada video representa una clase de video distinto, e
 
 El motivo de estas elecciones se debe a la busqueda de diversos \textit{artifacts} a partir de las caracteristicas de cada clase.
 
+        MENCIONAR COMO SE GENERAN LAS COSAS ALEATORIAS
+
 \subsection{Funcionamiento de los métodos implementados}
 En este experimento nuestro objetivo fue asegurarnos el correcto funcionamiento de nuestra implementación de la interpolación fragmentaria lineal, interpolación por splines, e interpolación por splines con tamaño de bloque fijo, tomando bloques de 2 cuadros, 4 cuadros y 8 cuadros.
 
-Con ese fin, generamos diversas instancias de distintos tamaño y comparamos los resultados obtenidos con los resultados de \texttt{OCTAVE} utilizando la funcion \textit{interpol1} \footnote{\url{https://www.gnu.org/software/octave/doc/interpreter/One_002ddimensional-Interpolation.html}} con los parámetros acorde.
-
-Las instancias utilizadas tienen las siguientes caracteristicas:
+Con este fin, realizamos una serie de tests que muestran el correcto funcionamiento de cada método para distintas familias de funciones:
 \begin{itemize}
-  \item Cantidad de puntos a interpolar:
-  \item Valores de los puntos a interpolar:
+  \item Función constante.
+  \item Función lineal.
+  \item Función cuadrática.
+  \item Función cúbica.
 \end{itemize}
 
-En el siguiente grafico mostramos la diferencia para cada punto calculado con nuestras implementaciones contra los resultados de \texttt{OCTAVE}.
+Luego, cada método de interpolación fue testeado contra cada una de las familias de funciones mencionadas de la siguiente forma:
+\begin{itemize}
+  \item Dada una familia de funciones, se generan aleatoriamente los coeficientes necesarios para definir una función de esa familia, i.e.: para una constante se genera solo el coeficiente independiente, mientras que para una cuadrática se generan 3 coeficientes.
+    \item Una vez generada la función, se la evalua en un rango de valores para obtener un array de valores esperados.
+    \item Luego, a partir del array de valores esperados se construye otro array quitandole elementos a intervalos fijos.
+        Este nuevo array será el utilizado para realizar la interpolación, y lo que testearemos es la aproximación de  la
+        interpolación a los elementos que quitamos.
+    \item Una vez que tenemos la interpolación con cualquiera de los métodos mencionados, basta recorrer los elementos del array de valores esperados a la vez que evaluamos la interpolación obtenida.
+        Para cada par de valores: esperado e interpolado, querremos ver que la diferencia absoluta es menor que un epsilon que
+        definiremos dependiendo del método utilizado y la función a interpolar.
+\end{itemize}
 
+Es importante mencionar algunas carácterísticas de las instancias utilizadas:
+\begin{itemize}
+    \item Cantidad de puntos generados con la función(tamaño del array de valores esperados): 100
+    \item Cantidad de puntos a interpolar: 50.
+    \item Todos los coeficientes generados aleatoriamente están en el rango $[1,10]$,
+        para evitar que las funciones generadas crezcan de forma desmedida.
+\end{itemize}
+
+Luego, se obtuvieron las siguientes cotas de precisión para los distintos métodos y funciones:
+
+\begin{table}[H]
+    \begin{tabular}{| c | c | c | c | c |}
+    \hline
+    {} & F. Constante & F. Lineal & F. Cuadrática & F. Cúbica \\ \hline
+    Interpolación por Vecinos & 0.0001 & 10 & 1000 & 100000 \\
+    Interpolación Lineal & 0.0001 & 0.0001 & 10 & 1000 \\
+    Interpolación por Splines & 0.0001 & 0.0001 & 1 & 10 \\
+    Interpolación por Splines (bloques tamaño 2) & FALTA & FALTA & FALTA & FALTA \\
+    Interpolación por Splines (bloques tamaño 4) & FALTA & FALTA & FALTA & FALTA \\
+    Interpolación por Splines (bloques tamaño 8) & FALTA & FALTA & FALTA & FALTA \\
+    \hline
+    \end{tabular}
+\end{table}
 
 \subsection{Determinación del tamaño de bloque del método Spline}
 En este experimento buscamos determinar cual es el mejor tamaño de bloque para la interpolación por splines con tamaño de bloque fijo, teniendo en cuenta la performance y la calidad de los resultados obtenidos de cada tamaño propuesto.
