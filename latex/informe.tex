@@ -75,6 +75,7 @@
 \usepackage{fancyvrb}
 \usepackage{pgfplotstable}
 \usepackage{float}
+\usepackage{abstract}
 \newcommand{\subscript}[2]{$#1 _ #2$}
 
 
@@ -90,6 +91,40 @@
 \integrante{Jos\'e Massigoge}{954/12}{jmmassigoge@gmail.com}
 \integrante{Iv\'an Pondal}{078/14}{ivan.pondal@gmail.com}
 \maketitle
+\renewcommand{\abstractname}{Abstract}
+\begin{abstract}
+   Fact: baby's videos are funny. And they are even funnier when watched in \textit{slow motion}.
+
+   In this work, we look at 4 different Interpolation methods to automatically generate
+   \textit{slow motion} videos. This is achieved by interpolating some amount of new frames
+   between each pair of original frames. Depending on the method, this procedure
+   generates different levels of \textit{smoothness}.
+
+   Once the methods are explained and implementation details are cleared out, we
+   will present several experiments, namely in two categories. The first ones, will
+   asure that the methods actually work, in the general case of function interpolation.
+   The second ones, will provide different ways to compare the quality of the videos
+   produced by each method.
+\end{abstract}
+\vspace{3em}
+\renewcommand{\abstractname}{Resumen}
+\begin{abstract}
+   Hecho: los videos de bebes son graciosos. Y son mucho más gracios cuando se miran en
+   \textit{slow motion}.
+
+   En este trabajo, nos centraremos en 4 diferentes métodos de Interpolación para generar
+   automaticamente videos en cámara lenta. Esto se logra interpolando una cierta
+   cantidad de cuadros nuevos entre cada par de cuadros originales. Dependiendo del
+   método, este procedimiento genera diferentes niveles de calidad.
+
+   Una vez que hayamos explicado los métodos junto con su implementación, presentaremos
+   varios experimentos, dentro de dos categorías. La primera, asegurará que los métodos
+   funcionen correctamente, en el caso general de interpolación de funciones. La
+   segunda, proveerá diferentes formas de comparar la calidad de los videos producidos
+   por cada método.
+\end{abstract}
+\vspace{3em}
+\textbf{Keywords:} Video, slow motion, interpolation methods, splines
 % no footer on the first page
 \thispagestyle{empty}
 \newpage
