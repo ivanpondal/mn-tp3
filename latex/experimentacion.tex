@@ -1,24 +1,59 @@
 En esta sección, se detallan los diferentes experimentos que realizamos para medir el funcionamiento, la eficiencia y calidad de resultados, tanto de forma cuantitativa como cualitativa, de los métodos implementados.
+
 Para lograr tal fin realizamos los siguientes tipos de experimentos:
 \begin{itemize}
   \item Funcionamiento de los métodos implementados.
-  \item Determinación del tamaño de bloque del método Spline.
+  \item Determinación del tamaño de bloque del método interpolación por splines.
   \item Medición del ECM y PSNR de los métodos.
   \item Medición de los tiempos de ejecución de los métodos.
   \item Análisis cualitativos de los métodos, fenómeno de artifacts.
-  \item VER DE AGREGAR O SACAR EXPERIMENTOS.
 \end{itemize}
 
+Los videos utilizados para los diversos experimentos, fueron los siguientes:
+
+\begin{itemize}
+  \item \textbf{Video 1 (CAMBIAR)}: cantidad de cuadros originales: , fps: , duracion:
+  \item \textbf{Video 2 (CAMBIAR)}: cantidad de cuadros originales: , fps: , duracion:
+  \item \textbf{Video 3 (CAMBIAR)}: cantidad de cuadros originales: , fps: , duracion:
+\end{itemize}
+
+Es importante mencionar que cada video representa una clase de video distinto, en donde el Video 1 contiene movimientos bruscos, el Video 2 cambios de camara, y el Video 3 movimientos armonicos.
+
+El motivo de estas elecciones se debe a la busqueda de diversos \textit{artifacts} a partir de las caracteristicas de cada clase.
+
 \subsection{Funcionamiento de los métodos implementados}
-En este experimento nuestro objetivo fue asegurarnos el correcto funcionamiento de nuestra implementación de la interpolación fragmentaria lineal y spline. Con ese fin, generamos diversas instancias de distintos tamaño y comparamos los resultados obtenidos con los resultados de \texttt{OCTAVE} utilizando la funcion \textit{interpol1} \footnote{\url{https://www.gnu.org/software/octave/doc/interpreter/One_002ddimensional-Interpolation.html}} con los parámetros acorde.
-DETALLE DE LA INSTANCIAS?
+En este experimento nuestro objetivo fue asegurarnos el correcto funcionamiento de nuestra implementación de la interpolación fragmentaria lineal, interpolación por splines, e interpolación por splines con tamaño de bloque fijo, tomando bloques de 2 cuadros, 4 cuadros y 8 cuadros.
+
+Con ese fin, generamos diversas instancias de distintos tamaño y comparamos los resultados obtenidos con los resultados de \texttt{OCTAVE} utilizando la funcion \textit{interpol1} \footnote{\url{https://www.gnu.org/software/octave/doc/interpreter/One_002ddimensional-Interpolation.html}} con los parámetros acorde.
+
+Las instancias utilizadas tienen las siguientes caracteristicas:
+\begin{itemize}
+  \item Cantidad de puntos a interpolar:
+  \item Valores de los puntos a interpolar:
+\end{itemize}
+
+En el siguiente grafico mostramos la diferencia para cada punto calculado con nuestras implementaciones contra los resultados de \texttt{OCTAVE}.
+
 
 \subsection{Determinación del tamaño de bloque del método Spline}
-En este experimento buscamos determinar cual es el mejor tamaño de bloque para el método Spline, teniendo en cuenta el trade-off entre perdida de precisión para mayor tamaño de bloque y perdida de performance para menor tamaño de bloque.
+En este experimento buscamos determinar cual es el mejor tamaño de bloque para la interpolación por splines con tamaño de bloque fijo, teniendo en cuenta la performance y la calidad de los resultados obtenidos de cada tamaño propuesto.
 
-Planteamos los siguientes tamaños de bloque: xxxx
+Planteamos los siguientes tamaños de bloques: 2 cuadros, 4 cuadros y 8 cuadros. PORQUE?
 
-\subsection{Medición del ECM y PSNR de los métodos.}
+Las comparaciones que vamos a realizar seran en terminos de complejidad temporal y ECM, PSNR (ver Seccion\ref{ECM} para las definiciones de ambas metricas).
+\subsubsection{Comparación complejidad temporal}
+Como instancias de prueba, tomamos cada uno de los videos elegidos y fuimos aumentando la cantidad de cuadros agregados.
+
+En los siguientes graficos mostramos los resultados obtenidos para cada tamaño de bloque:
+
+\subsubsection{Comparacion ECM y PSNR}
+
+
+\subsubsection{Conclusiones}
+
+Habiendo hecho las comparaciones entre los diversos tamaños.
+
+\subsection{Medición del ECM y PSNR de los métodos.}\label{ECM}
 Sea $F$ un frame del vídeo real (ideal) , y $\bar{F}$ el mismo frame del vídeo efectivamente construidos por alguno de los métodos. Sea $m$ la cantidad de filas de píxeles en cada imagen y $n$ la cantidad de columnas.
 
 Definimos el Error Cuadrático Medio, \texttt{ECM}, como el real dado por:
@@ -33,34 +68,31 @@ A su vez definimos \emph{Peak to Signal Noise Ratio}, \texttt{PSNR}, como el rea
 
 Ambas medidas nos sirven para realizar un análisis cuantitativo de la calidad de los resultados obtenidos con los distintos métodos.
 
-En este experimento utilizamos las siguientes instancias:
-INSERTAR INSTANCIA
+En este experimento utilizamos los videos propuestos al inicio de la experimentacion, variando la cantidad de cuadros que agregamos
+
 
 Los resultados obtenidos son los siguientes: (GRÁFICO COMPARANDO LOS MÉTODOS)
 
 \subsection{Medición de los tiempos de ejecución de los métodos}
-COMPLEJIDAD DE RESOLVER UNA INSTANCIA O UN PÍXEL?
-
 A partir de la implementación descripta en la Sección xxx, podemos inferir una complejidad temporal para cada método:
-Nuevamente, sea $m$ la cantidad de filas de píxeles en cada imagen y $n$ la cantidad de columnas y sea $f$ la cantidad de frames a agregar entre los originales.
+Nuevamente, sea $m$ la cantidad de filas de píxeles en cada imagen y $n$ la cantidad de columnas, sea $c$ es la cantidad de cuadros originales y sea $f$ la cantidad de cuadros a agregar entre los originales.
 \begin{itemize}
-  \item LINEAL: dado que realizamos 3 ciclos, en donde el primero se ejecuta $n$ veces, el segundo $m$ veces y el tercero $f$ veces, la complejidad temporal del mismo es $\Theta(nmf)$.
-  \item VECINOS: situación idéntica al método lineal, realizamos 3 ciclos, en donde el primero se ejecuta $n$ veces, el segundo $m$ veces y el tercero $f$ veces, la complejidad temporal del mismo es $\Theta(nmf)$.
-  \item SPLINE: ??
+  \item Interpolacion lineal: dado que realizamos 4 ciclos, en donde el primero se ejecuta $n$ veces, el segundo $m$ veces, el tercero $c$ veces, y el cuarto $f$ veces, la complejidad temporal del mismo es $\Theta(nmcf)$.
+  \item Vecino mas cercano: situación idéntica al método lineal, realizamos 4 ciclos, en donde el primero se ejecuta $n$ veces, el segundo $m$ veces, el tercero $c$ veces, y el cuarto $f$ veces, la complejidad temporal del mismo es $\Theta(nmcf)$.
+  \item Interpolacion por Splines:
+  \item Interpolacion por Splines con tamaño de bloque fijo:
 \end{itemize}
-Es importante mencionar que la complejidad temporal resultante de la creación de los elementos de la clase \texttt{vídeo} desde la cual aplicamos los métodos implementados, es de $\Theta(nm(c+f))$, donde $c$ es la cantidad de cuadros originales.
-Sin embargo no la consideraremos en nuestro análisis, ya que este costo es el mismo para todos los métodos.
 
-Las instancias que utilizamos, en este caso, fueron las siguientes:
+Las instancias que utilizamos, en este caso, fueron
 
 Los resultamos obtenidos:
 
 
 \subsection{Análisis cualitativos de los métodos, fenómeno de artifacts.}
-Los \textit{artifacts} son errores visuales resultantes de la aplicación de los métodos. Estos errores visuales se caracterizan por romper la coherencia entre imágenes al generar distorsiones evidentes. Para poder analizar este tipo de fenómeno
+Los \textit{artifacts} son errores visuales resultantes de la aplicación de los métodos. Estos errores visuales se caracterizan por romper la coherencia entre imágenes al generar distorsiones evidentes.
 
-\subsubsection{Artifacts: Movimientos bruscos}
+\subsubsection{Artifacts: Movimientos Bruscos}
 
-\subsubsection{Artifacts: Imagenes fijas}
+\subsubsection{Artifacts: Cambios de Camara}
 
-\subsubsection{Artifacts: Pantalla negra}
+\subsubsection{Artifacts: Movimientos Armonicos}
