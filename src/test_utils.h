@@ -293,44 +293,69 @@ namespace utils {
         if(system(command)) { cout << "textfileToVideo failed" << endl; };
     }
 
-    enum Funcion : int {CONSTANTE = 0, LINEAL = 1, CUADRATICA = 2, CUBICA = 3};
+    enum Funcion : int {F_CONSTANTE = 0, F_LINEAL = 1, F_CUADRATICA = 2, F_CUBICA = 3};
 
     static int random_in_range(int min, int max) {
         srand (time(NULL));
         return min + (rand() % (max - min + 1));
     }
 
-    static vector<double> generarEsperados(Funcion funcion, int rango, int incremento) {
+    static vector<double> generarEsperados(Funcion funcion, double rango, double incremento) {
         vector<double> ret;
-        if (funcion == CONSTANTE) {
+        if (funcion == F_CONSTANTE) {
             int a = random_in_range(1,10);
-            for (int i = 0; i < rango; i+= incremento) {
+            for (double i = 0; i < rango; i+= incremento) {
                 ret.push_back(a);
             }
-        } else if (funcion == LINEAL) {
+        } else if (funcion == F_LINEAL) {
             int a = random_in_range(1,10);
             int b = random_in_range(1,10);
-            for (int i = 0; i < rango; i+= incremento) {
+            for (double i = 0; i < rango; i+= incremento) {
                 ret.push_back(a + b*i);
             }
 
-        } else if (funcion == CUADRATICA) {
+        } else if (funcion == F_CUADRATICA) {
             int a = random_in_range(1,10);
             int b = random_in_range(1,10);
             int c = random_in_range(1,10);
-            for (int i = 0; i < rango; i+= incremento) {
+            for (double i = 0; i < rango; i+= incremento) {
                 ret.push_back(a + b*i + c*i*i);
             }
-        } else if (funcion == CUBICA) {
+        } else if (funcion == F_CUBICA) {
             int a = random_in_range(1,10);
             int b = random_in_range(1,10);
             int c = random_in_range(1,10);
             int d = random_in_range(1,10);
-            for (int i = 0; i < rango; i+= incremento) {
+            for (double i = 0; i < rango; i+= incremento) {
                 ret.push_back(a + b*i + c*i*i + d*i*i*i);
             }
-        } else {
-            return ret;
+        }
+        return ret;
+    }
+
+    static void test_interpolacion_funcion(MetodoInterpolacion metodo, Funcion funcion, double rango, double incremento, double precision = DELTA) {
+        vector<double> esperados(generarEsperados(funcion, rango, incremento));
+        vector<int> y;
+        int salto = (int)(double(1)/incremento);
+        for (unsigned int i = 0; i < esperados.size(); i+= salto) {
+            y.push_back(esperados[i]);
+        }
+
+        if (metodo == VECINOS) {
+            InterpolacionVecinos vecinos(y, salto-1);
+            vector<double>::const_iterator first = esperados.begin();
+            vector<double>::const_iterator last = esperados.begin() + rango - salto ;
+        	assert_interpolacion(&vecinos, vector<double>(first, last), incremento, precision);
+        } else if (metodo == LINEAL) {
+            InterpolacionLineal lineal(y, salto-1);
+            vector<double>::const_iterator first = esperados.begin();
+            vector<double>::const_iterator last = esperados.begin() + rango - salto ;
+        	assert_interpolacion(&lineal, vector<double>(first, last), incremento, precision);
+        } else if (metodo == SPLINES) {
+            Spline spline(y);
+            vector<double>::const_iterator first = esperados.begin();
+            vector<double>::const_iterator last = esperados.begin() + rango - salto ;
+        	assert_interpolacion(&spline, vector<double>(first, last), incremento, precision);
         }
     }
 }

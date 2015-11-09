@@ -21,12 +21,6 @@ void InterpolacionLineal::recalcular(const vector<int> &y, int valores_a_agregar
 
 		for(int k = 0; k < valores_a_agregar; k++){
 			double pixel = dif_dividida_cero + dif_dividida_uno*double(k + 1);
-			if(pixel < 0){
-				pixel = 0;
-			}
-			else if(pixel > 255){
-				pixel = 255;
-			}
 			datos_generados.push_back(pixel);
 		}
 	}
