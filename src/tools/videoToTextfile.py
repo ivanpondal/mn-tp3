@@ -39,22 +39,28 @@ print '   Width:\t' + str(width)
 # Guardamos informacion general en el archivo de salida.
 f = open(textFilename,'w')
 
-f.write(str((int(nFrames)+salto-1)/salto) + '\n')
-f.write(str(int(height)) + ',' + str(int(width)) + '\n')
-f.write(str(int(frameRate)) + '\n')
-
+newFrames = []
 # Bajamos al archivo los frames que nos interesan.
 for k in xrange(0,int(nFrames),salto):
 	ret, frame = video.read()
-	grayFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-	cv2.imshow('frame',grayFrame)
+	if ret:
+		grayFrame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+		cv2.imshow('frame',grayFrame)
+		newFrames.append(grayFrame)
 	k = k+salto
 	video.set(cv2.cv.CV_CAP_PROP_POS_FRAMES,k)
 
+# dumpeo informacion del video
+f.write(str(len(newFrames)) + '\n')
+f.write(str(int(height)) + ',' + str(int(width)) + '\n')
+f.write(str(int(frameRate)) + '\n')
+
+# dumpeo frames en escala de grises
+for frame in newFrames:
 	for i in range(0,int(video.get(4))):
 		for j in range(0,int(video.get(3))-1):
-			f.write(str(grayFrame[i][j]) + ',')
-		f.write(str(grayFrame[i][int(video.get(3)-1)]))
+			f.write(str(frame[i][j]) + ',')
+		f.write(str(frame[i][int(video.get(3)-1)]))
 		f.write('\n')
 
 video.release()
