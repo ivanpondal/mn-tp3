@@ -18,6 +18,8 @@
 #include <chrono>
 #include <random>
 #include <iomanip>
+#include <utility>
+#include <vector>
 
 using namespace std;
 using namespace utils;
@@ -184,7 +186,7 @@ void test_multi_spline_tres_tramos_cuadratico(){
 
 void exp_error(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * input_text, const char * out) {
     //cout << "Calculando error al interpolar usando " << getTextForMetodo(metodo) << ", tomando del video original 1 frame de cada " << cuadros_a_agregar + 1 << ": " << endl;
-    FILE *file = fopen(out, "w+");
+    FILE *file = fopen(out, "a+");
     string input_video = input_text;
     ostringstream os_real;
     os_real << "data/video_exp_" << getTextForMetodo(metodo) << "_real.txt";
@@ -216,14 +218,26 @@ void exp_error(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * i
     error_cuadratico_medio_per_frame(frames_out, frames_real, err_per_frame_ecm);
     peak_to_signal_noise_per_frame(frames_out, frames_real, err_per_frame_psnr);
 
+    fprintf(file, "%s %s %s\n", "frame", "err_per_frame_ecm", "err_per_frame_psnr");
+    fprintf(file, "%s %s\n","Metodo: ", getTextForMetodo(metodo));
 
-    //fprintf(file, "%s\n", metodo);
-    //fprintf(file, "%s %s %s\n", frame, err_per_frame_ecm, err_per_frame_psnr);
+    vector<pair<int, double> > resultado_ecm;
+    vector<pair<int, double> > resultado_psnr;
+    pair<int, double> aux_ecm;
+    pair<int, double> aux_psnr;
     for(int i = 0; i < frames; i++) {
         if(err_per_frame_ecm[i] != 0) {
-              fprintf(file, "%d %.4f %.4f \n", i, err_per_frame_ecm[i], err_per_frame_psnr[i]);
+            aux_ecm = make_pair(i, err_per_frame_ecm[i]);
+            aux_psnr = make_pair(i, err_per_frame_psnr[i]);
+            resultado_ecm.push_back(aux_ecm);
+            resultado_psnr.push_back(aux_psnr);
         }
     }
+
+    for(unsigned int i = 0; i < resultado_ecm.size(); i++) {
+        fprintf(file, "%d %.4f %.4f \n", resultado_ecm[i].first , resultado_ecm[i].second, resultado_psnr[i].second);
+    }
+
 
     //double err_frame_ecm = video_prom_error_cuadratico_medio(frames_out, frames_real);
     //double err_frame_psnr = video_prom_peak_to_signal_noise_ratio(frames_out, frames_real);
@@ -234,7 +248,7 @@ void exp_error(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * i
 
 void exp_tiempo(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * input_text, const char * out) {
     //cout << "Calculando tiempo de computo al interpolar usando " << getTextForMetodo(metodo) << ", agregando " << cuadros_a_agregar << " frames: " << endl;
-    FILE *file = fopen(out, "w+");
+    FILE *file = fopen(out, "a+");
     string input_video = input_text;
     ostringstream os_aux;
     os_aux << "data/video_exp_" << getTextForMetodo(metodo) << "_aux.txt";
@@ -247,7 +261,7 @@ void exp_tiempo(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * 
     Video video(aux_text.c_str(), cuadros_a_agregar);
 	  video.aplicarCamaraLenta(metodo);
     double time = stop_timer();
-    fprintf(file, "%d %.6f \n", metodo, time);
+    fprintf(file, "%s %s %.6f \n","Metodo: ", getTextForMetodo(metodo), time);
     //cout << "Tiempo de computo para todo el video: " << setprecision(15) << time << " ns." << endl;
     vector<vector<vector<int> > > frames_out = video.obtenerFramesCalculados();
     //cout << "Tiempo de computo promedio por frame: " << setprecision(15) << time/double(frames_out[0][0].size()) << " ns." << endl;
@@ -306,7 +320,7 @@ int main(int argc, char *argv[])
 		RUN_TEST(test_multi_spline_tres_tramos_cuadratico);
     */
         // exp grupo
-        // exp_baby_error(SPLINES, 1);
+        exp_error(SPLINES, 1,"data/sunrise.avi","data/error_messi");
         // exp_baby_error(LINEAL, 1);
         // exp_baby_error(VECINOS, 1);
         // exp_baby_error(SPLINES, 2);
