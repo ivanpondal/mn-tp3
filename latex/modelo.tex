@@ -136,18 +136,59 @@ Donde los $c_j$ nos quedan determinados por el siguiente sistema de ecuaciones:
 		&\text{para cada } j \in [1, \dots, n - 1]
 \end{align*}
 
-El mismo se puede representar como $Ax = b$ que resulta en la siguiente matriz:
+El mismo se puede representar como la siguiente matriz:
 
-\setlength{\arraycolsep}{3pt}
+\setlength{\arraycolsep}{2pt}
 \kbordermatrix{
 	&c_0	&c_1	&c_2	&\dots	&c_{j-1}	&c_j	&c_{j+1}	&\dots	&c_{n-2}	&c_{n-1}	&c_n	&		&b \\
-	&1		&0		&0		&\dots	&0			&0		&0			&\dots	&0			&0			&0		&\vrule	&0	\\
-	&h_0	&2(h_0+h_1) &h_1	&\dots	&0		&0		&0			&\dots	&0			&0			&0		&\vrule	&\frac{3(a_2 - a_1)}{h_1} + \frac{3(a_0 - a_1)}{h_0} \\
-	&\vdots	&\vdots	&\vdots	&\vdots	&\vdots		&\vdots	&\vdots		&\vdots	&\vdots		&\vdots		&\vdots &\vrule	&\vdots \\
-	&0		&0		&0		&\dots	&h_{j-1} &2(h_{j-1}+h_j) &h_j	&\dots	&0			&0			&0		&\vrule	&\frac{3(a_{j+1} - a_j)}{h_j} + \frac{3(a_{j-1} - a_j)}{h_{j-1}} \\
-	&\vdots	&\vdots	&\vdots	&\vdots	&\vdots		&\vdots	&\vdots		&\vdots	&\vdots		&\vdots		&\vdots	&\vrule	&\vdots \\
-	&0		&0		&0		&\dots	&0			&0		&0			&\dots	&h_{n-2}	&2(h_{n-2}+h_{n-1}) &h_{n-1} &\vrule &\frac{3(a_n - a_{n-1})}{h_{n-1}} + \frac{3(a_{n-2} - a_{n-1})}{h_{n-2}} \\
-	&0		&0		&0		&\dots	&0			&0		&0			&\dots	&0			&0			&1		&\vrule	&0
+c_0	&1		&0		&0		&\dots	&0			&0		&0			&\dots	&0			&0			&0		&\vrule	&0 \\
+c_1	&h_0	&2(h_0+h_1) &h_1	&\dots	&0		&0		&0			&\dots	&0			&0			&0		&\vrule	&\frac{3(a_2 - a_1)}{h_1} + \frac{3(a_0 - a_1)}{h_0} \\
+\vdots	&\vdots	&\vdots	&\vdots	&\vdots	&\vdots		&\vdots	&\vdots		&\vdots	&\vdots		&\vdots		&\vdots &\vrule	&\vdots \\
+c_j	&0		&0		&0		&\dots	&h_{j-1} &2(h_{j-1}+h_j) &h_j	&\dots	&0			&0			&0		&\vrule	&\frac{3(a_{j+1} - a_j)}{h_j} + \frac{3(a_{j-1} - a_j)}{h_{j-1}} \\
+\vdots	&\vdots	&\vdots	&\vdots	&\vdots	&\vdots		&\vdots	&\vdots		&\vdots	&\vdots		&\vdots		&\vdots	&\vrule	&\vdots \\
+c_{n-1}	&0		&0		&0		&\dots	&0			&0		&0			&\dots	&h_{n-2}	&2(h_{n-2}+h_{n-1}) &h_{n-1} &\vrule &\frac{3(a_n - a_{n-1})}{h_{n-1}} + \frac{3(a_{n-2} - a_{n-1})}{h_{n-2}} \\
+c_n	&0		&0		&0		&\dots	&0			&0		&0			&\dots	&0			&0			&1		&\vrule	&0
 }
+
+~
+
+Ahora para el problema planteado, que es la interpolación de los cuadros de un
+video, nuesto $h_j$ será la distancia entre cada uno de ellos. Esta distancia la
+podemos pensar como el tiempo entre cada captura del video, y como la duración
+del mismo se define por la cantidad de cuadros por segundo, podemos afirmar que
+son equidistantes, por lo tanto tenemos $h_j = 1$ para todo $j \in [0, \dots,
+n-1]$.
+
+Reemplazando en la matriz anterior nos queda:
+
+\setlength{\arraycolsep}{6pt}
+\kbordermatrix{
+	&c_0	&c_1	&c_2	&\dots	&c_{j-1}	&c_j	&c_{j+1}	&\dots	&c_{n-2}	&c_{n-1}	&c_n	&		&b \\
+c_0	&1		&0		&0		&\dots	&0			&0		&0			&\dots	&0			&0			&0		&\vrule	&0 \\
+c_1	&1		&4		&1		&\dots	&0			&0		&0			&\dots	&0			&0			&0		&\vrule	&3(a_2 - a_1) + 3(a_0 - a_1) \\
+\vdots	&\vdots	&\vdots	&\vdots	&\vdots	&\vdots		&\vdots	&\vdots		&\vdots	&\vdots		&\vdots		&\vdots &\vrule	&\vdots \\
+c_j	&0		&0		&0		&\dots	&1			&4		&1			&\dots	&0			&0			&0		&\vrule	&3(a_{j+1} - a_j) + 3(a_{j-1} - a_j) \\
+\vdots	&\vdots	&\vdots	&\vdots	&\vdots	&\vdots		&\vdots	&\vdots		&\vdots	&\vdots		&\vdots		&\vdots	&\vrule	&\vdots \\
+c_{n-1}	&0		&0		&0		&\dots	&0			&0		&0			&\dots	&1			&4			&1		&\vrule &3(a_n - a_{n-1}) + 3(a_{n-2} - a_{n-1}) \\
+c_n	&0		&0		&0		&\dots	&0			&0		&0			&\dots	&0			&0			&1		&\vrule	&0
+}
+
+~
+
+Como se puede observar resulta en una matriz cuadrada tridiagonal estrictamente dominante
+por filas. Como consecuencia tenemos que la misma y sus submatrices principales
+son inversibles, llevando a que el sistema tenga una única solución y que además
+$A$ posea factorización $LU$.
+
+Una vez que se tiene la factorización $A = LU$, sólo queda resolver el sistema
+planteado y así calcular los coeficientes de cada $S_j(x)$. Por último resta
+evaluar el spline en los puntos donde se agregaron cuadros nuevos para así poder
+lograr el efecto buscado.
+
+El beneficio de utilizar la factorización $LU$ es que el spline que se utiliza
+para interpolar cada pixel del video comparte el mismo sistema, lo que cambia
+son los valores de los $a_j$ que definen nuestro vector $b$. De esta manera,
+recalculamos el vector $b$, utilizamos la factorización $LU$ para resolver el
+sistema y nuevamente calculamos los coeficientes del spline.
 
 \subsection{Interpolación por Splines con tamaño de bloque variante}\label{MultiSplines}
