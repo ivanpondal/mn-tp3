@@ -270,22 +270,31 @@ void exp_tiempo(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * 
     FILE *file = fopen(out, "a+");
     string input_video = input_text;
     ostringstream os_aux;
-    os_aux << "data/video_exp_" << getTextForMetodo(metodo) << "_aux.txt";
+    os_aux << "data/video_exp_" << getTextForMetodo(metodo) <<  cuadros_a_agregar <<"_aux.txt";
     string aux_text = os_aux.str();
 
     // convierto a texto el video original
+
     video_a_texto(input_video.c_str(), aux_text.c_str());
+
     // agrego cuadros_a_agregar frames entre cada frame del output_text
     start_timer();
+
     Video video(aux_text.c_str(), cuadros_a_agregar);
-	  video.aplicarCamaraLenta(metodo);
+
+    video.aplicarCamaraLenta(metodo);
+
     double time = stop_timer();
+
     fprintf(file, "%s %s %.6f \n","Metodo: ", getTextForMetodo(metodo), time);
     //cout << "Tiempo de computo para todo el video: " << setprecision(15) << time << " ns." << endl;
-    vector<vector<vector<int> > > frames_out = video.obtenerFramesCalculados();
+    //vector<vector<vector<int> > > frames_out = video.obtenerFramesCalculados();
     //cout << "Tiempo de computo promedio por frame: " << setprecision(15) << time/double(frames_out[0][0].size()) << " ns." << endl;
     //cout << "Tiempo de computo promedio por pixel: " << setprecision(15) << time/double(frames_out.size() * frames_out[0].size() *frames_out[0][0].size()) << " ns." << endl;
+
     fclose(file);
+
+
 }
 
 
@@ -345,25 +354,30 @@ int main(int argc, char *argv[])
     */
 
         // exp grupo
-        exp_error(SPLINES, 1,"data/sunrise.avi","data/error_messi");
-        // exp_baby_error(LINEAL, 1);
-        // exp_baby_error(VECINOS, 1);
-        // exp_baby_error(SPLINES, 2);
-        // exp_baby_error(LINEAL, 2);
-        // exp_baby_error(VECINOS, 2);
-        // exp_baby_error(SPLINES, 5);
-        // exp_baby_error(LINEAL, 5);
-        // exp_baby_error(VECINOS, 5);
-        // exp_baby_tiempo(SPLINES, 1);
-        // exp_baby_tiempo(LINEAL, 1);
-        // exp_baby_tiempo(VECINOS, 1);
-        // exp_baby_tiempo(SPLINES, 2);
-        // exp_baby_tiempo(LINEAL, 2);
-        // exp_baby_tiempo(VECINOS, 2);
-        // exp_baby_tiempo(SPLINES, 5);
-        // exp_baby_tiempo(LINEAL, 5);
-        // exp_baby_tiempo(VECINOS, 5);
+        /*
+        const char* input_error = "data/error_funnybaby";
+        FILE *file = fopen(input_error, "w+");
+        fclose(file);
+        exp_error(SPLINES, 1,"data/funnybaby.avi",input_error);
+        exp_error(SPLINES, 2,"data/funnybaby.avi",input_error);
+        exp_error(SPLINES, 3,"data/funnybaby.avi",input_error);
 
+        exp_error(LINEAL, 1,"data/funnybaby.avi",input_error);
+        exp_error(SPLINES, 1,"data/funnybaby.avi",input_error);
+        */
+
+        const char* input_tiempo = "data/time_funnybaby";
+        FILE *file = fopen(input_tiempo, "w+");
+        fclose(file);
+        // PROBLEMA DOUBLE FREE CUANDO EJECUTA CON CUADROS NUEVOS 1 Y DESPUES 2 en exp_tiempo CON VECINOS Y LINEAL
+        exp_tiempo(LINEAL, 1,"data/funnybaby.avi", input_tiempo);
+        exp_tiempo(LINEAL, 2,"data/funnybaby.avi",input_tiempo);
+        exp_tiempo(SPLINES, 3,"data/funnybaby.avi",input_tiempo);
+        
+        /*
+        exp_tiempo(LINEAL, i,"data/funnybaby.avi","data/time_funnybaby", input_tiempo);
+        exp_tiempo(SPLINES, i,"data/funnybaby.avi","data/time_funnybaby", input_tiempo);
+        */
 	} else {
         cout << "Usage: ./tp <archivo_entrada> <archivo_salida> <metodo> <cantidad_cuadros_a_agregar>" << endl;
         return 1;
