@@ -196,7 +196,27 @@ void test_spline_varios() {
     test_interpolacion_funcion(SPLINES, F_CONSTANTE, 50, 0.5);
     test_interpolacion_funcion(SPLINES, F_LINEAL, 50, 0.5);
     test_interpolacion_funcion(SPLINES, F_CUADRATICA, 50, 0.5, 1);
-    test_interpolacion_funcion(LINEAL, F_CUBICA, 50, 0.5, 1000);
+    test_interpolacion_funcion(SPLINES, F_CUBICA, 50, 0.5, 10);
+}
+
+void test_multi_spline_varios() {
+    // tamaño de bloques 2
+    test_interpolacion_funcion(MULTI_SPLINES, F_CONSTANTE, 50, 0.5, DELTA, 2);
+    test_interpolacion_funcion(MULTI_SPLINES, F_LINEAL, 50, 0.5, DELTA, 2);
+    test_interpolacion_funcion(MULTI_SPLINES, F_CUADRATICA, 50, 0.5, 10, 2);
+    test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.5, 1000, 2);
+
+    // tamaño de bloques 4
+    test_interpolacion_funcion(MULTI_SPLINES, F_CONSTANTE, 50, 0.5, DELTA, 4);
+    test_interpolacion_funcion(MULTI_SPLINES, F_LINEAL, 50, 0.5, DELTA, 4);
+    test_interpolacion_funcion(MULTI_SPLINES, F_CUADRATICA, 50, 0.5, 10, 4);
+    test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.5, 1000, 4);
+
+    // tamaño de bloques 8
+    test_interpolacion_funcion(MULTI_SPLINES, F_CONSTANTE, 50, 0.5, DELTA, 8);
+    test_interpolacion_funcion(MULTI_SPLINES, F_LINEAL, 50, 0.5, DELTA, 8);
+    test_interpolacion_funcion(MULTI_SPLINES, F_CUADRATICA, 50, 0.5, 10, 8);
+    test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.5, 1000, 8);
 }
 
 // ********************** EXPERIMENTACION DEL GRUPO ****************************
@@ -324,11 +344,12 @@ int main(int argc, char *argv[])
 		RUN_TEST(test_multi_spline_dos_tramos_cuadratico);
 		RUN_TEST(test_multi_spline_tres_tramos_cuadratico);
     */
-    /*
+
         RUN_TEST(test_vecinos_varios);
         RUN_TEST(test_lineal_varios);
         RUN_TEST(test_spline_varios);
-    */
+        RUN_TEST(test_multi_spline_varios)
+
 
         // exp grupo
         // exp_baby_error(SPLINES, 1);

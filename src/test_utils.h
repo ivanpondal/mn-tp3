@@ -33,7 +33,7 @@ namespace utils {
     	double xj = 0;
     	for(unsigned int i = 0; i < esperados.size(); i++){
     		if(DEBUG){
-    			cout << "P(" << xj << ") = " << interpolador->evaluar(xj) << ", Expected(" << xj <<") = " << esperados[i] << endl;
+    			cout << "P(" << xj << ") = " << setprecision(15) << interpolador->evaluar(xj) << ", Expected(" << xj <<") = " << esperados[i] << endl;
     		}
     		// Si el intervalo equivale a un punto interpolado, el interpolador TIENE que
     		// darme el "mismo" valor que la función original
@@ -333,7 +333,7 @@ namespace utils {
         return ret;
     }
 
-    static void test_interpolacion_funcion(MetodoInterpolacion metodo, Funcion funcion, double rango, double incremento, double precision = DELTA) {
+    static void test_interpolacion_funcion(MetodoInterpolacion metodo, Funcion funcion, double rango, double incremento, double precision = DELTA, int bloques = 2) {
         vector<double> esperados(generarEsperados(funcion, rango, incremento));
         vector<int> y;
         int salto = (int)(double(1)/incremento);
@@ -356,6 +356,11 @@ namespace utils {
             vector<double>::const_iterator first = esperados.begin();
             vector<double>::const_iterator last = esperados.begin() + rango - salto ;
         	assert_interpolacion(&spline, vector<double>(first, last), incremento, precision);
+        } else if (metodo == MULTI_SPLINES) {
+            vector<double>::const_iterator first = esperados.begin();
+            vector<double>::const_iterator last = esperados.begin() + rango - salto ;
+            MultiSpline multi_spline(y, bloques-1);
+        	assert_interpolacion(&multi_spline, vector<double>(first, last), incremento, precision);
         }
     }
 }
