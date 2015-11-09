@@ -74,4 +74,80 @@ Luego, si llamamos $f$ a la función (desconocida excepto en los puntos $x_j$), 
 
 \subsection{Interpolación por Splines}\label{Splines}
 
+El método de interpolación por splines se basa en dados $n$ puntos la
+construcción de $n - 1$ funciones que interpolan los puntos y además cumplen
+una serie de condiciones que aseguran que la función por tramos resultante no
+posea las irregularidades de trabajar con polinomios de alto grado generando
+además uniones suaves entre cada segmento.
+
+~
+
+Dada una función $f$ definida en el intervalo $[a, b]$ y un conjunto de nodos $a
+= x_0 < x_1 < \dots < x_n = b$.
+
+\begin{enumerate}
+	\item Definimos $S(x)$ como un
+	polinomio cúbico denominándolo $S_j(x)$ en el subintervalo $[x_j, x_{j+1}]$
+	con $j \in [0, \dots, n - 1]$.
+
+	\item $S_j(x_j) = f(x_j)$ y $S_j(x_{j+1}) = f(x_{j+1})$ para todo $j \in [0, \dots, n - 1]$.
+	\item $S_j(x_{j+1}) = S_j(x_{j+1})$ para todo $j \in [0, \dots, n - 2]$.
+	\item $S'_j(x_{j+1}) = S'_j(x_{j+1})$ para todo $j \in [0, \dots, n - 2]$.
+	\item $S''_j(x_{j+1}) = S''_j(x_{j+1})$ para todo $j \in [0, \dots, n - 2]$.
+	\item Por último, se cumple una de la siguientes condiciones
+		\begin{enumerate}
+			\item $S''(x_0) = S''(x_n) = 0$ (natural o de libre
+				frontera).\label{splines_item_6b}
+			\item $S'(x_0) = f'(x_0)$ y $S'(x_n) = f'(x_n)$ (sujeta). 
+		\end{enumerate}
+\end{enumerate}
+
+Un spline definido en un intervalo que está dividido en $n$ subintervalos
+requiere determinar $4n$ constantes. Se aplican las condiciones descritas previamente a los siguiente
+polinomios cúbicos:
+
+\begin{gather*}
+	S_j(x) = a_j + b_j(x - x_j) + c_j(x - x_j)^2 + d_j(x - x_j)^3 \\
+	\text{para cada } j \in [0, \dots, n - 1]
+\end{gather*}
+
+Para este trabajo, dado que no conocemos la función $f$ que estamos
+interpolando se decidió utilizar la condición \ref{splines_item_6b}, que define
+al spline como natural o libre.
+
+Una vez establecidas las ecuaciones resultantes de aplicar las condiciones y
+despejando todas las variables en función de $c_j$ nos quedan las siguientes
+igualdades:
+
+\begin{align*}
+	h_j &= x_{j+1} - x_j \\
+	a_j &= f(x_j) \text{ para cada } j \in [0, \dots, n] \\
+	b_j &= \frac{a_{j+1}-a_j}{h_j} - \frac{2c_jh_j - c_{j+1}h_j}{3} \\
+	d_j &= \frac{c_{j+1} - c_j}{3h_j} \\
+		&\text{para cada } j \in [0, \dots, n - 1]
+\end{align*}
+
+Donde los $c_j$ nos quedan determinados por el siguiente sistema de ecuaciones:
+
+\begin{align*}
+	&c_0 = 0 \\
+	&c_n = 0 \\
+	&h_{j-1}c_{j-1} + 2(h_{j-1} + h_j)c_j + h_jc_{j+1} = \frac{3(a_{j+1} - a_j)}{h_j} + \frac{3(a_{j-1} - a_j)}{h_{j-1}} \\
+		&\text{para cada } j \in [1, \dots, n - 1]
+\end{align*}
+
+El mismo se puede representar como $Ax = b$ que resulta en la siguiente matriz:
+
+\setlength{\arraycolsep}{3pt}
+\kbordermatrix{
+	&c_0	&c_1	&c_2	&\dots	&c_{j-1}	&c_j	&c_{j+1}	&\dots	&c_{n-2}	&c_{n-1}	&c_n	&		&b \\
+	&1		&0		&0		&\dots	&0			&0		&0			&\dots	&0			&0			&0		&\vrule	&0	\\
+	&h_0	&2(h_0+h_1) &h_1	&\dots	&0		&0		&0			&\dots	&0			&0			&0		&\vrule	&\frac{3(a_2 - a_1)}{h_1} + \frac{3(a_0 - a_1)}{h_0} \\
+	&\vdots	&\vdots	&\vdots	&\vdots	&\vdots		&\vdots	&\vdots		&\vdots	&\vdots		&\vdots		&\vdots &\vrule	&\vdots \\
+	&0		&0		&0		&\dots	&h_{j-1} &2(h_{j-1}+h_j) &h_j	&\dots	&0			&0			&0		&\vrule	&\frac{3(a_{j+1} - a_j)}{h_j} + \frac{3(a_{j-1} - a_j)}{h_{j-1}} \\
+	&\vdots	&\vdots	&\vdots	&\vdots	&\vdots		&\vdots	&\vdots		&\vdots	&\vdots		&\vdots		&\vdots	&\vrule	&\vdots \\
+	&0		&0		&0		&\dots	&0			&0		&0			&\dots	&h_{n-2}	&2(h_{n-2}+h_{n-1}) &h_{n-1} &\vrule &\frac{3(a_n - a_{n-1})}{h_{n-1}} + \frac{3(a_{n-2} - a_{n-1})}{h_{n-2}} \\
+	&0		&0		&0		&\dots	&0			&0		&0			&\dots	&0			&0			&1		&\vrule	&0
+}
+
 \subsection{Interpolación por Splines con tamaño de bloque variante}\label{MultiSplines}
