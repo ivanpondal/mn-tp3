@@ -50,7 +50,7 @@ double MultiSpline::evaluar(double x){
 	double result = 0;
 
 	if(this->longitud_tramo_menor != 0 && xj >= (this->numero_tramos - 1)*this->longitud_tramo){
-		xj = this->longitud_tramo_menor + 1;
+		xj = (this->numero_tramos - 1)*this->longitud_tramo;
 		result = this->tramos[this->numero_tramos - 1].evaluar(x - xj);
 	}
 	else{
@@ -60,7 +60,7 @@ double MultiSpline::evaluar(double x){
 		}
 		else{
 			xj /= this->longitud_tramo;
-			result = this->tramos[xj].evaluar(x - xj);
+			result = this->tramos[xj].evaluar(x - xj*this->longitud_tramo);
 		}
 	}
 	return result;

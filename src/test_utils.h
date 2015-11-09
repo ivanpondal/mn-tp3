@@ -341,24 +341,19 @@ namespace utils {
             y.push_back(esperados[i]);
         }
 
-        if (metodo == VECINOS) {
+        vector<double>::const_iterator first = esperados.begin();
+        vector<double>::const_iterator last = esperados.begin() + rango*salto - 1;
+
+		if (metodo == VECINOS) {
             InterpolacionVecinos vecinos(y, salto-1);
-            vector<double>::const_iterator first = esperados.begin();
-            vector<double>::const_iterator last = esperados.begin() + rango - salto ;
         	assert_interpolacion(&vecinos, vector<double>(first, last), incremento, precision);
         } else if (metodo == LINEAL) {
             InterpolacionLineal lineal(y, salto-1);
-            vector<double>::const_iterator first = esperados.begin();
-            vector<double>::const_iterator last = esperados.begin() + rango - salto ;
         	assert_interpolacion(&lineal, vector<double>(first, last), incremento, precision);
         } else if (metodo == SPLINES) {
             Spline spline(y);
-            vector<double>::const_iterator first = esperados.begin();
-            vector<double>::const_iterator last = esperados.begin() + rango - salto ;
         	assert_interpolacion(&spline, vector<double>(first, last), incremento, precision);
         } else if (metodo == MULTI_SPLINES) {
-            vector<double>::const_iterator first = esperados.begin();
-            vector<double>::const_iterator last = esperados.begin() + rango - salto ;
             MultiSpline multi_spline(y, bloques-1);
         	assert_interpolacion(&multi_spline, vector<double>(first, last), incremento, precision);
         }
