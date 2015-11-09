@@ -1,6 +1,3 @@
-#define DELTA 0.0001
-#define DEBUG false
-
 #include "interpolador.h"
 #include "vecinos.h"
 #include "lineal.h"
@@ -180,6 +177,28 @@ void test_multi_spline_tres_tramos_cuadratico(){
 	MultiSpline multi_spline(y, 3);
 	assert_interpolacion(&multi_spline, esperados, 0.5, 0.5);
 }
+
+void test_vecinos_varios() {
+    test_interpolacion_funcion(VECINOS, F_CONSTANTE, 50, 0.5);
+    test_interpolacion_funcion(VECINOS, F_LINEAL, 50, 0.5, 10);
+    test_interpolacion_funcion(VECINOS, F_CUADRATICA, 50, 0.5, 1000);
+    test_interpolacion_funcion(VECINOS, F_CUBICA, 50, 0.5, 10000);
+}
+
+void test_lineal_varios() {
+    test_interpolacion_funcion(LINEAL, F_CONSTANTE, 50, 0.5);
+    test_interpolacion_funcion(LINEAL, F_LINEAL, 50, 0.5);
+    test_interpolacion_funcion(LINEAL, F_CUADRATICA, 50, 0.5, 10);
+    test_interpolacion_funcion(LINEAL, F_CUBICA, 50, 0.5, 1000);
+}
+
+void test_spline_varios() {
+    test_interpolacion_funcion(SPLINES, F_CONSTANTE, 50, 0.5);
+    test_interpolacion_funcion(SPLINES, F_LINEAL, 50, 0.5);
+    test_interpolacion_funcion(SPLINES, F_CUADRATICA, 50, 0.5, 1);
+    test_interpolacion_funcion(LINEAL, F_CUBICA, 50, 0.5, 1000);
+}
+
 // ********************** EXPERIMENTACION DEL GRUPO ****************************
 
 void exp_error(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * input_text, const char * out) {
@@ -305,6 +324,12 @@ int main(int argc, char *argv[])
 		RUN_TEST(test_multi_spline_dos_tramos_cuadratico);
 		RUN_TEST(test_multi_spline_tres_tramos_cuadratico);
     */
+    /*
+        RUN_TEST(test_vecinos_varios);
+        RUN_TEST(test_lineal_varios);
+        RUN_TEST(test_spline_varios);
+    */
+
         // exp grupo
         // exp_baby_error(SPLINES, 1);
         // exp_baby_error(LINEAL, 1);

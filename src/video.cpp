@@ -149,7 +149,13 @@ void Video::interpolarLineal(){
 			for (int i = 0; i < this->numero_frames; i++) {
 				double aux = double(1)/double(this->cuadros_nuevos + 1);
 				for (int k = 0; k < this->cuadros_nuevos + 1; k++) {
-					this->frames_out[x][y][count] = lineal.evaluar(double(i) + double(k)*aux);
+					double pixel = lineal.evaluar(double(i) + double(k)*aux);
+					if (pixel < 0) {
+						pixel = 0;
+					} else if (pixel > 255) {
+						pixel = 255;
+					}
+					this->frames_out[x][y][count] = pixel;
 					count++;
 				}
 			}
