@@ -394,7 +394,7 @@ int main(int argc, char *argv[])
         exp_tiempo(LINEAL, 1,"data/funnybaby.avi", input_tiempo);
         exp_tiempo(LINEAL, 2,"data/funnybaby.avi",input_tiempo);
         exp_tiempo(SPLINES, 3,"data/funnybaby.avi",input_tiempo);
-        
+
         /*
         exp_tiempo(LINEAL, i,"data/funnybaby.avi","data/time_funnybaby", input_tiempo);
         exp_tiempo(SPLINES, i,"data/funnybaby.avi","data/time_funnybaby", input_tiempo);
