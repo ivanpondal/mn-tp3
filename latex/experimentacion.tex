@@ -38,7 +38,7 @@ El motivo de estas elecciones se debe a la busqueda de diversos \textit{artifact
 \end{itemize}
 
 
-\subsection{Funcionamiento de los métodos implementados}
+\subsection{Funcionamiento de los métodos implementados}\label{exp_funcionamiento}
 En este experimento nuestro objetivo fue asegurarnos el correcto funcionamiento de nuestra implementación de la interpolación fragmentaria lineal, interpolación por splines, e interpolación por splines con tamaño de bloque fijo, tomando bloques de 2, 4, 8, 16, 32 y 64 cuadros.
 
 Con este fin, realizamos una serie de tests que muestran el correcto funcionamiento de cada método para distintas familias de funciones:
@@ -211,10 +211,23 @@ A su vez definimos \emph{Peak to Signal Noise Ratio}, \texttt{PSNR}, como el rea
 
 Ambas medidas nos sirven para realizar un análisis cuantitativo de la calidad de los resultados obtenidos con los distintos métodos.
 
-En este experimento utilizamos los videos propuestos al inicio de la experimentacion, variando la cantidad de cuadros que agregamos
+En este experimento utilizamos los videos propuestos al inicio de la experimentacion, variando la cantidad de cuadros que agregamos.
+Dichos videos fueron elegidos especificamente para variar la dificultad de Interpolación:
+\begin{itemize}
+    \item El video \textbf{Amanecer} no contiene movimientos bruscos ni cambios de cámaras
+        por lo que, para cualquier método, el error debería ser en lineas generales
+        menor que pare el resto de los videos.
+    \item El video \textbf{Skate} contiene movimientos bruscos pero no cambios de cámaras
+        por lo que, se espera un mayor error que en el video anterior. Además,
+        deberíamos ver un aumento del error en los frames donde hay movimientos
+        bruscos.
+    \item El video \textbf{Skate} contiene movimientos bruscos y cambios de cámaras
+        por lo que, se espera un mayor error que en el resto de los videos. Además,
+        deberíamos ver un aumento \textit{importante} del error en los frames
+        donde se produce el cambio de cámara.
+\end{itemize}
 
-
-Los resultados obtenidos son los siguientes:
+A continuación, presentaremos e iremos analizando los resultados obtenidos:
 
 \subsubsection{ECM - Agregando 1 cuadro}
 
@@ -232,16 +245,16 @@ Los resultados obtenidos son los siguientes:
 			legend style={at={(1.015,1)},anchor=north west},
 			no markers,
 			thick,
-			cycle list name=exotic
+            cycle list name=exotic
 		]
 		\addplot table[x index=0,y index=1]{../src/exp/error-sunrise-vecinos1};
-        \addplot table[x index=0,y index=1]{../src/exp/error-sunrise-lineal1};
-        \addplot table[x index=0,y index=1]{../src/exp/error-sunrise-spline1};
+        \addplot[color=blue] table[x index=0,y index=1]{../src/exp/error-sunrise-lineal1};
+        \addplot[color=red] table[x index=0,y index=1]{../src/exp/error-sunrise-spline1};
 		\legend{Vecinos, Lineal, Spline}
 		\end{axis}
 	\end{tikzpicture}
 	\caption{ECM para el video \textbf{Amanecer} al agregar 1 cuadro con distintos métodos de Interpolación.}
-	\label{fig:ecm_sunrise}
+	\label{fig:ecm_sunrise_1}
 \end{figure}
 
 \begin{figure}[H]
@@ -261,13 +274,13 @@ Los resultados obtenidos son los siguientes:
 			cycle list name=exotic
 		]
 		\addplot table[x index=0,y index=1]{../src/exp/error-skate-vecinos1};
-        \addplot table[x index=0,y index=1]{../src/exp/error-skate-lineal1};
-        \addplot table[x index=0,y index=1]{../src/exp/error-skate-spline1};
+        \addplot[color=blue] table[x index=0,y index=1]{../src/exp/error-skate-lineal1};
+        \addplot[color=red] table[x index=0,y index=1]{../src/exp/error-skate-spline1};
 		\legend{Vecinos, Lineal, Spline}
 		\end{axis}
 	\end{tikzpicture}
-	\caption{ECM para el video \textbf{Skate}  al agregar 1 cuadrocon distintos métodos de Interpolación.}
-	\label{fig:ecm_skate}
+	\caption{ECM para el video \textbf{Skate}  al agregar 1 cuadro con distintos métodos de Interpolación.}
+	\label{fig:ecm_skate_1}
 \end{figure}
 
 \begin{figure}[H]
@@ -287,16 +300,34 @@ Los resultados obtenidos son los siguientes:
 			cycle list name=exotic
 		]
 		\addplot table[x index=0,y index=1]{../src/exp/error-messi-vecinos1};
-        \addplot table[x index=0,y index=1]{../src/exp/error-messi-lineal1};
-        \addplot table[x index=0,y index=1]{../src/exp/error-messi-spline1};
+        \addplot[color=blue] table[x index=0,y index=1]{../src/exp/error-messi-lineal1};
+        \addplot[color=red] table[x index=0,y index=1]{../src/exp/error-messi-spline1};
 		\legend{Vecinos, Lineal, Spline}
 		\end{axis}
 	\end{tikzpicture}
-	\caption{ECM para el video \textbf{Messi}  al agregar 1 cuadrocon distintos métodos de Interpolación.}
-	\label{fig:ecm_messi}
+	\caption{ECM para el video \textbf{Messi}  al agregar 1 cuadro con distintos métodos de Interpolación.}
+	\label{fig:ecm_messi_1}
 \end{figure}
 
-FALTA CONCLUSIONES ECM
+Viendo las Figuras \ref{fig:ecm_sunrise_1}, \ref{fig:ecm_skate_1} y \ref{fig:ecm_messi_1} podemos decir que:
+\begin{itemize}
+    \item La Interpolación por Vecinos obtiene consistentemente un mayor error que
+        el resto de los métodos.
+    \item La Interpolación Fragmentaria Lineal y la Interpolación por Splines obtienen
+        en general un error similar, siendo la primera ligeramente mejor.
+    \item El rango de error obtenido por todos los métodos en el video \textbf{Amanecer},
+        es significativamente menor que en el resto de los videos. Además, se puede ver
+        que el error obtenido en ese video es en cierta forma ``regular'', lo cual
+        tiene sentido ya que tiene movimientos suaves y repetitivos.
+    \item El rango de error obtenido por todos los métodos en los videos \textbf{Skate} y \textbf{Messi},
+        son similares, y ambos mayores al rango obtenido en el video \textbf{Amanecer}.
+    \item El error obtenido en el video \textbf{Skate} es bastante irregular
+        al compararlo con el video \textbf{Amanecer}, encontrandose un pico de error
+        en el movimiento más brusco del video.
+    \item A diferencia del caso anterior, el error obtenido en el video \textbf{Messi}
+        es bastante regular, a excepción del pico de error que encontramos cuando
+        ocurre el cambio de cámara, el cual es notorio para todos los métodos.
+\end{itemize}
 
 \subsubsection{PSNR - Agregando 1 cuadro}
 \begin{figure}[H]
@@ -316,13 +347,13 @@ FALTA CONCLUSIONES ECM
 			cycle list name=exotic
 		]
 		\addplot table[x index=0,y index=2]{../src/exp/error-sunrise-vecinos1};
-        \addplot table[x index=0,y index=2]{../src/exp/error-sunrise-lineal1};
-        \addplot table[x index=0,y index=2]{../src/exp/error-sunrise-spline1};
+        \addplot[color=blue] table[x index=0,y index=2]{../src/exp/error-sunrise-lineal1};
+        \addplot[color=red] table[x index=0,y index=2]{../src/exp/error-sunrise-spline1};
 		\legend{Vecinos, Lineal, Spline}
 		\end{axis}
 	\end{tikzpicture}
 	\caption{PSNR para el video \textbf{Amanecer} al agregar 1 cuadro con distintos métodos de Interpolación.}
-	\label{fig:psnr_sunrise}
+	\label{fig:psnr_sunrise_1}
 \end{figure}
 
 \begin{figure}[H]
@@ -342,13 +373,13 @@ FALTA CONCLUSIONES ECM
 			cycle list name=exotic
 		]
 		\addplot table[x index=0,y index=2]{../src/exp/error-skate-vecinos1};
-        \addplot table[x index=0,y index=2]{../src/exp/error-skate-lineal1};
-        \addplot table[x index=0,y index=2]{../src/exp/error-skate-spline1};
+        \addplot[color=blue] table[x index=0,y index=2]{../src/exp/error-skate-lineal1};
+        \addplot[color=red] table[x index=0,y index=2]{../src/exp/error-skate-spline1};
 		\legend{Vecinos, Lineal, Spline}
 		\end{axis}
 	\end{tikzpicture}
 	\caption{PSNR para el video \textbf{Skate} al agregar 1 cuadro con distintos métodos de Interpolación.}
-	\label{fig:psnr_skate}
+	\label{fig:psnr_skate_1}
 \end{figure}
 
 \begin{figure}[H]
@@ -368,16 +399,18 @@ FALTA CONCLUSIONES ECM
 			cycle list name=exotic
 		]
 		\addplot table[x index=0,y index=2]{../src/exp/error-messi-vecinos1};
-        \addplot table[x index=0,y index=2]{../src/exp/error-messi-lineal1};
-        \addplot table[x index=0,y index=2]{../src/exp/error-messi-spline1};
+        \addplot[color=blue] table[x index=0,y index=2]{../src/exp/error-messi-lineal1};
+        \addplot[color=red] table[x index=0,y index=2]{../src/exp/error-messi-spline1};
 		\legend{Vecinos, Lineal, Spline}
 		\end{axis}
 	\end{tikzpicture}
 	\caption{PSNR para el video \textbf{Messi} al agregar 1 cuadro con distintos métodos de Interpolación.}
-	\label{fig:psnr_messi}
+	\label{fig:psnr_messi_1}
 \end{figure}
 
-FALTA CONCLUSIONES PSNR
+Sabiendo que, mientras más grande es el \texttt{ECM} más chico es el \texttt{PSNR},
+encontramos que la información provista por este último no aporta nuevos elementos
+al análisis, ya que se condice con lo análizado previamente utilizando el \texttt{ECM}.
 
 \subsubsection{ECM - Agregando 5 cuadros}
 
@@ -398,13 +431,13 @@ FALTA CONCLUSIONES PSNR
 			cycle list name=exotic
 		]
 		\addplot table[x index=0,y index=1]{../src/exp/error-sunrise-vecinos5};
-        \addplot table[x index=0,y index=1]{../src/exp/error-sunrise-lineal5};
-        \addplot table[x index=0,y index=1]{../src/exp/error-sunrise-spline5};
+        \addplot[color=blue] table[x index=0,y index=1]{../src/exp/error-sunrise-lineal5};
+        \addplot[color=red] table[x index=0,y index=1]{../src/exp/error-sunrise-spline5};
 		\legend{Vecinos, Lineal, Spline}
 		\end{axis}
 	\end{tikzpicture}
 	\caption{ECM para el video \textbf{Amanecer} al agregar 5 cuadros con distintos métodos de Interpolación.}
-	\label{fig:ecm_sunrise}
+	\label{fig:ecm_sunrise_5}
 \end{figure}
 
 \begin{figure}[H]
@@ -424,13 +457,13 @@ FALTA CONCLUSIONES PSNR
 			cycle list name=exotic
 		]
 		\addplot table[x index=0,y index=1]{../src/exp/error-skate-vecinos5};
-        \addplot table[x index=0,y index=1]{../src/exp/error-skate-lineal5};
-        \addplot table[x index=0,y index=1]{../src/exp/error-skate-spline5};
+        \addplot[color=blue] table[x index=0,y index=1]{../src/exp/error-skate-lineal5};
+        \addplot[color=red] table[x index=0,y index=1]{../src/exp/error-skate-spline5};
 		\legend{Vecinos, Lineal, Spline}
 		\end{axis}
 	\end{tikzpicture}
 	\caption{ECM para el video \textbf{Skate} al agregar 5 cuadros con distintos métodos de Interpolación.}
-	\label{fig:ecm_skate}
+	\label{fig:ecm_skate_5}
 \end{figure}
 
 \begin{figure}[H]
@@ -450,16 +483,24 @@ FALTA CONCLUSIONES PSNR
 			cycle list name=exotic
 		]
 		\addplot table[x index=0,y index=1]{../src/exp/error-messi-vecinos5};
-        \addplot table[x index=0,y index=1]{../src/exp/error-messi-lineal5};
-        \addplot table[x index=0,y index=1]{../src/exp/error-messi-spline5};
+        \addplot[color=blue] table[x index=0,y index=1]{../src/exp/error-messi-lineal5};
+        \addplot[color=red] table[x index=0,y index=1]{../src/exp/error-messi-spline5};
 		\legend{Vecinos, Lineal, Spline}
 		\end{axis}
 	\end{tikzpicture}
 	\caption{ECM para el video \textbf{Messi} al agregar 5 cuadros con distintos métodos de Interpolación.}
-	\label{fig:ecm_messi}
+	\label{fig:ecm_messi_5}
 \end{figure}
 
-FALTA CONCLUSIONES ECM
+Viendo las Figuras \ref{fig:ecm_sunrise_5}, \ref{fig:ecm_skate_5} y \ref{fig:ecm_messi_5} podemos decir que:
+\begin{itemize}
+    \item El comportamiento general de los métodos para cada video no varió con respecto
+        al escenario en el cual agregabamos 1 cuadro. Los análisis de movimiento brusco y
+        cambios de cámaras se reafirman.
+    \item En lineas generales, y en todos los videos, el error se incrementó con respecto al
+        escenario en el cual agregabamos 1 cuadro, a excepción del método de Interpolación
+        por Vecinos, que mantiene su rango de error.
+\end{itemize}
 
 \subsubsection{PSNR - Agregando 5 cuadros}
 \begin{figure}[H]
@@ -479,13 +520,13 @@ FALTA CONCLUSIONES ECM
 			cycle list name=exotic
 		]
 		\addplot table[x index=0,y index=2]{../src/exp/error-sunrise-vecinos5};
-        \addplot table[x index=0,y index=2]{../src/exp/error-sunrise-lineal5};
-        \addplot table[x index=0,y index=2]{../src/exp/error-sunrise-spline5};
+        \addplot[color=blue] table[x index=0,y index=2]{../src/exp/error-sunrise-lineal5};
+        \addplot[color=red] table[x index=0,y index=2]{../src/exp/error-sunrise-spline5};
 		\legend{Vecinos, Lineal, Spline}
 		\end{axis}
 	\end{tikzpicture}
 	\caption{PSNR para el video \textbf{Amanecer} al agregar 5 cuadros con distintos métodos de Interpolación.}
-	\label{fig:psnr_sunrise}
+	\label{fig:psnr_sunrise_5}
 \end{figure}
 
 \begin{figure}[H]
@@ -505,13 +546,13 @@ FALTA CONCLUSIONES ECM
 			cycle list name=exotic
 		]
 		\addplot table[x index=0,y index=2]{../src/exp/error-skate-vecinos5};
-        \addplot table[x index=0,y index=2]{../src/exp/error-skate-lineal5};
-        \addplot table[x index=0,y index=2]{../src/exp/error-skate-spline5};
+        \addplot[color=blue] table[x index=0,y index=2]{../src/exp/error-skate-lineal5};
+        \addplot[color=red] table[x index=0,y index=2]{../src/exp/error-skate-spline5};
 		\legend{Vecinos, Lineal, Spline}
 		\end{axis}
 	\end{tikzpicture}
 	\caption{PSNR para el video \textbf{Skate} al agregar 5 cuadros con distintos métodos de Interpolación.}
-	\label{fig:psnr_skate}
+	\label{fig:psnr_skate_5}
 \end{figure}
 
 \begin{figure}[H]
@@ -531,16 +572,45 @@ FALTA CONCLUSIONES ECM
 			cycle list name=exotic
 		]
 		\addplot table[x index=0,y index=2]{../src/exp/error-messi-vecinos5};
-        \addplot table[x index=0,y index=2]{../src/exp/error-messi-lineal5};
-        \addplot table[x index=0,y index=2]{../src/exp/error-messi-spline5};
+        \addplot[color=blue] table[x index=0,y index=2]{../src/exp/error-messi-lineal5};
+        \addplot[color=red] table[x index=0,y index=2]{../src/exp/error-messi-spline5};
 		\legend{Vecinos, Lineal, Spline}
 		\end{axis}
 	\end{tikzpicture}
 	\caption{PSNR para el video \textbf{Messi} al agregar 5 cuadros con distintos métodos de Interpolación.}
-	\label{fig:psnr_messi}
+	\label{fig:psnr_messi_5}
 \end{figure}
 
-FALTA CONCLUSIONES PSNR
+Sabiendo que, mientras más grande es el \texttt{ECM} más chico es el \texttt{PSNR},
+encontramos que la información provista por este último no aporta nuevos elementos
+al análisis, ya que se condice con lo análizado previamente utilizando el \texttt{ECM}.
+
+\subsubsection{Conclusiones}
+
+En base a lo análizado, podemos concluir que:
+
+\begin{itemize}
+    \item El error máximo cometido por el método de Interpolación por Vecinos, en comparación
+        con los otros dos, lo hace inusable en la mayoría de los casos, y empeora a medida
+        que agregamos más cuadros.
+    \item Si bien en el Experimento de la Sección \ref{exp_funcionamiento} pudimos lograr una
+        mayor precisión con la Interpolación por Splines que con la Interpolación Fragmentaria Lineal,
+        no sucedió lo mismo cuando aplicamos los métodos a la interpolación de videos.
+        En este escenario, los métodos obtuvieron errores muy similares, siendo la Interpolación
+        Fragmentaria Lineal mejor en algunos casos.
+
+        Esto lo atribuimos a que los píxeles de de los videos no respetan ninguna familia de funciones,
+        obviamente, y por lo tanto la función que infiere la Interpolación por Splines
+        no es sustancialmente mejor que la obtenida mediante Interpolación Fragmentaria Lineal.
+
+        REVISAR. PODRIAMOS MENCIONAR QUE, QUIZAS, CON MULTI SPLINE ESTO SE ARREGLARIA, A PESAR
+        DE QUE VIMOS QUE LA PRECISION DE MULTI SPLINE NO ES MEJOR QUE LA DE SPLINE, SINO QUE
+        CONVERGE A ESTA.
+    \item El video con movimientos suaves es mucho más sencillo de interpolar que los demás, y
+        permite que incluso el método de Interpolación por Vecinos logre errores bajos.
+        Al ir agregando movimientos bruscos y cambios de camaras, los videos se vuelven más
+        difíciles de interpolar, aumentando el error obtenido con los distintos métodos.
+\end{itemize}
 
 \subsection{Análisis cualitativos de los métodos, fenómeno de artifacts.}
 Los \textit{artifacts} son errores visuales resultantes de la aplicación de los métodos. Estos errores visuales se caracterizan por romper la coherencia entre imágenes al generar distorsiones evidentes.

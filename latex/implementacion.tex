@@ -3,23 +3,29 @@
 Este método consiste en reemplazar los cuadros intermedios a ser rellenados por el cuadro original mas cercano en el tiempo.
 Es decir, dados los cuadros del video sin camara lenta, generamos otro video en camara lenta copiando los cuadros originales de la siguiente manera:
 
+% \begin{center}
 % \begin{bytefield}{16}
 % \wordbox{1}{A 16-bit field} \\
 % \bitbox{8}{8 bits} & \bitbox{8}{8 more bits} \\
 % \wordbox{2}{A 32-bit field. Note that text wraps within the box.}
 % \end{bytefield}
+% \end{center}
 
 Sean Frame1 y Frame2 dos cuadros consecutivos del video original:
 
+\begin{center}
 \begin{bytefield}{8}
 \bitbox{4}{Frame1} & \bitbox{4}{Frame2}
 \end{bytefield}
+\end{center}
 
 Si queremos ahora 6 cuadros entre cada 2 del archivo original lo transformamos a:
 
+\begin{center}
 \begin{bytefield}{32}
 \bitbox{4}{Frame1} & \bitbox{4}{Frame1} & \bitbox{4}{Frame1} & \bitbox{4}{Frame1} & \bitbox{4}{Frame2} & \bitbox{4}{Frame2} & \bitbox{4}{Frame2} & \bitbox{4}{Frame2}
 \end{bytefield}
+\end{center}
 
 El pseudocódigo sería el siguiente:
 
@@ -51,15 +57,19 @@ En este caso, usamos el polinomio interpolador de Lagrange entre cada par de pun
 
 Por ejemplo, sean dos pixeles con valores 1 y 4:
 
+\begin{center}
 \begin{bytefield}{8}
 \bitbox{4}{1} & \bitbox{4}{4}
 \end{bytefield}
+\end{center}
 
 Si queremos un video en camara lenta con 5 cuadros intermedios por cada 2 del original, estos se replicarán de la siguiente forma:
 
+\begin{center}
 \begin{bytefield}{28}
 \bitbox{4}{1} & \bitbox{4}{1.5} & \bitbox{4}{2} & \bitbox{4}{2.5} & \bitbox{4}{3} & \bitbox{4}{3.5} & \bitbox{4}{4}
 \end{bytefield}
+\end{center}
 
 El procedimiento es el siguiente:
 
