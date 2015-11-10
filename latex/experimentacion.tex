@@ -630,14 +630,42 @@ Los resultados fueron los siguientes:
 \subsection{Interpolación por vecinos}
 
 \begin{itemize}
-\item Como era de esperar no hubieron elementos falsos
-\item Eso si, todos los movimientos parecieron bruscos, casi robóticos y sin ningún tipo de fluidez
-\item Por ejemplo, en el video 'messi' la pelota exhibe un movimiento claramente antinatural
-\item Concluimos que este método no produce resultados de movimientos naturales
+\item Como era de esperar no hubieron elementos falsos.
+\item Eso si, todos los movimientos parecieron bruscos, casi robóticos y sin ningún tipo de fluidez.
+\item Por ejemplo, en el video 'messi' la pelota exhibe un movimiento claramente antinatural.
+\item Todo esto es lógico dado que solo estamos copiando y pegando frames en el tiempo.
+\item Concluimos que este método no produce resultados de movimientos fluidos.
 \end{itemize}
 
 \subsection{Interpolación lineal}
 
+\begin{itemize}
+\item En este caso no encontramos los movimientos bruscos de interpolación por vecinos.
+\item Si podemos ver que hay congelamientos de imágen cada aproximadamente 1 segundo.
+\item Parecería haber un retroceso de calidad con respecto al método anterior.
+\item Detectamos imágenes falsas cuando las personas se mueven como:
+\end{itemize}
+
+\includegraphics[scale=1]{imagenes/art1.png}
+
 \subsection{Interpolación por Splines}
 
-\subsection{Interpolación por Splines de a bloques}
+\begin{itemize}
+\item Con seguridad, este hasta ahora es el método que genera los videos más fluidos.
+\item Los movimientos de las cosas parecen naturales y no hay congelamientos ni transformaciones bruscas.
+\item Esto se lo atribuimos a que el método en sí aprovecha todos los datos del pixel a tráves del tiempo para producir resultados mejores que tienen que ver con el marco teórico que le dan los polinomio interpoladores de Lagrange.
+\item Eso si, siguen habiendo imágenes falsas a causa del movimiento y no son menores pero si ligeramente mejores que en la interpolación lineal.
+\item Por ejemplo, en la instancia 'skate', los resultados son del estilo:
+\end{itemize}
+
+\includegraphics[scale=1]{imagenes/art2.png}
+
+\subsection{Interpolación por Splines de a bloques de 4 pixeles}
+
+\begin{itemize}
+\item En este caso parece haber un retroceso de calidad con respecto al método anterior.
+\item Los movimientos de las cosas parecen naturales.
+\item Pero si hay congelamientos.
+\item En particular, en el video 'messi' se nota claramente como la pelota se congela en algunos momentos.
+\item Esto era de esperarse debido a los bloques de tamaño fijo ubicados a través del tiempo.
+\end{itemize}

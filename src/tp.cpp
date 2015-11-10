@@ -492,7 +492,7 @@ int main(int argc, char *argv[])
         // exp_error(SPLINES, 5, "data/skate.avi", "exp/error-skate-spline5");
 
         // exp_artifacts(0);// {VECINOS = 0, LINEAL = 1, SPLINES = 2, MULTI_SPLINES = 3};
-        exp_artifacts(1);
+        // exp_artifacts(1);
         // exp_artifacts(2);
         // exp_artifacts(3);
 
