@@ -110,11 +110,17 @@ Analizando dichas cotas vemos que:
 \end{itemize}
 
 \subsection{Medición de los tiempos de ejecución de los métodos}
-A partir de la implementaciones descriptas en la Sección \ref{Implementacion}, podemos inferir una complejidad temporal para cada método.
+A partir de la implementaciones descriptas en la Sección \ref{Implementacion},
+podemos inferir una complejidad temporal para cada método.
 
-Sea $w$ la cantidad de filas de píxeles en cada imagen, $h$ la cantidad de columnas, $i$ la cantidad de cuadros originales y sea $k$ la cantidad de cuadros a agregar entre los originales:
+Sea $w$ la cantidad de filas de píxeles en cada imagen, $h$ la cantidad de
+columnas, $i$ la cantidad de cuadros originales y sea $k$ la cantidad de
+cuadros a agregar entre los originales:
 
-Todos los metodos implementados tienen la misma una complejidad temporal que es $\Theta(w*h*i*k*)$. Esta conclusion surge del hecho que, en todos los casos, tenemos 4 ciclos anidados, en donde el primero se ejecuta $w$ veces, el segundo $h$ veces, el tercero $i$ veces, y el cuarto $k$ veces.
+Todos los metodos implementados tienen la misma complejidad temporal que es
+ $\Theta(w*h*i*k*)$. Esta conclusion surge del hecho de que, en todos los casos,
+ tenemos 4 ciclos anidados, en donde el primero se ejecuta $w$ veces, el segundo
+ $h$ veces, el tercero $i$ veces, y el cuarto $k$ veces.
 %\begin{itemize}
 %  \item Vecino mas cercano: realizamos 4 ciclos anidados, en donde el primero se ejecuta $w$ veces, el segundo $h$ veces, el tercero $i$ veces, y el cuarto $k$ veces, la complejidad temporal del mismo es $\Theta(whik)$.
 %  \item Interpolacion lineal: situacion identica a la de vecinos mas cercanos, por lo tanto su complejidad temporal es de $\Theta(whik)$.
@@ -125,7 +131,7 @@ Todos los metodos implementados tienen la misma una complejidad temporal que es 
 \newline
 Para corroborar esta hipotesis planteamos un experimento con las siguientes caracteristicas:
 \begin{itemize}
-  \item Utilizamos el video provisto por la catedra llamado \textit{funnybaby}, el cual tiene 44 cuadros y es de xx.
+  \item Utilizamos el video provisto por la catedra llamado \textit{funnybaby}, el cual tiene 44 cuadros y es de 240x320.
   \item Solo medimos la resolucion del sistema, no su creacion o los respectivos pasajes de video a texto y viceversa.
   \item Dado que $w$, $h$ y $i$ son valores fijos que no podemos cambiar, variamos el $k$.
   \item Generamos instancias para valores de $k$ entre 1 y 6.
