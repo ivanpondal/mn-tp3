@@ -333,7 +333,7 @@ namespace utils {
         return ret;
     }
 
-    static void test_interpolacion_funcion(MetodoInterpolacion metodo, Funcion funcion, double rango, double incremento, double precision = DELTA, int bloques = 2) {
+    static void test_interpolacion_funcion(MetodoInterpolacion metodo, Funcion funcion, double rango, double incremento, double precision = DELTA, int tamanio_bloques = 2) {
         vector<double> esperados(generarEsperados(funcion, rango, incremento));
         vector<double> y;
         int salto = (int)(double(1)/incremento);
@@ -354,7 +354,7 @@ namespace utils {
             Spline spline(y);
         	assert_interpolacion(&spline, vector<double>(first, last), incremento, precision);
         } else if (metodo == MULTI_SPLINES) {
-            MultiSpline multi_spline(y, bloques-1);
+            MultiSpline multi_spline(y, tamanio_bloques-1);
         	assert_interpolacion(&multi_spline, vector<double>(first, last), incremento, precision);
         }
     }

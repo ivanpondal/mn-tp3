@@ -69,6 +69,10 @@ void Video::guardar(const char* salida){
 	archivo_salida.close();
 }
 
+void Video::cambiarTamanioBloques(int tamanio_bloques) {
+	this->tamanio_bloques = tamanio_bloques;
+}
+
 void Video::aplicarCamaraLenta(MetodoInterpolacion metodo){
 	switch(metodo){
 		case VECINOS:
@@ -84,8 +88,8 @@ void Video::aplicarCamaraLenta(MetodoInterpolacion metodo){
 			interpolarSplines();
 			break;
 		case MULTI_SPLINES:
-			cout << "Aplicando interpolación cúbica de a tramos" << endl;
-			interpolarMultiSplines(4);
+			cout << "Aplicando interpolación cúbica de a tramos. Tamaño bloques: " << tamanio_bloques << endl;
+			interpolarMultiSplines(tamanio_bloques -1);
 			break;
 
 	}

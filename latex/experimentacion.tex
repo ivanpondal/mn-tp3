@@ -603,13 +603,131 @@ En base a lo análizado, podemos concluir que:
         obviamente, y por lo tanto la función que infiere la Interpolación por Splines
         no es sustancialmente mejor que la obtenida mediante Interpolación Fragmentaria Lineal.
 
-        REVISAR. PODRIAMOS MENCIONAR QUE, QUIZAS, CON MULTI SPLINE ESTO SE ARREGLARIA, A PESAR
-        DE QUE VIMOS QUE LA PRECISION DE MULTI SPLINE NO ES MEJOR QUE LA DE SPLINE, SINO QUE
-        CONVERGE A ESTA.
+        Sin embargo, ya que las cotas de precisión definidas previamente no nos permitieron
+        proyectar que la Interpolación por Splines iba a dar resultados similares a la
+        Interpolación Fragmentaria Lineal, queda la duda de si la Interpolación por Splines
+        de tamaño de bloque fijo puede dar mejores resultados. Para eso, haremos un
+        experimento extra a continuación para comparar el error de dichos métodos.
     \item El video con movimientos suaves es mucho más sencillo de interpolar que los demás, y
         permite que incluso el método de Interpolación por Vecinos logre errores bajos.
         Al ir agregando movimientos bruscos y cambios de camaras, los videos se vuelven más
         difíciles de interpolar, aumentando el error obtenido con los distintos métodos.
+\end{itemize}
+
+\subsubsection{Interpolación por Splines: bloques de tamaño variable vs fijo}
+
+A continuación presentamos los resultados de comparar los errores de los siguientes métodos, solo para el video \textbf{Messi}:
+\begin{itemize}
+    \item Interpolación por Splines \textit{standard}, o de bloque variable.
+    \item Interpolación por Splines (bloques de tamaño 2)
+    \item Interpolación por Splines (bloques de tamaño 8)
+    \item Interpolación por Splines (bloques de tamaño 32)
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			title={ },
+			xlabel=Frame,
+			ylabel=ECM,
+			width=0.8\textwidth,
+			height=0.5\textwidth,
+			yticklabel style={/pgf/number format/fixed},
+			scaled y ticks=false,
+			legend style={at={(1.015,1)},anchor=north west},
+			no markers,
+			thick,
+			cycle list name=exotic
+		]
+		\addplot table[x index=0,y index=1]{../src/exp/error-messi-multisplines1-b2};
+        %\addplot table[x index=0,y index=1]{../src/exp/error-messi-multisplines1-b4};
+        \addplot table[x index=0,y index=1]{../src/exp/error-messi-multisplines1-b8};
+        %\addplot table[x index=0,y index=1]{../src/exp/error-messi-multisplines1-b16};
+        \addplot table[x index=0,y index=1]{../src/exp/error-messi-multisplines1-b32};
+        %\addplot table[x index=0,y index=1]{../src/exp/error-messi-multisplines1-b64};
+        \addplot table[x index=0,y index=1]{../src/exp/error-messi-spline1};
+		%\legend{B2, B4, B8, B16, B32, B64, Standard}
+        \legend{B2, B8, B32, Standard}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{ECM para el video \textbf{Messi}  al agregar 1 cuadro con variantes del método de Interpolación por Splines.}
+	\label{fig:ecm_splines_messi_1}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			title={ },
+			xlabel=Frame,
+			ylabel=ECM,
+			width=0.8\textwidth,
+			height=0.5\textwidth,
+			yticklabel style={/pgf/number format/fixed},
+			scaled y ticks=false,
+			legend style={at={(1.015,1)},anchor=north west},
+			no markers,
+			thick,
+			cycle list name=exotic
+		]
+		%\addplot table[x index=0,y index=1]{../src/exp/error-messi-multisplines1-b2};
+        %\addplot table[x index=0,y index=1]{../src/exp/error-messi-multisplines1-b4};
+        %\addplot table[x index=0,y index=1]{../src/exp/error-messi-multisplines1-b8};
+        %\addplot table[x index=0,y index=1]{../src/exp/error-messi-multisplines1-b16};
+        \addplot table[x index=0,y index=1]{../src/exp/error-messi-multisplines1-b32};
+        %\addplot table[x index=0,y index=1]{../src/exp/error-messi-multisplines1-b64};
+        \addplot table[x index=0,y index=1]{../src/exp/error-messi-spline1};
+		%\legend{B2, B4, B8, B16, B32, B64, Standard}
+        \legend{B32, Standard}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{ECM para el video \textbf{Messi}  al agregar 1 cuadro con variantes del método de Interpolación por Splines.}
+	\label{fig:ecm_splines_messi_1_bis}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			title={ },
+			xlabel=Frame,
+			ylabel=ECM,
+			width=0.8\textwidth,
+			height=0.5\textwidth,
+			yticklabel style={/pgf/number format/fixed},
+			scaled y ticks=false,
+			legend style={at={(1.015,1)},anchor=north west},
+			no markers,
+			thick,
+			cycle list name=exotic
+		]
+        \addplot table[x index=0,y index=1]{../src/exp/error-messi-multisplines5-b2};
+        %\addplot table[x index=0,y index=1]{../src/exp/error-messi-multisplines5-b4};
+        \addplot table[x index=0,y index=1]{../src/exp/error-messi-multisplines5-b8};
+        %\addplot table[x index=0,y index=1]{../src/exp/error-messi-multisplines5-b16};
+        \addplot table[x index=0,y index=1]{../src/exp/error-messi-multisplines5-b32};
+        %\addplot table[x index=0,y index=1]{../src/exp/error-messi-multisplines5-b64};
+        \addplot table[x index=0,y index=1]{../src/exp/error-messi-spline5};
+		\legend{B2, B4, B8, B16, B32, B64, Standard}
+        \legend{B2, B8, B32, Standard}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{ECM para el video \textbf{Messi} al agregar 5 cuadros con variantes del método de Interpolación por Splines.}
+	\label{fig:ecm_splines_messi_5}
+\end{figure}
+
+En base a las Figuras \ref{fig:ecm_splines_messi_1}, \ref{fig:ecm_splines_messi_1_bis} y\ref{fig:ecm_splines_messi_5}, podemos terminar de concluir que:
+
+\begin{itemize}
+    \item El error del método de Interpolación por Splines usando bloques de tamaño fijo converge, al
+        ir aumentando el tamaño del bloque, al error obtenido con la versión \textit{standard}.
+        Anteriormente ya habíamos confirmado un resultado parecido para diferentes familias de funciones,
+        pero ahora podemos afirmar que esto vale también en el escenario en el cual estamos interpolando
+        cuadros de video.
+    \item Luego, la variante de Interpolación por Splines con tamaño fijo es
+        similar o peor (dependiendo del tamaño del bloque) a la variante \textit{standard}, y por lo tanto
+        similar a la Interpolación Fragmentaria Lineal.
 \end{itemize}
 
 \subsection{Análisis cualitativos de los métodos, fenómeno de artifacts.}

@@ -247,7 +247,7 @@ void test_multi_spline_varios() {
 
 // ********************** EXPERIMENTACION DEL GRUPO ****************************
 
-void exp_error(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * input_text, const char * out) {
+void exp_error(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * input_text, const char * out, int tamanio_bloques = -1) {
     cout << "Calculando error al interpolar usando " << getTextForMetodo(metodo) << ", tomando del video original 1 frame de cada " << cuadros_a_agregar + 1 << ": " << endl;
 
     // armo los strings de inputfiles
@@ -271,7 +271,10 @@ void exp_error(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * i
 
     // agrego cuadros_a_agregar frames entre cada frame del output_text
     Video video(aux_text.c_str(), cuadros_a_agregar);
-	  video.aplicarCamaraLenta(metodo);
+    if (tamanio_bloques != -1) {
+        video.cambiarTamanioBloques(tamanio_bloques);
+    }
+    video.aplicarCamaraLenta(metodo);
     vector<vector<vector<double> > > frames_out = video.obtenerFramesCalculados();
 
     // calculo el error cuadratico por frame y el psnr
@@ -461,25 +464,39 @@ int main(int argc, char *argv[])
         // exp_tiempo_lineal("data/funnybaby.avi");
         // exp_tiempo_splines("data/funnybaby.avi");
 
-        exp_error(VECINOS, 1, "data/messi.avi", "exp/error-messi-vecinos1");
-        exp_error(LINEAL, 1, "data/messi.avi", "exp/error-messi-lineal1");
-        exp_error(SPLINES, 1, "data/messi.avi", "exp/error-messi-spline1");
-        exp_error(VECINOS, 1, "data/sunrise.avi", "exp/error-sunrise-vecinos1");
-        exp_error(LINEAL, 1, "data/sunrise.avi", "exp/error-sunrise-lineal1");
-        exp_error(SPLINES, 1, "data/sunrise.avi", "exp/error-sunrise-spline1");
-        exp_error(VECINOS, 1, "data/skate.avi", "exp/error-skate-vecinos1");
-        exp_error(LINEAL, 1, "data/skate.avi", "exp/error-skate-lineal1");
-        exp_error(SPLINES, 1, "data/skate.avi", "exp/error-skate-spline1");
+        // exp_error(VECINOS, 1, "data/messi.avi", "exp/error-messi-vecinos1");
+        // exp_error(LINEAL, 1, "data/messi.avi", "exp/error-messi-lineal1");
+        // exp_error(SPLINES, 1, "data/messi.avi", "exp/error-messi-spline1");
+        // exp_error(VECINOS, 1, "data/sunrise.avi", "exp/error-sunrise-vecinos1");
+        // exp_error(LINEAL, 1, "data/sunrise.avi", "exp/error-sunrise-lineal1");
+        // exp_error(SPLINES, 1, "data/sunrise.avi", "exp/error-sunrise-spline1");
+        // exp_error(VECINOS, 1, "data/skate.avi", "exp/error-skate-vecinos1");
+        // exp_error(LINEAL, 1, "data/skate.avi", "exp/error-skate-lineal1");
+        // exp_error(SPLINES, 1, "data/skate.avi", "exp/error-skate-spline1");
+        //
+        // exp_error(VECINOS, 5, "data/messi.avi", "exp/error-messi-vecinos5");
+        // exp_error(LINEAL, 5, "data/messi.avi", "exp/error-messi-lineal5");
+        // exp_error(SPLINES, 5, "data/messi.avi", "exp/error-messi-spline5");
+        // exp_error(VECINOS, 5, "data/sunrise.avi", "exp/error-sunrise-vecinos5");
+        // exp_error(LINEAL, 5, "data/sunrise.avi", "exp/error-sunrise-lineal5");
+        // exp_error(SPLINES, 5, "data/sunrise.avi", "exp/error-sunrise-spline5");
+        // exp_error(VECINOS, 5, "data/skate.avi", "exp/error-skate-vecinos5");
+        // exp_error(LINEAL, 5, "data/skate.avi", "exp/error-skate-lineal5");
+        // exp_error(SPLINES, 5, "data/skate.avi", "exp/error-skate-spline5");
 
-        exp_error(VECINOS, 5, "data/messi.avi", "exp/error-messi-vecinos5");
-        exp_error(LINEAL, 5, "data/messi.avi", "exp/error-messi-lineal5");
-        exp_error(SPLINES, 5, "data/messi.avi", "exp/error-messi-spline5");
-        exp_error(VECINOS, 5, "data/sunrise.avi", "exp/error-sunrise-vecinos5");
-        exp_error(LINEAL, 5, "data/sunrise.avi", "exp/error-sunrise-lineal5");
-        exp_error(SPLINES, 5, "data/sunrise.avi", "exp/error-sunrise-spline5");
-        exp_error(VECINOS, 5, "data/skate.avi", "exp/error-skate-vecinos5");
-        exp_error(LINEAL, 5, "data/skate.avi", "exp/error-skate-lineal5");
-        exp_error(SPLINES, 5, "data/skate.avi", "exp/error-skate-spline5");
+        exp_error(MULTI_SPLINES, 1, "data/messi.avi", "exp/error-messi-multisplines1-b2", 2);
+        exp_error(MULTI_SPLINES, 1, "data/messi.avi", "exp/error-messi-multisplines1-b4", 4);
+        exp_error(MULTI_SPLINES, 1, "data/messi.avi", "exp/error-messi-multisplines1-b8", 8);
+        exp_error(MULTI_SPLINES, 1, "data/messi.avi", "exp/error-messi-multisplines1-b16", 16);
+        exp_error(MULTI_SPLINES, 1, "data/messi.avi", "exp/error-messi-multisplines1-b32", 32);
+        exp_error(MULTI_SPLINES, 1, "data/messi.avi", "exp/error-messi-multisplines1-b64", 64);
+
+        exp_error(MULTI_SPLINES, 5, "data/messi.avi", "exp/error-messi-multisplines5-b2", 2);
+        exp_error(MULTI_SPLINES, 5, "data/messi.avi", "exp/error-messi-multisplines5-b4", 4);
+        exp_error(MULTI_SPLINES, 5, "data/messi.avi", "exp/error-messi-multisplines5-b8", 8);
+        exp_error(MULTI_SPLINES, 5, "data/messi.avi", "exp/error-messi-multisplines5-b16", 16);
+        exp_error(MULTI_SPLINES, 5, "data/messi.avi", "exp/error-messi-multisplines5-b32", 32);
+        exp_error(MULTI_SPLINES, 5, "data/messi.avi", "exp/error-messi-multisplines5-b64", 64);
 
 	} else {
         cout << "Usage: ./tp <archivo_entrada> <archivo_salida> <metodo> <cantidad_cuadros_a_agregar>" << endl;

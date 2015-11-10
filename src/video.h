@@ -25,6 +25,7 @@ class Video{
 		vector<vector<vector<double> > > obtenerFramesCalculados();
 		void guardar(const char* salida);
 		void aplicarCamaraLenta(MetodoInterpolacion metodo);
+        void cambiarTamanioBloques(int tamanio_bloques);
 	private:
 		int numero_frames;
 		int numero_frames_out;
@@ -32,6 +33,7 @@ class Video{
 		int alto;
 		int fps;
 		int cuadros_nuevos;
+        int tamanio_bloques = 5;
 		vector<vector<vector<double> > > frames;
 		vector<vector<vector<double> > > frames_out;
 		void interpolarSplines();
