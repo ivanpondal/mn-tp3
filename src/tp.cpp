@@ -184,7 +184,7 @@ void test_vecinos_varios() {
     test_interpolacion_funcion(VECINOS, F_CONSTANTE, 50, 0.5);
     test_interpolacion_funcion(VECINOS, F_LINEAL, 50, 0.5, 10);
     test_interpolacion_funcion(VECINOS, F_CUADRATICA, 50, 0.5, 1000);
-    test_interpolacion_funcion(VECINOS, F_CUBICA, 50, 0.5, 10000);
+    test_interpolacion_funcion(VECINOS, F_CUBICA, 50, 0.5, 100000);
 }
 
 void test_lineal_varios() {
@@ -197,8 +197,8 @@ void test_lineal_varios() {
 void test_spline_varios() {
     test_interpolacion_funcion(SPLINES, F_CONSTANTE, 50, 0.5);
     test_interpolacion_funcion(SPLINES, F_LINEAL, 50, 0.5);
-    test_interpolacion_funcion(SPLINES, F_CUADRATICA, 50, 0.5, 1);
-    test_interpolacion_funcion(SPLINES, F_CUBICA, 50, 0.5, 10);
+    test_interpolacion_funcion(SPLINES, F_CUADRATICA, 50, 0.5, 10);
+    test_interpolacion_funcion(SPLINES, F_CUBICA, 50, 0.5, 1000);
 }
 
 void test_multi_spline_varios() {
@@ -387,13 +387,13 @@ int main(int argc, char *argv[])
         exp_error(SPLINES, 1,"data/funnybaby.avi",input_error);
         */
 
-        const char* input_tiempo = "data/time_funnybaby";
-        FILE *file = fopen(input_tiempo, "w+");
-        fclose(file);
-        // PROBLEMA DOUBLE FREE CUANDO EJECUTA CON CUADROS NUEVOS 1 Y DESPUES 2 en exp_tiempo CON VECINOS Y LINEAL
-        exp_tiempo(LINEAL, 1,"data/funnybaby.avi", input_tiempo);
-        exp_tiempo(LINEAL, 2,"data/funnybaby.avi",input_tiempo);
-        exp_tiempo(SPLINES, 3,"data/funnybaby.avi",input_tiempo);
+        // const char* input_tiempo = "data/time_funnybaby";
+        // FILE *file = fopen(input_tiempo, "w+");
+        // fclose(file);
+        // // PROBLEMA DOUBLE FREE CUANDO EJECUTA CON CUADROS NUEVOS 1 Y DESPUES 2 en exp_tiempo CON VECINOS Y LINEAL
+        // exp_tiempo(LINEAL, 1,"data/funnybaby.avi", input_tiempo);
+        // exp_tiempo(LINEAL, 2,"data/funnybaby.avi",input_tiempo);
+        // exp_tiempo(SPLINES, 3,"data/funnybaby.avi",input_tiempo);
 
         /*
         exp_tiempo(LINEAL, i,"data/funnybaby.avi","data/time_funnybaby", input_tiempo);
