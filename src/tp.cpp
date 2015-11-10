@@ -221,6 +221,30 @@ void test_multi_spline_varios() {
     test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.5, 1000, 8);
 }
 
+void test_multi_spline_varios2() {
+    cout << endl;
+    // tamaño de bloques 2
+    cout << "Bloque 2" << endl;
+    test_interpolacion_funcion(MULTI_SPLINES, F_CONSTANTE, 50, 0.2, DELTA, 2);
+    test_interpolacion_funcion(MULTI_SPLINES, F_LINEAL, 50, 0.2, DELTA, 2);
+    test_interpolacion_funcion(MULTI_SPLINES, F_CUADRATICA, 50, 0.2, 10, 2);
+    test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.2, 1000, 2);
+
+    // tamaño de bloques 4
+    // cout << "Bloque 4" << endl;
+    // test_interpolacion_funcion(MULTI_SPLINES, F_CONSTANTE, 50, 0.2, DELTA, 4);
+    // test_interpolacion_funcion(MULTI_SPLINES, F_LINEAL, 50, 0.2, DELTA, 4);
+    // test_interpolacion_funcion(MULTI_SPLINES, F_CUADRATICA, 50, 0.2, 10, 4);
+    // test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.2, 1000, 4);
+    //
+    // // tamaño de bloques 8
+    // cout << "Bloque 8" << endl;
+    // test_interpolacion_funcion(MULTI_SPLINES, F_CONSTANTE, 50, 0.2, DELTA, 8);
+    // test_interpolacion_funcion(MULTI_SPLINES, F_LINEAL, 50, 0.2, DELTA, 8);
+    // test_interpolacion_funcion(MULTI_SPLINES, F_CUADRATICA, 50, 0.2, 10, 8);
+    // test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.2, 1000, 8);
+}
+
 // ********************** EXPERIMENTACION DEL GRUPO ****************************
 
 void exp_error(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * input_text, const char * out) {
@@ -368,10 +392,11 @@ int main(int argc, char *argv[])
 		RUN_TEST(test_multi_spline_tres_tramos_cuadratico);
     */
 
-        RUN_TEST(test_vecinos_varios);
-        RUN_TEST(test_lineal_varios);
-        RUN_TEST(test_spline_varios);
-        RUN_TEST(test_multi_spline_varios)
+        // RUN_TEST(test_vecinos_varios);
+        // RUN_TEST(test_lineal_varios);
+        // RUN_TEST(test_spline_varios);
+        RUN_TEST(test_multi_spline_varios);
+        RUN_TEST(test_multi_spline_varios2);
 
 
         // exp grupo
