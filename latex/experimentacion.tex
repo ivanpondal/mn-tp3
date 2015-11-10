@@ -447,18 +447,86 @@ FALTA CONCLUSIONES ECM
 FALTA CONCLUSIONES PSNR
 
 \subsection{Medición de los tiempos de ejecución de los métodos}
-A partir de la implementación descripta en la Sección xxx, podemos inferir una complejidad temporal para cada método:
-Nuevamente, sea $m$ la cantidad de filas de píxeles en cada imagen y $n$ la cantidad de columnas, sea $c$ es la cantidad de cuadros originales y sea $f$ la cantidad de cuadros a agregar entre los originales.
+A partir de la implementaciones descriptas en la Sección \ref{Implementacion}, podemos inferir una complejidad temporal para cada método.
+
+Sea $w$ la cantidad de filas de píxeles en cada imagen, $h$ la cantidad de columnas, $i$ la cantidad de cuadros originales y sea $k$ la cantidad de cuadros a agregar entre los originales:
+
+Todos los metodos implementados tienen la misma una complejidad temporal que es $\Theta(w*h*i*k*)$. Esta conclusion surge del hecho que, en todos los casos, tenemos 4 ciclos anidados, en donde el primero se ejecuta $w$ veces, el segundo $h$ veces, el tercero $i$ veces, y el cuarto $k$ veces.
+%\begin{itemize}
+%  \item Vecino mas cercano: realizamos 4 ciclos anidados, en donde el primero se ejecuta $w$ veces, el segundo $h$ veces, el tercero $i$ veces, y el cuarto $k$ veces, la complejidad temporal del mismo es $\Theta(whik)$.
+%  \item Interpolacion lineal: situacion identica a la de vecinos mas cercanos, por lo tanto su complejidad temporal es de $\Theta(whik)$.
+%  \item Interpolacion por Splines: en este caso realizamos primero un ciclo que se ejecuta $w$ veces, dentro de este ciclamos $h$
+%  \item Interpolacion por Splines con tamaño de bloque fijo:
+%\end{itemize}
+\newline
+\newline
+Para corroborar esta hipotesis planteamos un experimento con las siguientes caracteristicas:
 \begin{itemize}
-  \item Interpolacion lineal: dado que realizamos 4 ciclos, en donde el primero se ejecuta $n$ veces, el segundo $m$ veces, el tercero $c$ veces, y el cuarto $f$ veces, la complejidad temporal del mismo es $\Theta(nmcf)$.
-  \item Vecino mas cercano: situación idéntica al método lineal, realizamos 4 ciclos, en donde el primero se ejecuta $n$ veces, el segundo $m$ veces, el tercero $c$ veces, y el cuarto $f$ veces, la complejidad temporal del mismo es $\Theta(nmcf)$.
-  \item Interpolacion por Splines:
-  \item Interpolacion por Splines con tamaño de bloque fijo:
+  \item Utilizamos el video provisto por la catedra llamado \textit{funnybaby}, el cual tiene 44 cuadros y es de xx.
+  \item Solo medimos la resolucion del sistema, no su creacion o los respectivos pasajes de video a texto y viceversa.
+  \item Dado que $w$, $h$ y $i$ son valores fijos que no podemos cambiar, variamos el $k$.
+  \item Generamos instancias para valores de $k$ entre 1 y 6.
+  \item Para cada valor distinto de $k$ generamos 4 instancias, cuyos valores vamos a promediar para mitigar los posibles valores distorsionados por algun procedimiento del procesador.
+  \item Los tiempos fueron medidos en nanosegundos.
 \end{itemize}
 
-Las instancias que utilizamos, en este caso, fueron
+Los resultamos obtenidos fueron los siguientes:
 
-Los resultamos obtenidos:
+\begin{center}
+    \begin{tikzpicture}
+    \begin{axis}[
+        title={},
+        xlabel={cantidad de cuadros agregados entre originales ($k$)},
+        ylabel={tiempo (nanosegundos)},
+        ylabel absolute,
+        ylabel style={yshift=.3cm},
+        scaled x ticks=false,
+        scaled y ticks=false,
+        enlargelimits=0.05,
+        width=0.85\textwidth,
+        height=0.45\textwidth,
+        legend style={at={(1.015,1)},anchor=north west},
+        no markers,
+        thick,
+        cycle list name=exotic
+    ]
+    \addplot[color=green] table[x index=0,y index=1]{datos/timelineal};
+    \addplot[color=red] table[x index=0,y index=1]{datos/timevecinos};
+    \addplot[color=blue] table[x index=0,y index=1]{datos/timesplines};
+    \legend{Lineal, Vecinos, Splines}
+    \end{axis}
+    \end{tikzpicture}
+\end{center}
+
+Si tomamos los tiempos que arrojó la experimentación, y los dividimos por su respectivo $k$, obtenemos el siguiente resultado:
+
+\begin{center}
+    \begin{tikzpicture}
+    \begin{axis}[
+        title={},
+        xlabel={cantidad de cuadros agregados entre originales ($k$)},
+        ylabel={tiempo (nanosegundos) / $k$},
+        ylabel absolute,
+        ylabel style={yshift=.3cm},
+        scaled x ticks=false,
+        scaled y ticks=false,
+        enlargelimits=0.05,
+        width=0.85\textwidth,
+        height=0.45\textwidth,
+        legend style={at={(1.015,1)},anchor=north west},
+        no markers,
+        thick,
+        cycle list name=exotic
+    ]
+    \addplot[color=green] table[x index=0,y index=2]{datos/timelineal};
+    \addplot[color=red] table[x index=0,y index=2]{datos/timevecinos};
+    \addplot[color=blue] table[x index=0,y index=2]{datos/timesplines};
+    \legend{Lineal, Vecinos, Splines}
+    \end{axis}
+    \end{tikzpicture}
+\end{center}
+
+A partir de los graficos, queda de manifiesto que los metodos tienen la misma complejidad temporal, ya que solo difieren en una constante.
 
 
 \subsection{Análisis cualitativos de los métodos, fenómeno de artifacts.}

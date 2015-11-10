@@ -7,7 +7,7 @@ Spline::Spline(int n){
 	generarSistema(n);
 }
 
-Spline::Spline(const vector<int> &y){
+Spline::Spline(const vector<double> &y){
 	generarSistema(y.size());
 	generarSpline(y);
 }
@@ -33,7 +33,7 @@ void Spline::generarSistema(int n){
 	this->factorizacionLU = sistema;
 }
 
-void Spline::generarSpline(const vector<int> &y){
+void Spline::generarSpline(const vector<double> &y){
 	int n = y.size();
 	this->a = y;
 	// Primero necesito calcular mis coeficientes "c"
@@ -63,7 +63,7 @@ void Spline::generarSpline(const vector<int> &y){
 	}
 }
 
-void Spline::recalcular(const vector<int> &y){
+void Spline::recalcular(const vector<double> &y){
 	generarSpline(y);
 }
 

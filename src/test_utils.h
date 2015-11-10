@@ -50,7 +50,7 @@ namespace utils {
     	assert_interpolacion(interpolador, esperados, intervalo, DELTA);
     }
 
-    static double frame_error_cuadratico_medio(const vector<vector<int > > &output, const vector<vector<int > > &real) {
+    static double frame_error_cuadratico_medio(const vector<vector<double> > &output, const vector<vector<double> > &real) {
         ASSERT(output.size() != 0 && output[0].size() != 0);
         ASSERT(real.size() != 0 && real[0].size() != 0);
         ASSERT(output.size() == real.size() && output[0].size() == real[0].size());
@@ -66,7 +66,7 @@ namespace utils {
         return double(sum)/(double(ancho)*double(alto));
     }
 
-    static double frame_peak_to_signal_noise_ratio(const vector<vector<int > > &output, const vector<vector<int > > &real) {
+    static double frame_peak_to_signal_noise_ratio(const vector<vector<double> > &output, const vector<vector<double> > &real) {
         ASSERT(output.size() != 0 && output[0].size() != 0);
         ASSERT(real.size() != 0 && real[0].size() != 0);
         ASSERT(output.size() == real.size() && output[0].size() == real[0].size());
@@ -81,7 +81,7 @@ namespace utils {
         }
     }
 
-    static double video_max_error_cuadratico_medio(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real) {
+    static double video_max_error_cuadratico_medio(const vector<vector<vector<double> > > &output, const vector<vector<vector<double> > > &real) {
         ASSERT(output.size() != 0 && output[0].size() != 0 && output[0][0].size() != 0);
         ASSERT(real.size() != 0 && real[0].size() != 0 && real[0][0].size() != 0);
         ASSERT(output.size() == real.size() && output[0].size() == real[0].size() && output[0][0].size() <= real[0][0].size());
@@ -91,8 +91,8 @@ namespace utils {
         int frames = output[0][0].size();
         double max_error = 0;
 
-        vector<vector<int > > frame_output(ancho, vector<int>(alto, 0));
-        vector<vector<int > > frame_real(ancho, vector<int>(alto, 0));
+        vector<vector<double> > frame_output(ancho, vector<double>(alto, 0));
+        vector<vector<double> > frame_real(ancho, vector<double>(alto, 0));
         for (int k = 0; k < frames; k++) {
             for(int x = 0; x < ancho; x++){
         		for(int y = 0; y < alto; y++){
@@ -109,7 +109,7 @@ namespace utils {
         return max_error;
     }
 
-    static double video_max_peak_to_signal_noise_ratio(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real) {
+    static double video_max_peak_to_signal_noise_ratio(const vector<vector<vector<double> > > &output, const vector<vector<vector<double> > > &real) {
         ASSERT(output.size() != 0 && output[0].size() != 0 && output[0][0].size() != 0);
         ASSERT(real.size() != 0 && real[0].size() != 0 && real[0][0].size() != 0);
         ASSERT(output.size() == real.size() && output[0].size() == real[0].size() && output[0][0].size() <= real[0][0].size());
@@ -119,8 +119,8 @@ namespace utils {
         int frames = output[0][0].size();
         double max_error = 0;
 
-        vector<vector<int > > frame_output(ancho, vector<int>(alto, 0));
-        vector<vector<int > > frame_real(ancho, vector<int>(alto, 0));
+        vector<vector<double> > frame_output(ancho, vector<double>(alto, 0));
+        vector<vector<double> > frame_real(ancho, vector<double>(alto, 0));
         for (int k = 0; k < frames; k++) {
             for(int x = 0; x < ancho; x++){
         		for(int y = 0; y < alto; y++){
@@ -137,7 +137,7 @@ namespace utils {
         return max_error;
     }
 
-    static double video_prom_error_cuadratico_medio(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real) {
+    static double video_prom_error_cuadratico_medio(const vector<vector<vector<double> > > &output, const vector<vector<vector<double> > > &real) {
         ASSERT(output.size() != 0 && output[0].size() != 0 && output[0][0].size() != 0);
         ASSERT(real.size() != 0 && real[0].size() != 0 && real[0][0].size() != 0);
         ASSERT(output.size() == real.size() && output[0].size() == real[0].size() && output[0][0].size() <= real[0][0].size());
@@ -148,8 +148,8 @@ namespace utils {
         int frames_iguales = 0;
         double sum_error = 0;
 
-        vector<vector<int > > frame_output(ancho, vector<int>(alto, 0));
-        vector<vector<int > > frame_real(ancho, vector<int>(alto, 0));
+        vector<vector<double> > frame_output(ancho, vector<double>(alto, 0));
+        vector<vector<double> > frame_real(ancho, vector<double>(alto, 0));
         for (int k = 0; k < frames; k++) {
             for(int x = 0; x < ancho; x++){
         		for(int y = 0; y < alto; y++){
@@ -171,7 +171,7 @@ namespace utils {
         return sum_error/double(frames - frames_iguales);
     }
 
-    static double video_prom_peak_to_signal_noise_ratio(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real) {
+    static double video_prom_peak_to_signal_noise_ratio(const vector<vector<vector<double> > > &output, const vector<vector<vector<double> > > &real) {
         ASSERT(output.size() != 0 && output[0].size() != 0 && output[0][0].size() != 0);
         ASSERT(real.size() != 0 && real[0].size() != 0 && real[0][0].size() != 0);
         ASSERT(output.size() == real.size() && output[0].size() == real[0].size() && output[0][0].size() <= real[0][0].size());
@@ -182,8 +182,8 @@ namespace utils {
         int frames_iguales = 0;
         double sum_error = 0;
 
-        vector<vector<int > > frame_output(ancho, vector<int>(alto, 0));
-        vector<vector<int > > frame_real(ancho, vector<int>(alto, 0));
+        vector<vector<double> > frame_output(ancho, vector<double>(alto, 0));
+        vector<vector<double> > frame_real(ancho, vector<double>(alto, 0));
         for (int k = 0; k < frames; k++) {
             for(int x = 0; x < ancho; x++){
         		for(int y = 0; y < alto; y++){
@@ -205,7 +205,7 @@ namespace utils {
         return sum_error/double(frames - frames_iguales);
     }
 
-    static void error_cuadratico_medio_per_frame(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real, vector<double> &resultados) {
+    static void error_cuadratico_medio_per_frame(const vector<vector<vector<double> > > &output, const vector<vector<vector<double> > > &real, vector<double> &resultados) {
         /*
         ASSERT(output.size() != 0 && output[0].size() != 0 && output[0][0].size() != 0);
         ASSERT(real.size() != 0 && real[0].size() != 0 && real[0][0].size() != 0);
@@ -217,8 +217,8 @@ namespace utils {
         //int frames_iguales = 0;
         //double sum_error = 0;
 
-        vector<vector<int > > frame_output(ancho, vector<int>(alto, 0));
-        vector<vector<int > > frame_real(ancho, vector<int>(alto, 0));
+        vector<vector<double> > frame_output(ancho, vector<double>(alto, 0));
+        vector<vector<double> > frame_real(ancho, vector<double>(alto, 0));
         for (int k = 0; k < frames; k++) {
             for(int x = 0; x < ancho; x++){
         		for(int y = 0; y < alto; y++){
@@ -241,7 +241,7 @@ namespace utils {
         //return sum_error/double(frames - frames_iguales);
     }
 
-    static void peak_to_signal_noise_per_frame(const vector<vector<vector<int> > > &output, const vector<vector<vector<int> > > &real, vector<double> &resultados) {
+    static void peak_to_signal_noise_per_frame(const vector<vector<vector<double> > > &output, const vector<vector<vector<double> > > &real, vector<double> &resultados) {
         ASSERT(output.size() != 0 && output[0].size() != 0 && output[0][0].size() != 0);
         ASSERT(real.size() != 0 && real[0].size() != 0 && real[0][0].size() != 0);
         ASSERT(output.size() == real.size() && output[0].size() == real[0].size() && output[0][0].size() <= real[0][0].size());
@@ -252,8 +252,8 @@ namespace utils {
         //int frames_iguales = 0;
         //double sum_error = 0;
 
-        vector<vector<int > > frame_output(ancho, vector<int>(alto, 0));
-        vector<vector<int > > frame_real(ancho, vector<int>(alto, 0));
+        vector<vector<double> > frame_output(ancho, vector<double>(alto, 0));
+        vector<vector<double> > frame_real(ancho, vector<double>(alto, 0));
         for (int k = 0; k < frames; k++) {
             for(int x = 0; x < ancho; x++){
         		for(int y = 0; y < alto; y++){
@@ -335,14 +335,14 @@ namespace utils {
 
     static void test_interpolacion_funcion(MetodoInterpolacion metodo, Funcion funcion, double rango, double incremento, double precision = DELTA, int bloques = 2) {
         vector<double> esperados(generarEsperados(funcion, rango, incremento));
-        vector<int> y;
+        vector<double> y;
         int salto = (int)(double(1)/incremento);
         for (unsigned int i = 0; i < esperados.size(); i+= salto) {
             y.push_back(esperados[i]);
         }
 
         vector<double>::const_iterator first = esperados.begin();
-        vector<double>::const_iterator last = esperados.begin() + rango*salto - 1;
+        vector<double>::const_iterator last = esperados.begin() + rango*salto - salto + 1;
 
 		if (metodo == VECINOS) {
             InterpolacionVecinos vecinos(y, salto-1);

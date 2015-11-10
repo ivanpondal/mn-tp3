@@ -3,11 +3,11 @@
 InterpolacionVecinos::InterpolacionVecinos(){
 }
 
-InterpolacionVecinos::InterpolacionVecinos(const vector<int> &y, int valores_a_agregar){
+InterpolacionVecinos::InterpolacionVecinos(const vector<double> &y, int valores_a_agregar){
 	recalcular(y, valores_a_agregar);
 }
 
-void InterpolacionVecinos::recalcular(const vector<int> &y, int valores_a_agregar){
+void InterpolacionVecinos::recalcular(const vector<double> &y, int valores_a_agregar){
 	this->cant_datos_originales = y.size();
 	this->valores_a_agregar = valores_a_agregar;
 

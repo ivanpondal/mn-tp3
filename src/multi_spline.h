@@ -9,8 +9,8 @@ class MultiSpline: public Interpolador{
 	public:
 		MultiSpline();
 		MultiSpline(int n, int tramo);
-		MultiSpline(const vector<int> &y, int tramo);
-		void recalcular(const vector<int> &y);
+		MultiSpline(const vector<double> &y, int tramo);
+		void recalcular(const vector<double> &y);
 		double evaluar(double x);
 	private:
 		int longitud_tramo;
@@ -18,7 +18,7 @@ class MultiSpline: public Interpolador{
 		int numero_tramos;
 		vector<Spline> tramos;
 		void generarSistema(int n, int tramo);
-		void generarMultiSpline(const vector<int> &y);
+		void generarMultiSpline(const vector<double> &y);
 };
  
 #endif // MULTI_SPLINE_H_INCLUDED

@@ -44,7 +44,7 @@ void test_texto_a_video() {
 
 // f(x) = 42
 void test_vecinos_constante(){
-	vector<int> y = {42, 42, 42, 42};
+	vector<double> y = {42, 42, 42, 42};
 	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
 	InterpolacionVecinos vecinos(y, 1);
 	assert_interpolacion(&vecinos, esperados, 0.5);
@@ -52,7 +52,7 @@ void test_vecinos_constante(){
 
 // f(x) = x
 void test_vecinos_lineal(){
-	vector<int> y = {0, 1, 2, 3};
+	vector<double> y = {0, 1, 2, 3};
 	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
 	InterpolacionVecinos vecinos(y, 1);
 	assert_interpolacion(&vecinos, esperados, 0.5, 1);
@@ -60,7 +60,7 @@ void test_vecinos_lineal(){
 
 // f(x) = x^2
 void test_vecinos_cuadratico(){
-	vector<int> y = {0, 1, 4, 9};
+	vector<double> y = {0, 1, 4, 9};
 	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
 	InterpolacionVecinos vecinos(y, 1);
 	assert_interpolacion(&vecinos, esperados, 0.5, 3);
@@ -68,7 +68,7 @@ void test_vecinos_cuadratico(){
 
 // f(x) = 42
 void test_lineal_constante(){
-	vector<int> y = {42, 42, 42, 42};
+	vector<double> y = {42, 42, 42, 42};
 	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
 	InterpolacionLineal lineal(y, 1);
 	assert_interpolacion(&lineal, esperados, 0.5);
@@ -76,7 +76,7 @@ void test_lineal_constante(){
 
 // f(x) = x
 void test_lineal_lineal(){
-	vector<int> y = {0, 1, 2, 3};
+	vector<double> y = {0, 1, 2, 3};
 	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
 	InterpolacionLineal lineal(y, 1);
 	assert_interpolacion(&lineal, esperados, 0.5);
@@ -84,7 +84,7 @@ void test_lineal_lineal(){
 
 // f(x) = x^2
 void test_lineal_cuadratico(){
-	vector<int> y = {0, 1, 4, 9};
+	vector<double> y = {0, 1, 4, 9};
 	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
 	InterpolacionLineal lineal(y, 1);
 	assert_interpolacion(&lineal, esperados, 0.5, 0.5);
@@ -92,7 +92,7 @@ void test_lineal_cuadratico(){
 
 // f(x) = 42
 void test_spline_constante(){
-	vector<int> y = {42, 42, 42, 42};
+	vector<double> y = {42, 42, 42, 42};
 	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
 	Spline spline(y);
 	assert_interpolacion(&spline, esperados, 0.5);
@@ -100,7 +100,7 @@ void test_spline_constante(){
 
 // f(x) = x
 void test_spline_lineal(){
-	vector<int> y = {0, 1, 2, 3};
+	vector<double> y = {0, 1, 2, 3};
 	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
 	Spline spline(y);
 	assert_interpolacion(&spline, esperados, 0.5);
@@ -108,7 +108,7 @@ void test_spline_lineal(){
 
 // f(x) = x^2
 void test_spline_cuadratico(){
-	vector<int> y = {0, 1, 4, 9};
+	vector<double> y = {0, 1, 4, 9};
 	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
 	Spline spline(y);
 	assert_interpolacion(&spline, esperados, 0.5, 0.5);
@@ -116,21 +116,21 @@ void test_spline_cuadratico(){
 
 // f(x) = 42
 void test_multi_spline_un_tramo_constante(){
-	vector<int> y = {42, 42, 42, 42};
+	vector<double> y = {42, 42, 42, 42};
 	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
 	MultiSpline multi_spline(y, 1);
 	assert_interpolacion(&multi_spline, esperados, 0.5);
 }
 
 void test_multi_spline_dos_tramos_constante(){
-	vector<int> y = {42, 42, 42, 42};
+	vector<double> y = {42, 42, 42, 42};
 	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
 	MultiSpline multi_spline(y, 2);
 	assert_interpolacion(&multi_spline, esperados, 0.5);
 }
 
 void test_multi_spline_tres_tramos_constante(){
-	vector<int> y = {42, 42, 42, 42};
+	vector<double> y = {42, 42, 42, 42};
 	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
 	MultiSpline multi_spline(y, 3);
 	assert_interpolacion(&multi_spline, esperados, 0.5);
@@ -138,21 +138,21 @@ void test_multi_spline_tres_tramos_constante(){
 
 // f(x) = x
 void test_multi_spline_un_tramo_lineal(){
-	vector<int> y = {0, 1, 2, 3};
+	vector<double> y = {0, 1, 2, 3};
 	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
 	MultiSpline multi_spline(y, 1);
 	assert_interpolacion(&multi_spline, esperados, 0.5);
 }
 
 void test_multi_spline_dos_tramos_lineal(){
-	vector<int> y = {0, 1, 2, 3};
+	vector<double> y = {0, 1, 2, 3};
 	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
 	MultiSpline multi_spline(y, 2);
 	assert_interpolacion(&multi_spline, esperados, 0.5);
 }
 
 void test_multi_spline_tres_tramos_lineal(){
-	vector<int> y = {0, 1, 2, 3};
+	vector<double> y = {0, 1, 2, 3};
 	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
 	MultiSpline multi_spline(y, 3);
 	assert_interpolacion(&multi_spline, esperados, 0.5);
@@ -160,21 +160,21 @@ void test_multi_spline_tres_tramos_lineal(){
 
 // f(x) = x^2
 void test_multi_spline_un_tramo_cuadratico(){
-	vector<int> y = {0, 1, 4, 9};
+	vector<double> y = {0, 1, 4, 9};
 	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
 	MultiSpline multi_spline(y, 1);
 	assert_interpolacion(&multi_spline, esperados, 0.5, 0.5);
 }
 
 void test_multi_spline_dos_tramos_cuadratico(){
-	vector<int> y = {0, 1, 4, 9};
+	vector<double> y = {0, 1, 4, 9};
 	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
 	MultiSpline multi_spline(y, 2);
 	assert_interpolacion(&multi_spline, esperados, 0.5, 0.5);
 }
 
 void test_multi_spline_tres_tramos_cuadratico(){
-	vector<int> y = {0, 1, 4, 9};
+	vector<double> y = {0, 1, 4, 9};
 	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
 	MultiSpline multi_spline(y, 3);
 	assert_interpolacion(&multi_spline, esperados, 0.5, 0.5);
@@ -253,16 +253,16 @@ void exp_error(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * i
     // armo los strings de inputfiles
     string input_video = input_text;
     ostringstream os_real;
-    os_real << "data/video_exp_" << getTextForMetodo(metodo) << "_real.txt";
+    os_real << "data/video_exp_" << getTextForMetodo(metodo) << cuadros_a_agregar << "_real.txt";
     string real_text = os_real.str();
     ostringstream os_aux;
-    os_aux << "data/video_exp_" << getTextForMetodo(metodo) << "_aux.txt";
+    os_aux << "data/video_exp_" << getTextForMetodo(metodo) << cuadros_a_agregar << "_aux.txt";
     string aux_text = os_aux.str();
 
     // convierto a texto el video original
     video_a_texto(input_video.c_str(), real_text.c_str(), 1);
     Video video_real(real_text.c_str(), 0);
-    vector<vector<vector<int> > > frames_real = video_real.obtenerFramesOriginales();
+    vector<vector<vector<double> > > frames_real = video_real.obtenerFramesOriginales();
     int ancho = frames_real.size();
     int alto = frames_real[0].size();
 
@@ -272,7 +272,7 @@ void exp_error(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * i
     // agrego cuadros_a_agregar frames entre cada frame del output_text
     Video video(aux_text.c_str(), cuadros_a_agregar);
 	  video.aplicarCamaraLenta(metodo);
-    vector<vector<vector<int> > > frames_out = video.obtenerFramesCalculados();
+    vector<vector<vector<double> > > frames_out = video.obtenerFramesCalculados();
 
     // calculo el error cuadratico por frame y el psnr
     int frames = frames_out[0][0].size();
@@ -301,34 +301,105 @@ void exp_error(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * i
     // cout << "PSNR promedio por frame: " << setprecision(15) << prom_err_frame_psnr << endl;
 }
 
-void exp_tiempo(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * input_text, const char * out) {
-    //cout << "Calculando tiempo de computo al interpolar usando " << getTextForMetodo(metodo) << ", agregando " << cuadros_a_agregar << " frames: " << endl;
-    FILE *file = fopen(out, "w+");
+double exp_tiempo(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * input_text, const char * out) {
     string input_video = input_text;
     ostringstream os_aux;
     os_aux << "data/video_exp_" << getTextForMetodo(metodo) <<  cuadros_a_agregar <<"_aux.txt";
     string aux_text = os_aux.str();
-
     // convierto a texto el video original
-
     video_a_texto(input_video.c_str(), aux_text.c_str());
-
     // agrego cuadros_a_agregar frames entre cada frame del output_text
-    start_timer();
-
     Video video(aux_text.c_str(), cuadros_a_agregar);
-
+    start_timer();
     video.aplicarCamaraLenta(metodo);
-
     double time = stop_timer();
 
-    fprintf(file, "%s %s %.6f \n","Metodo: ", getTextForMetodo(metodo), time);
-    //cout << "Tiempo de computo para todo el video: " << setprecision(15) << time << " ns." << endl;
-    //vector<vector<vector<int> > > frames_out = video.obtenerFramesCalculados();
-    //cout << "Tiempo de computo promedio por frame: " << setprecision(15) << time/double(frames_out[0][0].size()) << " ns." << endl;
-    //cout << "Tiempo de computo promedio por pixel: " << setprecision(15) << time/double(frames_out.size() * frames_out[0].size() *frames_out[0][0].size()) << " ns." << endl;
+    return time;
 
-    fclose(file);
+}
+
+void exp_tiempo_lineal(const char* video){
+  const char* input_video = video;
+  const char* input_tiempo = "data/timelineal";
+  FILE *file = fopen(input_tiempo, "w+");
+
+  int cuadros_a_agregar = 6;
+  int iteraciones = 4;
+  vector<double> resultado(cuadros_a_agregar, 0);
+  double aux = 0;
+  for (int i = 0; i < cuadros_a_agregar; i++) {
+    for (int j = 0; j < iteraciones; j++) {
+        aux = exp_tiempo(LINEAL, i+1, input_video, input_tiempo);
+        resultado[i] += aux;
+    }
+  }
+  double time = 0;
+  double dividido_k = 0;
+  for (unsigned int i = 0; i < resultado.size(); i++) {
+    time = resultado[i] / (double) iteraciones;
+    dividido_k = time / (double) (i+1);
+    fprintf(file, "%d %.4f %.4f \n", i+1, time, dividido_k);
+
+  }
+
+  fclose(file);
+
+}
+
+void exp_tiempo_vecinos(const char* video){
+  const char* input_video = video;
+  const char* input_tiempo = "data/timevecinos";
+  FILE *file = fopen(input_tiempo, "w+");
+
+  int cuadros_a_agregar = 6;
+  int iteraciones = 4;
+  vector<double> resultado(cuadros_a_agregar, 0);
+  double aux = 0;
+  for (int i = 0; i < cuadros_a_agregar; i++) {
+    for (int j = 0; j < iteraciones; j++) {
+        aux = exp_tiempo(VECINOS, i+1, input_video, input_tiempo);
+        resultado[i] += aux;
+    }
+  }
+  double time = 0;
+  double dividido_k = 0;
+  for (unsigned int i = 0; i < resultado.size(); i++) {
+    time = resultado[i] / (double) iteraciones;
+    dividido_k = time / (double) (i+1);
+    fprintf(file, "%d %.4f %.4f \n", i+1, time, dividido_k);
+
+  }
+
+  fclose(file);
+
+}
+
+void exp_tiempo_splines(const char* video){
+  const char* input_video = video;
+  const char* input_tiempo = "data/timesplines";
+  FILE *file = fopen(input_tiempo, "w+");
+
+  int cuadros_a_agregar = 6;
+  int iteraciones = 4;
+  vector<double> resultado(cuadros_a_agregar, 0);
+  double aux = 0;
+  for (int i = 0; i < cuadros_a_agregar; i++) {
+    for (int j = 0; j < iteraciones; j++) {
+        aux = exp_tiempo(SPLINES, i+1, input_video, input_tiempo);
+        resultado[i] += aux;
+    }
+  }
+  double time = 0;
+  double dividido_k = 0;
+  for (unsigned int i = 0; i < resultado.size(); i++) {
+    time = resultado[i] / (double) iteraciones;
+    dividido_k = time / (double) (i+1);
+    fprintf(file, "%d %.4f %.4f \n", i+1, time, dividido_k);
+
+  }
+
+  fclose(file);
+
 }
 
 
@@ -360,7 +431,7 @@ int main(int argc, char *argv[])
 		// test_video_a_texto();
         // test_texto_a_video();
 
-/*		RUN_TEST(test_vecinos_constante);
+		RUN_TEST(test_vecinos_constante);
 		RUN_TEST(test_vecinos_lineal);
 		RUN_TEST(test_vecinos_cuadratico);
         RUN_TEST(test_lineal_constante);
@@ -369,8 +440,6 @@ int main(int argc, char *argv[])
 		RUN_TEST(test_spline_constante);
 		RUN_TEST(test_spline_lineal);
 		RUN_TEST(test_spline_cuadratico);
-		*/
-    /*
 		RUN_TEST(test_multi_spline_un_tramo_constante);
 		RUN_TEST(test_multi_spline_dos_tramos_constante);
 		RUN_TEST(test_multi_spline_tres_tramos_constante);
@@ -380,16 +449,21 @@ int main(int argc, char *argv[])
 		RUN_TEST(test_multi_spline_un_tramo_cuadratico);
 		RUN_TEST(test_multi_spline_dos_tramos_cuadratico);
 		RUN_TEST(test_multi_spline_tres_tramos_cuadratico);
-    */
 
+    /*
         // RUN_TEST(test_vecinos_varios);
         // RUN_TEST(test_lineal_varios);
         // RUN_TEST(test_spline_varios);
         // RUN_TEST(test_multi_spline_varios);
         // RUN_TEST(test_multi_spline_varios2);
-
+      */
 
         // exp grupo
+
+        // exp_tiempo_vecinos("data/funnybaby.avi");
+        // exp_tiempo_lineal("data/funnybaby.avi");
+        // exp_tiempo_splines("data/funnybaby.avi");
+
         // exp_error(VECINOS, 1, "data/messi.avi", "exp/error-messi-vecinos1");
         // exp_error(LINEAL, 1, "data/messi.avi", "exp/error-messi-lineal1");
         // exp_error(SPLINES, 1, "data/messi.avi", "exp/error-messi-spline1");
@@ -400,28 +474,16 @@ int main(int argc, char *argv[])
         // exp_error(LINEAL, 1, "data/skate.avi", "exp/error-skate-lineal1");
         // exp_error(SPLINES, 1, "data/skate.avi", "exp/error-skate-spline1");
 
-        exp_error(VECINOS, 5, "data/messi.avi", "exp/error-messi-vecinos5");
-        exp_error(LINEAL, 5, "data/messi.avi", "exp/error-messi-lineal5");
-        exp_error(SPLINES, 5, "data/messi.avi", "exp/error-messi-spline5");
-        exp_error(VECINOS, 5, "data/sunrise.avi", "exp/error-sunrise-vecinos5");
-        exp_error(LINEAL, 5, "data/sunrise.avi", "exp/error-sunrise-lineal5");
-        exp_error(SPLINES, 5, "data/sunrise.avi", "exp/error-sunrise-spline5");
-        exp_error(VECINOS, 5, "data/skate.avi", "exp/error-skate-vecinos5");
-        exp_error(LINEAL, 5, "data/skate.avi", "exp/error-skate-lineal5");
-        exp_error(SPLINES, 5, "data/skate.avi", "exp/error-skate-spline5");
+        // exp_error(VECINOS, 5, "data/messi.avi", "exp/error-messi-vecinos5");
+        // exp_error(LINEAL, 5, "data/messi.avi", "exp/error-messi-lineal5");
+        // exp_error(SPLINES, 5, "data/messi.avi", "exp/error-messi-spline5");
+        // exp_error(VECINOS, 5, "data/sunrise.avi", "exp/error-sunrise-vecinos5");
+        // exp_error(LINEAL, 5, "data/sunrise.avi", "exp/error-sunrise-lineal5");
+        // exp_error(SPLINES, 5, "data/sunrise.avi", "exp/error-sunrise-spline5");
+        // exp_error(VECINOS, 5, "data/skate.avi", "exp/error-skate-vecinos5");
+        // exp_error(LINEAL, 5, "data/skate.avi", "exp/error-skate-lineal5");
+        // exp_error(SPLINES, 5, "data/skate.avi", "exp/error-skate-spline5");
 
-        // const char* input_tiempo = "data/time_funnybaby";
-        // FILE *file = fopen(input_tiempo, "w+");
-        // fclose(file);
-        // // PROBLEMA DOUBLE FREE CUANDO EJECUTA CON CUADROS NUEVOS 1 Y DESPUES 2 en exp_tiempo CON VECINOS Y LINEAL
-        // exp_tiempo(LINEAL, 1,"data/funnybaby.avi", input_tiempo);
-        // exp_tiempo(LINEAL, 2,"data/funnybaby.avi",input_tiempo);
-        // exp_tiempo(SPLINES, 3,"data/funnybaby.avi",input_tiempo);
-
-        /*
-        exp_tiempo(LINEAL, i,"data/funnybaby.avi","data/time_funnybaby", input_tiempo);
-        exp_tiempo(SPLINES, i,"data/funnybaby.avi","data/time_funnybaby", input_tiempo);
-        */
 	} else {
         cout << "Usage: ./tp <archivo_entrada> <archivo_salida> <metodo> <cantidad_cuadros_a_agregar>" << endl;
         return 1;
