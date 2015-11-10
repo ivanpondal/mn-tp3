@@ -21,6 +21,8 @@
 using namespace std;
 using namespace utils;
 
+void resolver(const char* inputfile, const char* outputfile, int metodo, int cuadros);
+
 // ****************************** CHRONO ***************************************
 static chrono::time_point<chrono::high_resolution_clock> start_time;
 
@@ -405,6 +407,14 @@ void exp_tiempo_splines(const char* video){
 
 }
 
+void exp_artifacts(int metodo){
+  const char* input[3] = {"data/messi.txt","data/skate.txt","data/sunrise.txt"};
+  const char* output[3] = {"data/out/messi_out.txt","data/out/skate_out.txt","data/out/sunrise_out.txt"};
+  for (int i = 0; i < 3; ++i) {
+      resolver(input[i], output[i], metodo, 10);
+  }
+}
+
 
 // ****************** FUNCION PARA FORMATO DE LA CATEDRA ***********************
 void resolver(const char* inputfile, const char* outputfile, int metodo, int cuadros) {
@@ -473,7 +483,7 @@ int main(int argc, char *argv[])
         // exp_error(VECINOS, 1, "data/skate.avi", "exp/error-skate-vecinos1");
         // exp_error(LINEAL, 1, "data/skate.avi", "exp/error-skate-lineal1");
         // exp_error(SPLINES, 1, "data/skate.avi", "exp/error-skate-spline1");
-        //
+
         // exp_error(VECINOS, 5, "data/messi.avi", "exp/error-messi-vecinos5");
         // exp_error(LINEAL, 5, "data/messi.avi", "exp/error-messi-lineal5");
         // exp_error(SPLINES, 5, "data/messi.avi", "exp/error-messi-spline5");
@@ -484,19 +494,24 @@ int main(int argc, char *argv[])
         // exp_error(LINEAL, 5, "data/skate.avi", "exp/error-skate-lineal5");
         // exp_error(SPLINES, 5, "data/skate.avi", "exp/error-skate-spline5");
 
-        exp_error(MULTI_SPLINES, 1, "data/messi.avi", "exp/error-messi-multisplines1-b2", 2);
-        exp_error(MULTI_SPLINES, 1, "data/messi.avi", "exp/error-messi-multisplines1-b4", 4);
-        exp_error(MULTI_SPLINES, 1, "data/messi.avi", "exp/error-messi-multisplines1-b8", 8);
-        exp_error(MULTI_SPLINES, 1, "data/messi.avi", "exp/error-messi-multisplines1-b16", 16);
-        exp_error(MULTI_SPLINES, 1, "data/messi.avi", "exp/error-messi-multisplines1-b32", 32);
-        exp_error(MULTI_SPLINES, 1, "data/messi.avi", "exp/error-messi-multisplines1-b64", 64);
+        // exp_error(MULTI_SPLINES, 1, "data/messi.avi", "exp/error-messi-multisplines1-b2", 2);
+        // exp_error(MULTI_SPLINES, 1, "data/messi.avi", "exp/error-messi-multisplines1-b4", 4);
+        // exp_error(MULTI_SPLINES, 1, "data/messi.avi", "exp/error-messi-multisplines1-b8", 8);
+        // exp_error(MULTI_SPLINES, 1, "data/messi.avi", "exp/error-messi-multisplines1-b16", 16);
+        // exp_error(MULTI_SPLINES, 1, "data/messi.avi", "exp/error-messi-multisplines1-b32", 32);
+        // exp_error(MULTI_SPLINES, 1, "data/messi.avi", "exp/error-messi-multisplines1-b64", 64);
+        
+        // exp_error(MULTI_SPLINES, 5, "data/messi.avi", "exp/error-messi-multisplines5-b2", 2);
+        // exp_error(MULTI_SPLINES, 5, "data/messi.avi", "exp/error-messi-multisplines5-b4", 4);
+        // exp_error(MULTI_SPLINES, 5, "data/messi.avi", "exp/error-messi-multisplines5-b8", 8);
+        // exp_error(MULTI_SPLINES, 5, "data/messi.avi", "exp/error-messi-multisplines5-b16", 16);
+        // exp_error(MULTI_SPLINES, 5, "data/messi.avi", "exp/error-messi-multisplines5-b32", 32);
+        // exp_error(MULTI_SPLINES, 5, "data/messi.avi", "exp/error-messi-multisplines5-b64", 64);
 
-        exp_error(MULTI_SPLINES, 5, "data/messi.avi", "exp/error-messi-multisplines5-b2", 2);
-        exp_error(MULTI_SPLINES, 5, "data/messi.avi", "exp/error-messi-multisplines5-b4", 4);
-        exp_error(MULTI_SPLINES, 5, "data/messi.avi", "exp/error-messi-multisplines5-b8", 8);
-        exp_error(MULTI_SPLINES, 5, "data/messi.avi", "exp/error-messi-multisplines5-b16", 16);
-        exp_error(MULTI_SPLINES, 5, "data/messi.avi", "exp/error-messi-multisplines5-b32", 32);
-        exp_error(MULTI_SPLINES, 5, "data/messi.avi", "exp/error-messi-multisplines5-b64", 64);
+        // exp_artifacts(0);// {VECINOS = 0, LINEAL = 1, SPLINES = 2, MULTI_SPLINES = 3};
+        // exp_artifacts(1);
+        // exp_artifacts(2);
+        // exp_artifacts(3);
 
 	} else {
         cout << "Usage: ./tp <archivo_entrada> <archivo_salida> <metodo> <cantidad_cuadros_a_agregar>" << endl;

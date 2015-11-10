@@ -173,10 +173,10 @@ Crear un triple vector de enteros new_video[W][H][I+(I-1)*K]
 Para w = 0 hasta W-1 hacer
 	Para h = 0 hasta H-1 hacer
 		Para t = 0 hasta T-1 hacer
-			Crear subarreglo aux[T] = video[w][h][T*t..T*(t+1)-1]
-			Crear arreglo bloque
+			Crear subvector aux[T] = video[w][h][T*t..T*(t+1)-1]
+			Crear vector bloque[T+(T-1)*K]
 			GenerarSpline(aux, bloque, T, K)
-			Pushear a new_video[w][h] todos los valores de 'bloque' excepto el ultimo
+			Pushear a new_video[w][h] todos los elementos de 'bloque' excepto el ultimo
 		Fin para
 		new_video[w][h].push_back(video[w][h][I-1])
 	Fin para
