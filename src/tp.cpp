@@ -228,11 +228,11 @@ void exp_error(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * i
     FILE *file = fopen(out, "a+");
     string input_video = input_text;
     ostringstream os_real;
-    os_real << "data/video_exp_" << getTextForMetodo(metodo) << "_real.txt";
+    os_real << "data/video_exp_" << getTextForMetodo(metodo) << cuadros_a_agregar << "_real.txt";
     string real_text = os_real.str();
 
     ostringstream os_aux;
-    os_aux << "data/video_exp_" << getTextForMetodo(metodo) << "_aux.txt";
+    os_aux << "data/video_exp_" << getTextForMetodo(metodo) << cuadros_a_agregar << "_aux.txt";
     string aux_text = os_aux.str();
 
     // convierto a texto el video original
@@ -285,35 +285,104 @@ void exp_error(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * i
     // cout << "PSNR promedio por frame: " << setprecision(15) << prom_err_frame_psnr << endl;
 }
 
-void exp_tiempo(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * input_text, const char * out) {
-    //cout << "Calculando tiempo de computo al interpolar usando " << getTextForMetodo(metodo) << ", agregando " << cuadros_a_agregar << " frames: " << endl;
-    FILE *file = fopen(out, "a+");
+double exp_tiempo(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * input_text, const char * out) {
     string input_video = input_text;
     ostringstream os_aux;
     os_aux << "data/video_exp_" << getTextForMetodo(metodo) <<  cuadros_a_agregar <<"_aux.txt";
     string aux_text = os_aux.str();
-
     // convierto a texto el video original
-
     video_a_texto(input_video.c_str(), aux_text.c_str());
-
     // agrego cuadros_a_agregar frames entre cada frame del output_text
-    start_timer();
-
     Video video(aux_text.c_str(), cuadros_a_agregar);
-
+    start_timer();
     video.aplicarCamaraLenta(metodo);
-
     double time = stop_timer();
 
-    fprintf(file, "%s %s %.6f \n","Metodo: ", getTextForMetodo(metodo), time);
-    //cout << "Tiempo de computo para todo el video: " << setprecision(15) << time << " ns." << endl;
-    //vector<vector<vector<int> > > frames_out = video.obtenerFramesCalculados();
-    //cout << "Tiempo de computo promedio por frame: " << setprecision(15) << time/double(frames_out[0][0].size()) << " ns." << endl;
-    //cout << "Tiempo de computo promedio por pixel: " << setprecision(15) << time/double(frames_out.size() * frames_out[0].size() *frames_out[0][0].size()) << " ns." << endl;
+    return time;
 
-    fclose(file);
+}
 
+void exp_tiempo_lineal(const char* video){
+  const char* input_video = video;
+  const char* input_tiempo = "data/timelineal";
+  FILE *file = fopen(input_tiempo, "w+");
+
+  int cuadros_a_agregar = 6;
+  int iteraciones = 4;
+  vector<double> resultado(cuadros_a_agregar, 0);
+  double aux = 0;
+  for (int i = 0; i < cuadros_a_agregar; i++) {
+    for (int j = 0; j < iteraciones; j++) {
+        aux = exp_tiempo(LINEAL, i+1, input_video, input_tiempo);
+        resultado[i] += aux;
+    }
+  }
+  double time = 0;
+  double dividido_k = 0;
+  for (unsigned int i = 0; i < resultado.size(); i++) {
+    time = resultado[i] / (double) iteraciones;
+    dividido_k = time / (double) (i+1);
+    fprintf(file, "%d %.4f %.4f \n", i+1, time, dividido_k);
+
+  }
+
+  fclose(file);
+
+}
+
+void exp_tiempo_vecinos(const char* video){
+  const char* input_video = video;
+  const char* input_tiempo = "data/timevecinos";
+  FILE *file = fopen(input_tiempo, "w+");
+
+  int cuadros_a_agregar = 6;
+  int iteraciones = 4;
+  vector<double> resultado(cuadros_a_agregar, 0);
+  double aux = 0;
+  for (int i = 0; i < cuadros_a_agregar; i++) {
+    for (int j = 0; j < iteraciones; j++) {
+        aux = exp_tiempo(VECINOS, i+1, input_video, input_tiempo);
+        resultado[i] += aux;
+    }
+  }
+  double time = 0;
+  double dividido_k = 0;
+  for (unsigned int i = 0; i < resultado.size(); i++) {
+    time = resultado[i] / (double) iteraciones;
+    dividido_k = time / (double) (i+1);
+    fprintf(file, "%d %.4f %.4f \n", i+1, time, dividido_k);
+
+  }
+
+  fclose(file);
+
+}
+
+void exp_tiempo_splines(const char* video){
+  const char* input_video = video;
+  const char* input_tiempo = "data/timesplines";
+  FILE *file = fopen(input_tiempo, "w+");
+
+  int cuadros_a_agregar = 6;
+  int iteraciones = 4;
+  vector<double> resultado(cuadros_a_agregar, 0);
+  double aux = 0;
+  for (int i = 0; i < cuadros_a_agregar; i++) {
+    for (int j = 0; j < iteraciones; j++) {
+        aux = exp_tiempo(SPLINES, i+1, input_video, input_tiempo);
+        resultado[i] += aux;
+    }
+  }
+  double time = 0;
+  double dividido_k = 0;
+  for (unsigned int i = 0; i < resultado.size(); i++) {
+    time = resultado[i] / (double) iteraciones;
+    dividido_k = time / (double) (i+1);
+    fprintf(file, "%d %.4f %.4f \n", i+1, time, dividido_k);
+
+  }
+
+  fclose(file);
 
 }
 
@@ -367,38 +436,30 @@ int main(int argc, char *argv[])
 		RUN_TEST(test_multi_spline_dos_tramos_cuadratico);
 		RUN_TEST(test_multi_spline_tres_tramos_cuadratico);
     */
-
+    /*
         RUN_TEST(test_vecinos_varios);
         RUN_TEST(test_lineal_varios);
         RUN_TEST(test_spline_varios);
         RUN_TEST(test_multi_spline_varios)
 
-
+      */
         // exp grupo
         /*
         const char* input_error = "data/error_funnybaby";
         FILE *file = fopen(input_error, "w+");
         fclose(file);
-        exp_error(SPLINES, 1,"data/funnybaby.avi",input_error);
-        exp_error(SPLINES, 2,"data/funnybaby.avi",input_error);
-        exp_error(SPLINES, 3,"data/funnybaby.avi",input_error);
-
-        exp_error(LINEAL, 1,"data/funnybaby.avi",input_error);
-        exp_error(SPLINES, 1,"data/funnybaby.avi",input_error);
+        int iteraciones_error = 4;
+        for (int i = 1; i <= iteraciones_error; i++) {
+          exp_error(VECINOS, i,"data/funnybaby.avi",input_error);
+          exp_error(LINEAL, i,"data/funnybaby.avi",input_error);
+          exp_error(SPLINES, i,"data/funnybaby.avi",input_error);
+          //exp_error(SPLINES, i,"data/funnybaby.avi",input_error);
+        }
         */
+        exp_tiempo_vecinos("data/funnybaby.avi");
+        exp_tiempo_lineal("data/funnybaby.avi");
+        exp_tiempo_splines("data/funnybaby.avi");
 
-        const char* input_tiempo = "data/time_funnybaby";
-        FILE *file = fopen(input_tiempo, "w+");
-        fclose(file);
-        // PROBLEMA DOUBLE FREE CUANDO EJECUTA CON CUADROS NUEVOS 1 Y DESPUES 2 en exp_tiempo CON VECINOS Y LINEAL
-        exp_tiempo(LINEAL, 1,"data/funnybaby.avi", input_tiempo);
-        exp_tiempo(LINEAL, 2,"data/funnybaby.avi",input_tiempo);
-        exp_tiempo(SPLINES, 3,"data/funnybaby.avi",input_tiempo);
-
-        /*
-        exp_tiempo(LINEAL, i,"data/funnybaby.avi","data/time_funnybaby", input_tiempo);
-        exp_tiempo(SPLINES, i,"data/funnybaby.avi","data/time_funnybaby", input_tiempo);
-        */
 	} else {
         cout << "Usage: ./tp <archivo_entrada> <archivo_salida> <metodo> <cantidad_cuadros_a_agregar>" << endl;
         return 1;
