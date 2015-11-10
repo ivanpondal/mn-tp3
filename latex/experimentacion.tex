@@ -321,7 +321,11 @@ Los resultamos obtenidos fueron los siguientes:
         scaled y ticks=false,
         enlargelimits=0.05,
         width=0.85\textwidth,
-        height=0.45\textwidth
+        height=0.45\textwidth,
+        legend style={at={(1.015,1)},anchor=north west},
+        no markers,
+        thick,
+        cycle list name=exotic
     ]
     \addplot[color=green] table[x index=0,y index=1]{datos/timelineal};
     \addplot[color=red] table[x index=0,y index=1]{datos/timevecinos};
@@ -345,7 +349,11 @@ Si tomamos los tiempos que arrojó la experimentación, y los dividimos por su r
         scaled y ticks=false,
         enlargelimits=0.05,
         width=0.85\textwidth,
-        height=0.45\textwidth
+        height=0.45\textwidth,
+        legend style={at={(1.015,1)},anchor=north west},
+        no markers,
+        thick,
+        cycle list name=exotic
     ]
     \addplot[color=green] table[x index=0,y index=2]{datos/timelineal};
     \addplot[color=red] table[x index=0,y index=2]{datos/timevecinos};
