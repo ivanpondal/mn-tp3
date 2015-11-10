@@ -192,3 +192,21 @@ recalculamos el vector $b$, utilizamos la factorización $LU$ para resolver el
 sistema y nuevamente calculamos los coeficientes del spline.
 
 \subsection{Interpolación por Splines con tamaño de bloque fijo}\label{MultiSplines}
+
+Este método tiene el mismo fondo teórico que el anterior ya que también trabaja
+con splines. La diferencia es que en el modelo anterior, dados todos los
+valores que tomaba cada pixel del video se generaba un único spline para
+cada pixel, mientras que con splines de a bloques lo que hacemos es para cada pixel
+generar varios splines conectados entre si.
+
+La motivación para realizar esto es la hipótesis de que si estamos trabajando
+con un video que contiene cambios bruscos, el utilizar toda la duración del
+video para alimentar un spline puede resultar impreciso, mientras que si
+generamos splines asociados a tramos del video, creemos que podría comportarse
+mejor a variaciones abruptas.
+
+Dada una función $f$ definida en el intervalo $[a, b]$ y un conjunto de nodos $a
+= x_0 < x_1 < \dots < x_n = b$, definimos $B$ como el tamaño de cada bloque y
+$Sb(x)$ como un spline de a bloques con $Sb_j(x)$ siendo el spline definido en
+el subintervalo $[x_j, x_{j+B}]$ con $j \in [0, \dots, n-B-1]$ que interpola los
+puntos de $f$ en ese mismo intervalo.
