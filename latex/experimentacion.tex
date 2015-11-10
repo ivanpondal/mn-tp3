@@ -72,16 +72,18 @@ Luego, se obtuvieron las siguientes cotas de precisión para los distintos méto
     {} & F. Constante & F. Lineal & F. Cuadrática & F. Cúbica \\ \hline
     Interpolación por Vecinos & 0.0001 & 10 & 1000 & 100000 \\
     Interpolación Lineal & 0.0001 & 0.0001 & 10 & 1000 \\
-    Interpolación por Splines & 0.0001 & 0.0001 & 1 & 10 \\
-    Interpolación por Splines (bloques tamaño 2) & FALTA & FALTA & FALTA & FALTA \\
-    Interpolación por Splines (bloques tamaño 4) & FALTA & FALTA & FALTA & FALTA \\
-    Interpolación por Splines (bloques tamaño 8) & FALTA & FALTA & FALTA & FALTA \\
+    Interpolación por Splines & 0.0001 & 0.0001 & 10 & 1000 \\
+    Interpolación por Splines (bloques tamaño 2) & 0.0001 & 0.0001 & 10 & 1000 \\
+    Interpolación por Splines (bloques tamaño 4) & 0.0001 & 0.0001 & 10 & 1000 \\
+    Interpolación por Splines (bloques tamaño 8) & 0.0001 & 0.0001 & 10 & 1000 \\
     \hline
     \end{tabular}
 \end{table}
 
 \subsection{Determinación del tamaño de bloque del método Spline}
-En este experimento buscamos determinar cual es el mejor tamaño de bloque para la interpolación por splines con tamaño de bloque fijo, teniendo en cuenta la performance y la calidad de los resultados obtenidos de cada tamaño propuesto.
+En este experimento buscamos determinar cual es el mejor tamaño de bloque para la
+ interpolación por splines con tamaño de bloque fijo, teniendo en cuenta la
+  performance y la calidad de los resultados obtenidos para cada tamaño propuesto.
 
 Planteamos los siguientes tamaños de bloques: 2 cuadros, 4 cuadros y 8 cuadros. PORQUE?
 
@@ -116,7 +118,170 @@ Ambas medidas nos sirven para realizar un análisis cuantitativo de la calidad d
 En este experimento utilizamos los videos propuestos al inicio de la experimentacion, variando la cantidad de cuadros que agregamos
 
 
-Los resultados obtenidos son los siguientes: (GRÁFICO COMPARANDO LOS MÉTODOS)
+Los resultados obtenidos son los siguientes:
+
+\subsubsection{ECM}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			title={ },
+			xlabel=Frame,
+			ylabel=ECM,
+			width=0.8\textwidth,
+			height=0.5\textwidth,
+			yticklabel style={/pgf/number format/fixed},
+			scaled y ticks=false,
+			legend style={at={(1.015,1)},anchor=north west},
+			no markers,
+			thick,
+			cycle list name=exotic
+		]
+		\addplot table[x index=0,y index=1]{../src/exp/error-sunrise-vecinos1};
+        \addplot table[x index=0,y index=1]{../src/exp/error-sunrise-lineal1};
+        \addplot table[x index=0,y index=1]{../src/exp/error-sunrise-spline1};
+		\legend{Vecinos, Lineal, Spline}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{ECM para el video \textbf{Amanecer} con distintos métodos de Interpolación.}
+	\label{fig:ecm_sunrise}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			title={ },
+			xlabel=Frame,
+			ylabel=ECM,
+			width=0.8\textwidth,
+			height=0.5\textwidth,
+			yticklabel style={/pgf/number format/fixed},
+			scaled y ticks=false,
+			legend style={at={(1.015,1)},anchor=north west},
+			no markers,
+			thick,
+			cycle list name=exotic
+		]
+		\addplot table[x index=0,y index=1]{../src/exp/error-skate-vecinos1};
+        \addplot table[x index=0,y index=1]{../src/exp/error-skate-lineal1};
+        \addplot table[x index=0,y index=1]{../src/exp/error-skate-spline1};
+		\legend{Vecinos, Lineal, Spline}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{ECM para el video \textbf{Skate} con distintos métodos de Interpolación.}
+	\label{fig:ecm_skate}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			title={ },
+			xlabel=Frame,
+			ylabel=ECM,
+			width=0.8\textwidth,
+			height=0.5\textwidth,
+			yticklabel style={/pgf/number format/fixed},
+			scaled y ticks=false,
+			legend style={at={(1.015,1)},anchor=north west},
+			no markers,
+			thick,
+			cycle list name=exotic
+		]
+		\addplot table[x index=0,y index=1]{../src/exp/error-messi-vecinos1};
+        \addplot table[x index=0,y index=1]{../src/exp/error-messi-lineal1};
+        \addplot table[x index=0,y index=1]{../src/exp/error-messi-spline1};
+		\legend{Vecinos, Lineal, Spline}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{ECM para el video \textbf{Messi} con distintos métodos de Interpolación.}
+	\label{fig:ecm_messi}
+\end{figure}
+
+FALTA CONCLUSIONES ECM
+
+\subsubsection{PSNR}
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			title={ },
+			xlabel=Frame,
+			ylabel=PSNR,
+			width=0.8\textwidth,
+			height=0.5\textwidth,
+			yticklabel style={/pgf/number format/fixed},
+			scaled y ticks=false,
+			legend style={at={(1.015,1)},anchor=north west},
+			no markers,
+			thick,
+			cycle list name=exotic
+		]
+		\addplot table[x index=0,y index=2]{../src/exp/error-sunrise-vecinos1};
+        \addplot table[x index=0,y index=2]{../src/exp/error-sunrise-lineal1};
+        \addplot table[x index=0,y index=2]{../src/exp/error-sunrise-spline1};
+		\legend{Vecinos, Lineal, Spline}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{PSNR para el video \textbf{Amanecer} con distintos métodos de Interpolación.}
+	\label{fig:psnr_sunrise}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			title={ },
+			xlabel=Frame,
+			ylabel=PSNR,
+			width=0.8\textwidth,
+			height=0.5\textwidth,
+			yticklabel style={/pgf/number format/fixed},
+			scaled y ticks=false,
+			legend style={at={(1.015,1)},anchor=north west},
+			no markers,
+			thick,
+			cycle list name=exotic
+		]
+		\addplot table[x index=0,y index=2]{../src/exp/error-skate-vecinos1};
+        \addplot table[x index=0,y index=2]{../src/exp/error-skate-lineal1};
+        \addplot table[x index=0,y index=2]{../src/exp/error-skate-spline1};
+		\legend{Vecinos, Lineal, Spline}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{PSNR para el video \textbf{Skate} con distintos métodos de Interpolación.}
+	\label{fig:psnr_skate}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			title={ },
+			xlabel=Frame,
+			ylabel=PSNR,
+			width=0.8\textwidth,
+			height=0.5\textwidth,
+			yticklabel style={/pgf/number format/fixed},
+			scaled y ticks=false,
+			legend style={at={(1.015,1)},anchor=north west},
+			no markers,
+			thick,
+			cycle list name=exotic
+		]
+		\addplot table[x index=0,y index=2]{../src/exp/error-messi-vecinos1};
+        \addplot table[x index=0,y index=2]{../src/exp/error-messi-lineal1};
+        \addplot table[x index=0,y index=2]{../src/exp/error-messi-spline1};
+		\legend{Vecinos, Lineal, Spline}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{PSNR para el video \textbf{Messi} con distintos métodos de Interpolación.}
+	\label{fig:psnr_messi}
+\end{figure}
+
+FALTA CONCLUSIONES PSNR
 
 \subsection{Medición de los tiempos de ejecución de los métodos}
 A partir de la implementaciones descriptas en la Sección \ref{Implementacion}, podemos inferir una complejidad temporal para cada método.

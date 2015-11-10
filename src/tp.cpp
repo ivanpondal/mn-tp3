@@ -184,7 +184,7 @@ void test_vecinos_varios() {
     test_interpolacion_funcion(VECINOS, F_CONSTANTE, 50, 0.5);
     test_interpolacion_funcion(VECINOS, F_LINEAL, 50, 0.5, 10);
     test_interpolacion_funcion(VECINOS, F_CUADRATICA, 50, 0.5, 1000);
-    test_interpolacion_funcion(VECINOS, F_CUBICA, 50, 0.5, 10000);
+    test_interpolacion_funcion(VECINOS, F_CUBICA, 50, 0.5, 100000);
 }
 
 void test_lineal_varios() {
@@ -197,8 +197,8 @@ void test_lineal_varios() {
 void test_spline_varios() {
     test_interpolacion_funcion(SPLINES, F_CONSTANTE, 50, 0.5);
     test_interpolacion_funcion(SPLINES, F_LINEAL, 50, 0.5);
-    test_interpolacion_funcion(SPLINES, F_CUADRATICA, 50, 0.5, 1);
-    test_interpolacion_funcion(SPLINES, F_CUBICA, 50, 0.5, 10);
+    test_interpolacion_funcion(SPLINES, F_CUADRATICA, 50, 0.5, 10);
+    test_interpolacion_funcion(SPLINES, F_CUBICA, 50, 0.5, 1000);
 }
 
 void test_multi_spline_varios() {
@@ -221,16 +221,40 @@ void test_multi_spline_varios() {
     test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.5, 1000, 8);
 }
 
+void test_multi_spline_varios2() {
+    cout << endl;
+    // tamaño de bloques 2
+    cout << "Bloque 2" << endl;
+    test_interpolacion_funcion(MULTI_SPLINES, F_CONSTANTE, 50, 0.2, DELTA, 2);
+    test_interpolacion_funcion(MULTI_SPLINES, F_LINEAL, 50, 0.2, DELTA, 2);
+    test_interpolacion_funcion(MULTI_SPLINES, F_CUADRATICA, 50, 0.2, 10, 2);
+    test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.2, 1000, 2);
+
+    // tamaño de bloques 4
+    // cout << "Bloque 4" << endl;
+    // test_interpolacion_funcion(MULTI_SPLINES, F_CONSTANTE, 50, 0.2, DELTA, 4);
+    // test_interpolacion_funcion(MULTI_SPLINES, F_LINEAL, 50, 0.2, DELTA, 4);
+    // test_interpolacion_funcion(MULTI_SPLINES, F_CUADRATICA, 50, 0.2, 10, 4);
+    // test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.2, 1000, 4);
+    //
+    // // tamaño de bloques 8
+    // cout << "Bloque 8" << endl;
+    // test_interpolacion_funcion(MULTI_SPLINES, F_CONSTANTE, 50, 0.2, DELTA, 8);
+    // test_interpolacion_funcion(MULTI_SPLINES, F_LINEAL, 50, 0.2, DELTA, 8);
+    // test_interpolacion_funcion(MULTI_SPLINES, F_CUADRATICA, 50, 0.2, 10, 8);
+    // test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.2, 1000, 8);
+}
+
 // ********************** EXPERIMENTACION DEL GRUPO ****************************
 
 void exp_error(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * input_text, const char * out) {
-    //cout << "Calculando error al interpolar usando " << getTextForMetodo(metodo) << ", tomando del video original 1 frame de cada " << cuadros_a_agregar + 1 << ": " << endl;
-    FILE *file = fopen(out, "a+");
+    cout << "Calculando error al interpolar usando " << getTextForMetodo(metodo) << ", tomando del video original 1 frame de cada " << cuadros_a_agregar + 1 << ": " << endl;
+
+    // armo los strings de inputfiles
     string input_video = input_text;
     ostringstream os_real;
     os_real << "data/video_exp_" << getTextForMetodo(metodo) << cuadros_a_agregar << "_real.txt";
     string real_text = os_real.str();
-
     ostringstream os_aux;
     os_aux << "data/video_exp_" << getTextForMetodo(metodo) << cuadros_a_agregar << "_aux.txt";
     string aux_text = os_aux.str();
@@ -244,44 +268,36 @@ void exp_error(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * i
 
     // convierto a texto el video original, tomando un cuadro de cada 1 + cuadros_a_agregar frames
     video_a_texto(input_video.c_str(), aux_text.c_str(), 1 + cuadros_a_agregar);
+
     // agrego cuadros_a_agregar frames entre cada frame del output_text
     Video video(aux_text.c_str(), cuadros_a_agregar);
 	  video.aplicarCamaraLenta(metodo);
     vector<vector<vector<int> > > frames_out = video.obtenerFramesCalculados();
 
+    // calculo el error cuadratico por frame y el psnr
     int frames = frames_out[0][0].size();
-
     vector<double> err_per_frame_ecm(frames, 0);
     vector<double> err_per_frame_psnr(frames, 0);
-
     error_cuadratico_medio_per_frame(frames_out, frames_real, err_per_frame_ecm);
     peak_to_signal_noise_per_frame(frames_out, frames_real, err_per_frame_psnr);
 
-    fprintf(file, "%s %s %s\n", "frame", "err_per_frame_ecm", "err_per_frame_psnr");
-    fprintf(file, "%s %s\n","Metodo: ", getTextForMetodo(metodo));
+    // escribo info en el el archiv out
+    FILE *file = fopen(out, "a+");
+    // fprintf(file, "# Metodo: %s\n", getTextForMetodo(metodo));
+    // fprintf(file, "%s %s %s\n", "frame", "err_per_frame_ecm", "err_per_frame_psnr");
 
-    vector<pair<int, double> > resultado_ecm;
-    vector<pair<int, double> > resultado_psnr;
-    pair<int, double> aux_ecm;
-    pair<int, double> aux_psnr;
+    int count = 0;
     for(int i = 0; i < frames; i++) {
-        if(err_per_frame_ecm[i] != 0) {
-            aux_ecm = make_pair(i, err_per_frame_ecm[i]);
-            aux_psnr = make_pair(i, err_per_frame_psnr[i]);
-            resultado_ecm.push_back(aux_ecm);
-            resultado_psnr.push_back(aux_psnr);
+        if (err_per_frame_ecm[i] != 0) {
+            fprintf(file, "%d %.4f %.4f \n", count, err_per_frame_ecm[i], err_per_frame_psnr[i]);
+            count++;
         }
     }
-
-    for(unsigned int i = 0; i < resultado_ecm.size(); i++) {
-        fprintf(file, "%d %.4f %.4f \n", resultado_ecm[i].first , resultado_ecm[i].second, resultado_psnr[i].second);
-    }
-
 
     //double err_frame_ecm = video_prom_error_cuadratico_medio(frames_out, frames_real);
     //double err_frame_psnr = video_prom_peak_to_signal_noise_ratio(frames_out, frames_real);
     fclose(file);
-	  // cout << "ECM promedio por frame: " << setprecision(15) << prom_err_frame_ecm << endl;
+	// cout << "ECM promedio por frame: " << setprecision(15) << prom_err_frame_ecm << endl;
     // cout << "PSNR promedio por frame: " << setprecision(15) << prom_err_frame_psnr << endl;
 }
 
@@ -436,11 +452,13 @@ int main(int argc, char *argv[])
 		RUN_TEST(test_multi_spline_dos_tramos_cuadratico);
 		RUN_TEST(test_multi_spline_tres_tramos_cuadratico);
     */
+
     /*
-        RUN_TEST(test_vecinos_varios);
-        RUN_TEST(test_lineal_varios);
-        RUN_TEST(test_spline_varios);
-        RUN_TEST(test_multi_spline_varios)
+        // RUN_TEST(test_vecinos_varios);
+        // RUN_TEST(test_lineal_varios);
+        // RUN_TEST(test_spline_varios);
+        // RUN_TEST(test_multi_spline_varios);
+        // RUN_TEST(test_multi_spline_varios2);
 
       */
         // exp grupo
@@ -459,6 +477,16 @@ int main(int argc, char *argv[])
         exp_tiempo_vecinos("data/funnybaby.avi");
         exp_tiempo_lineal("data/funnybaby.avi");
         exp_tiempo_splines("data/funnybaby.avi");
+
+        exp_error(VECINOS, 1, "data/messi.avi", "exp/error-messi-vecinos1");
+        exp_error(LINEAL, 1, "data/messi.avi", "exp/error-messi-lineal1");
+        exp_error(SPLINES, 1, "data/messi.avi", "exp/error-messi-spline1");
+        exp_error(VECINOS, 1, "data/sunrise.avi", "exp/error-sunrise-vecinos1");
+        exp_error(LINEAL, 1, "data/sunrise.avi", "exp/error-sunrise-lineal1");
+        exp_error(SPLINES, 1, "data/sunrise.avi", "exp/error-sunrise-spline1");
+        exp_error(VECINOS, 1, "data/skate.avi", "exp/error-skate-vecinos1");
+        exp_error(LINEAL, 1, "data/skate.avi", "exp/error-skate-lineal1");
+        exp_error(SPLINES, 1, "data/skate.avi", "exp/error-skate-spline1");
 
 	} else {
         cout << "Usage: ./tp <archivo_entrada> <archivo_salida> <metodo> <cantidad_cuadros_a_agregar>" << endl;
