@@ -2,11 +2,16 @@ En esta sección, se detallan los diferentes experimentos que realizamos para me
 
 Para lograr tal fin realizamos los siguientes tipos de experimentos:
 \begin{itemize}
-  \item Funcionamiento de los métodos implementados: mostraremos que los métodos de interpolación funcionan correctamente comparandolos contra diferentes familias de funciones.
-  \item Determinación del tamaño de bloque del método interpolación por splines.
-  \item Medición del ECM y PSNR de los métodos.
-  \item Medición de los tiempos de ejecución de los métodos.
-  \item Análisis cualitativos de los métodos, fenómeno de artifacts.
+  \item Funcionamiento de los métodos implementados: Mostraremos que los métodos
+        de interpolación funcionan correctamente comparandolos contra diferentes
+        familias de funciones. A su vez, basandonos en las precisiones obtenidas,
+        determinaremos el tamaño de bloque óptimo para el método Interpolación por Splines.
+  \item Medición del ECM y PSNR de los métodos: Compararemos los errores obtenidos
+        en varias instancias de pruebas para los distintos métodos.
+  \item Medición de los tiempos de ejecución de los métodos: Compararemos los
+        tiempos de ejecución utilizando los distintos métodos.
+  \item Análisis cualitativos de los métodos, fenómeno de artifacts: Buscaremos
+        reconocer defectos de interpolación en los videos generados.
 \end{itemize}
 
 Los videos utilizados para los diversos experimentos, fueron los siguientes:
@@ -71,34 +76,120 @@ Luego, se obtuvieron las siguientes cotas de precisión para los distintos méto
     \hline
     {} & F. Constante & F. Lineal & F. Cuadrática & F. Cúbica \\ \hline
     Interpolación por Vecinos & 0.0001 & 10 & 1000 & 100000 \\
-    Interpolación Lineal & 0.0001 & 0.0001 & 10 & 1000 \\
-    Interpolación por Splines & 0.0001 & 0.0001 & 10 & 1000 \\
+    Interpolación Fragmentaria Lineal & 0.0001 & 0.0001 & 10 & 1000 \\
     Interpolación por Splines (bloques tamaño 2) & 0.0001 & 0.0001 & 10 & 1000 \\
-    Interpolación por Splines (bloques tamaño 4) & 0.0001 & 0.0001 & 10 & 1000 \\
-    Interpolación por Splines (bloques tamaño 8) & 0.0001 & 0.0001 & 10 & 1000 \\
+    Interpolación por Splines (bloques tamaño 4) & 0.0001 & 0.0001 & 5 & 500 \\
+    Interpolación por Splines (bloques tamaño 8) & 0.0001 & 0.0001 & 1 & 200 \\
+    Interpolación por Splines (bloques tamaño 16) & 0.0001 & 0.0001 & 1 & 200 \\
+    Interpolación por Splines (bloques tamaño 32) & 0.0001 & 0.0001 & 1 & 200 \\
+    Interpolación por Splines (bloques tamaño 64) & 0.0001 & 0.0001 & 1 & 200 \\
+    Interpolación por Splines (1 solo bloque) & 0.0001 & 0.0001 & 1 & 200 \\
     \hline
     \end{tabular}
 \end{table}
 
-\subsection{Determinación del tamaño de bloque del método Spline}
-En este experimento buscamos determinar cual es el mejor tamaño de bloque para la
- interpolación por splines con tamaño de bloque fijo, teniendo en cuenta la
-  performance y la calidad de los resultados obtenidos para cada tamaño propuesto.
+Analizando dichas cotas vemos que:
+\begin{itemize}
+    \item La Interpolación por Vecinos resulta razonable solo para funciones con muy
+        poca variación (derivada a lo sumo constante). Esto se ve claramente en la
+        cota de presición al interpolar una función Cuadrática.
+    \item La Interpolación Fragmentaria Lineal es sustancialmente mejor que por Vecinos,
+        y devuelve resultados razonables para funciones a lo sumo Cuadráticas.
+    \item La Interpolación por Splines utilizando solo 2 puntos para cada bloque es
+        equivalente a interpolar utilizando funciones lineales, y queda evidenciado al
+        tener las mismas cotas de precisión.
+    \item A partir de los tamaños de bloque 4 a 16, la Interpolación por Splines realiza
+        una mejora ``asintótica'' de su cota de precisión.
+    \item Entre los tamaños de bloque 16 a 64, no se notó una mejora significativa en la cota
+        de precisión de la Interpolación por Splines.
+    \item Al realizar Interpolación por Splines \textit{standard} (1 solo bloque),
+        vemos que su cota de precisión concuerda con las cotas a las cuales ``convergen''
+        los métodos de Interpolación por Splines con bloque de tamaño fijo. Es por esta razón
+        que para los experimentos cualitativos, utilizaremos solamente la Interpolación
+        por Splines \textit{standard}, y no la de tamaño de bloques fijo.
+\end{itemize}
 
-Planteamos los siguientes tamaños de bloques: 2 cuadros, 4 cuadros y 8 cuadros. PORQUE?
+\subsection{Medición de los tiempos de ejecución de los métodos}
+A partir de la implementaciones descriptas en la Sección \ref{Implementacion}, podemos inferir una complejidad temporal para cada método.
 
-Las comparaciones que vamos a realizar seran en terminos de complejidad temporal y ECM, PSNR (ver Seccion\ref{ECM} para las definiciones de ambas metricas).
-\subsubsection{Comparación complejidad temporal}
-Como instancias de prueba, tomamos cada uno de los videos elegidos y fuimos aumentando la cantidad de cuadros agregados.
+Sea $w$ la cantidad de filas de píxeles en cada imagen, $h$ la cantidad de columnas, $i$ la cantidad de cuadros originales y sea $k$ la cantidad de cuadros a agregar entre los originales:
 
-En los siguientes graficos mostramos los resultados obtenidos para cada tamaño de bloque:
+Todos los metodos implementados tienen la misma una complejidad temporal que es $\Theta(w*h*i*k*)$. Esta conclusion surge del hecho que, en todos los casos, tenemos 4 ciclos anidados, en donde el primero se ejecuta $w$ veces, el segundo $h$ veces, el tercero $i$ veces, y el cuarto $k$ veces.
+%\begin{itemize}
+%  \item Vecino mas cercano: realizamos 4 ciclos anidados, en donde el primero se ejecuta $w$ veces, el segundo $h$ veces, el tercero $i$ veces, y el cuarto $k$ veces, la complejidad temporal del mismo es $\Theta(whik)$.
+%  \item Interpolacion lineal: situacion identica a la de vecinos mas cercanos, por lo tanto su complejidad temporal es de $\Theta(whik)$.
+%  \item Interpolacion por Splines: en este caso realizamos primero un ciclo que se ejecuta $w$ veces, dentro de este ciclamos $h$
+%  \item Interpolacion por Splines con tamaño de bloque fijo:
+%\end{itemize}
+\newline
+\newline
+Para corroborar esta hipotesis planteamos un experimento con las siguientes caracteristicas:
+\begin{itemize}
+  \item Utilizamos el video provisto por la catedra llamado \textit{funnybaby}, el cual tiene 44 cuadros y es de xx.
+  \item Solo medimos la resolucion del sistema, no su creacion o los respectivos pasajes de video a texto y viceversa.
+  \item Dado que $w$, $h$ y $i$ son valores fijos que no podemos cambiar, variamos el $k$.
+  \item Generamos instancias para valores de $k$ entre 1 y 6.
+  \item Para cada valor distinto de $k$ generamos 4 instancias, cuyos valores vamos a promediar para mitigar los posibles valores distorsionados por algun procedimiento del procesador.
+  \item Los tiempos fueron medidos en nanosegundos.
+\end{itemize}
 
-\subsubsection{Comparacion ECM y PSNR}
+Los resultamos obtenidos fueron los siguientes:
 
+\begin{center}
+    \begin{tikzpicture}
+    \begin{axis}[
+        title={},
+        xlabel={cantidad de cuadros agregados entre originales ($k$)},
+        ylabel={tiempo (nanosegundos)},
+        ylabel absolute,
+        ylabel style={yshift=.3cm},
+        scaled x ticks=false,
+        scaled y ticks=false,
+        enlargelimits=0.05,
+        width=0.85\textwidth,
+        height=0.45\textwidth,
+        legend style={at={(1.015,1)},anchor=north west},
+        no markers,
+        thick,
+        cycle list name=exotic
+    ]
+    \addplot[color=green] table[x index=0,y index=1]{datos/timelineal};
+    \addplot[color=red] table[x index=0,y index=1]{datos/timevecinos};
+    \addplot[color=blue] table[x index=0,y index=1]{datos/timesplines};
+    \legend{Lineal, Vecinos, Splines}
+    \end{axis}
+    \end{tikzpicture}
+\end{center}
 
-\subsubsection{Conclusiones}
+Si tomamos los tiempos que arrojó la experimentación, y los dividimos por su respectivo $k$, obtenemos el siguiente resultado:
 
-Habiendo hecho las comparaciones entre los diversos tamaños.
+\begin{center}
+    \begin{tikzpicture}
+    \begin{axis}[
+        title={},
+        xlabel={cantidad de cuadros agregados entre originales ($k$)},
+        ylabel={tiempo (nanosegundos) / $k$},
+        ylabel absolute,
+        ylabel style={yshift=.3cm},
+        scaled x ticks=false,
+        scaled y ticks=false,
+        enlargelimits=0.05,
+        width=0.85\textwidth,
+        height=0.45\textwidth,
+        legend style={at={(1.015,1)},anchor=north west},
+        no markers,
+        thick,
+        cycle list name=exotic
+    ]
+    \addplot[color=green] table[x index=0,y index=2]{datos/timelineal};
+    \addplot[color=red] table[x index=0,y index=2]{datos/timevecinos};
+    \addplot[color=blue] table[x index=0,y index=2]{datos/timesplines};
+    \legend{Lineal, Vecinos, Splines}
+    \end{axis}
+    \end{tikzpicture}
+\end{center}
+
+A partir de los graficos, queda de manifiesto que los metodos tienen la misma complejidad temporal, ya que solo difieren en una constante.
 
 \subsection{Medición del ECM y PSNR de los métodos.}\label{ECM}
 Sea $F$ un frame del vídeo real (ideal) , y $\bar{F}$ el mismo frame del vídeo efectivamente construidos por alguno de los métodos. Sea $m$ la cantidad de filas de píxeles en cada imagen y $n$ la cantidad de columnas.
@@ -445,89 +536,6 @@ FALTA CONCLUSIONES ECM
 \end{figure}
 
 FALTA CONCLUSIONES PSNR
-
-\subsection{Medición de los tiempos de ejecución de los métodos}
-A partir de la implementaciones descriptas en la Sección \ref{Implementacion}, podemos inferir una complejidad temporal para cada método.
-
-Sea $w$ la cantidad de filas de píxeles en cada imagen, $h$ la cantidad de columnas, $i$ la cantidad de cuadros originales y sea $k$ la cantidad de cuadros a agregar entre los originales:
-
-Todos los metodos implementados tienen la misma una complejidad temporal que es $\Theta(w*h*i*k*)$. Esta conclusion surge del hecho que, en todos los casos, tenemos 4 ciclos anidados, en donde el primero se ejecuta $w$ veces, el segundo $h$ veces, el tercero $i$ veces, y el cuarto $k$ veces.
-%\begin{itemize}
-%  \item Vecino mas cercano: realizamos 4 ciclos anidados, en donde el primero se ejecuta $w$ veces, el segundo $h$ veces, el tercero $i$ veces, y el cuarto $k$ veces, la complejidad temporal del mismo es $\Theta(whik)$.
-%  \item Interpolacion lineal: situacion identica a la de vecinos mas cercanos, por lo tanto su complejidad temporal es de $\Theta(whik)$.
-%  \item Interpolacion por Splines: en este caso realizamos primero un ciclo que se ejecuta $w$ veces, dentro de este ciclamos $h$
-%  \item Interpolacion por Splines con tamaño de bloque fijo:
-%\end{itemize}
-\newline
-\newline
-Para corroborar esta hipotesis planteamos un experimento con las siguientes caracteristicas:
-\begin{itemize}
-  \item Utilizamos el video provisto por la catedra llamado \textit{funnybaby}, el cual tiene 44 cuadros y es de xx.
-  \item Solo medimos la resolucion del sistema, no su creacion o los respectivos pasajes de video a texto y viceversa.
-  \item Dado que $w$, $h$ y $i$ son valores fijos que no podemos cambiar, variamos el $k$.
-  \item Generamos instancias para valores de $k$ entre 1 y 6.
-  \item Para cada valor distinto de $k$ generamos 4 instancias, cuyos valores vamos a promediar para mitigar los posibles valores distorsionados por algun procedimiento del procesador.
-  \item Los tiempos fueron medidos en nanosegundos.
-\end{itemize}
-
-Los resultamos obtenidos fueron los siguientes:
-
-\begin{center}
-    \begin{tikzpicture}
-    \begin{axis}[
-        title={},
-        xlabel={cantidad de cuadros agregados entre originales ($k$)},
-        ylabel={tiempo (nanosegundos)},
-        ylabel absolute,
-        ylabel style={yshift=.3cm},
-        scaled x ticks=false,
-        scaled y ticks=false,
-        enlargelimits=0.05,
-        width=0.85\textwidth,
-        height=0.45\textwidth,
-        legend style={at={(1.015,1)},anchor=north west},
-        no markers,
-        thick,
-        cycle list name=exotic
-    ]
-    \addplot[color=green] table[x index=0,y index=1]{datos/timelineal};
-    \addplot[color=red] table[x index=0,y index=1]{datos/timevecinos};
-    \addplot[color=blue] table[x index=0,y index=1]{datos/timesplines};
-    \legend{Lineal, Vecinos, Splines}
-    \end{axis}
-    \end{tikzpicture}
-\end{center}
-
-Si tomamos los tiempos que arrojó la experimentación, y los dividimos por su respectivo $k$, obtenemos el siguiente resultado:
-
-\begin{center}
-    \begin{tikzpicture}
-    \begin{axis}[
-        title={},
-        xlabel={cantidad de cuadros agregados entre originales ($k$)},
-        ylabel={tiempo (nanosegundos) / $k$},
-        ylabel absolute,
-        ylabel style={yshift=.3cm},
-        scaled x ticks=false,
-        scaled y ticks=false,
-        enlargelimits=0.05,
-        width=0.85\textwidth,
-        height=0.45\textwidth,
-        legend style={at={(1.015,1)},anchor=north west},
-        no markers,
-        thick,
-        cycle list name=exotic
-    ]
-    \addplot[color=green] table[x index=0,y index=2]{datos/timelineal};
-    \addplot[color=red] table[x index=0,y index=2]{datos/timevecinos};
-    \addplot[color=blue] table[x index=0,y index=2]{datos/timesplines};
-    \legend{Lineal, Vecinos, Splines}
-    \end{axis}
-    \end{tikzpicture}
-\end{center}
-
-A partir de los graficos, queda de manifiesto que los metodos tienen la misma complejidad temporal, ya que solo difieren en una constante.
-
 
 \subsection{Análisis cualitativos de los métodos, fenómeno de artifacts.}
 Los \textit{artifacts} son errores visuales resultantes de la aplicación de los métodos. Estos errores visuales se caracterizan por romper la coherencia entre imágenes al generar distorsiones evidentes.

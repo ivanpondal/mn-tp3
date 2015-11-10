@@ -197,52 +197,52 @@ void test_lineal_varios() {
 void test_spline_varios() {
     test_interpolacion_funcion(SPLINES, F_CONSTANTE, 50, 0.5);
     test_interpolacion_funcion(SPLINES, F_LINEAL, 50, 0.5);
-    test_interpolacion_funcion(SPLINES, F_CUADRATICA, 50, 0.5, 10);
-    test_interpolacion_funcion(SPLINES, F_CUBICA, 50, 0.5, 1000);
+    test_interpolacion_funcion(SPLINES, F_CUADRATICA, 50, 0.5, 1);
+    test_interpolacion_funcion(SPLINES, F_CUBICA, 50, 0.5, 200);
 }
 
 void test_multi_spline_varios() {
     // tamaño de bloques 2
+    cout << "Bloque 2" << endl;
     test_interpolacion_funcion(MULTI_SPLINES, F_CONSTANTE, 50, 0.5, DELTA, 2);
     test_interpolacion_funcion(MULTI_SPLINES, F_LINEAL, 50, 0.5, DELTA, 2);
     test_interpolacion_funcion(MULTI_SPLINES, F_CUADRATICA, 50, 0.5, 10, 2);
     test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.5, 1000, 2);
 
     // tamaño de bloques 4
+    cout << "Bloque 4" << endl;
     test_interpolacion_funcion(MULTI_SPLINES, F_CONSTANTE, 50, 0.5, DELTA, 4);
     test_interpolacion_funcion(MULTI_SPLINES, F_LINEAL, 50, 0.5, DELTA, 4);
-    test_interpolacion_funcion(MULTI_SPLINES, F_CUADRATICA, 50, 0.5, 10, 4);
-    test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.5, 1000, 4);
+    test_interpolacion_funcion(MULTI_SPLINES, F_CUADRATICA, 50, 0.5, 5, 4);
+    test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.5, 500, 4);
 
     // tamaño de bloques 8
+    cout << "Bloque 8" << endl;
     test_interpolacion_funcion(MULTI_SPLINES, F_CONSTANTE, 50, 0.5, DELTA, 8);
     test_interpolacion_funcion(MULTI_SPLINES, F_LINEAL, 50, 0.5, DELTA, 8);
-    test_interpolacion_funcion(MULTI_SPLINES, F_CUADRATICA, 50, 0.5, 10, 8);
-    test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.5, 1000, 8);
-}
+    test_interpolacion_funcion(MULTI_SPLINES, F_CUADRATICA, 50, 0.5, 1, 8);
+    test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.5, 200, 8);
 
-void test_multi_spline_varios2() {
-    cout << endl;
-    // tamaño de bloques 2
-    cout << "Bloque 2" << endl;
-    test_interpolacion_funcion(MULTI_SPLINES, F_CONSTANTE, 50, 0.2, DELTA, 2);
-    test_interpolacion_funcion(MULTI_SPLINES, F_LINEAL, 50, 0.2, DELTA, 2);
-    test_interpolacion_funcion(MULTI_SPLINES, F_CUADRATICA, 50, 0.2, 10, 2);
-    test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.2, 1000, 2);
+    // tamaño de bloques 16
+    cout << "Bloque 16" << endl;
+    test_interpolacion_funcion(MULTI_SPLINES, F_CONSTANTE, 50, 0.5, DELTA, 16);
+    test_interpolacion_funcion(MULTI_SPLINES, F_LINEAL, 50, 0.5, DELTA, 16);
+    test_interpolacion_funcion(MULTI_SPLINES, F_CUADRATICA, 50, 0.5, 1, 16);
+    test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.5, 200, 16);
 
-    // tamaño de bloques 4
-    // cout << "Bloque 4" << endl;
-    // test_interpolacion_funcion(MULTI_SPLINES, F_CONSTANTE, 50, 0.2, DELTA, 4);
-    // test_interpolacion_funcion(MULTI_SPLINES, F_LINEAL, 50, 0.2, DELTA, 4);
-    // test_interpolacion_funcion(MULTI_SPLINES, F_CUADRATICA, 50, 0.2, 10, 4);
-    // test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.2, 1000, 4);
-    //
-    // // tamaño de bloques 8
-    // cout << "Bloque 8" << endl;
-    // test_interpolacion_funcion(MULTI_SPLINES, F_CONSTANTE, 50, 0.2, DELTA, 8);
-    // test_interpolacion_funcion(MULTI_SPLINES, F_LINEAL, 50, 0.2, DELTA, 8);
-    // test_interpolacion_funcion(MULTI_SPLINES, F_CUADRATICA, 50, 0.2, 10, 8);
-    // test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.2, 1000, 8);
+    // tamaño de bloques 32
+    cout << "Bloque 32" << endl;
+    test_interpolacion_funcion(MULTI_SPLINES, F_CONSTANTE, 50, 0.5, DELTA, 32);
+    test_interpolacion_funcion(MULTI_SPLINES, F_LINEAL, 50, 0.5, DELTA, 32);
+    test_interpolacion_funcion(MULTI_SPLINES, F_CUADRATICA, 50, 0.5, 1, 32);
+    test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.5, 200, 32);
+
+    // tamaño de bloques 64
+    cout << "Bloque 64" << endl;
+    test_interpolacion_funcion(MULTI_SPLINES, F_CONSTANTE, 50, 0.5, DELTA, 64);
+    test_interpolacion_funcion(MULTI_SPLINES, F_LINEAL, 50, 0.5, DELTA, 64);
+    test_interpolacion_funcion(MULTI_SPLINES, F_CUADRATICA, 50, 0.5, 1, 64);
+    test_interpolacion_funcion(MULTI_SPLINES, F_CUBICA, 50, 0.5, 200, 64);
 }
 
 // ********************** EXPERIMENTACION DEL GRUPO ****************************
@@ -431,32 +431,29 @@ int main(int argc, char *argv[])
 		// test_video_a_texto();
         // test_texto_a_video();
 
-		RUN_TEST(test_vecinos_constante);
-		RUN_TEST(test_vecinos_lineal);
-		RUN_TEST(test_vecinos_cuadratico);
-        RUN_TEST(test_lineal_constante);
-		RUN_TEST(test_lineal_lineal);
-		RUN_TEST(test_lineal_cuadratico);
-		RUN_TEST(test_spline_constante);
-		RUN_TEST(test_spline_lineal);
-		RUN_TEST(test_spline_cuadratico);
-		RUN_TEST(test_multi_spline_un_tramo_constante);
-		RUN_TEST(test_multi_spline_dos_tramos_constante);
-		RUN_TEST(test_multi_spline_tres_tramos_constante);
-		RUN_TEST(test_multi_spline_un_tramo_lineal);
-		RUN_TEST(test_multi_spline_dos_tramos_lineal);
-		RUN_TEST(test_multi_spline_tres_tramos_lineal);
-		RUN_TEST(test_multi_spline_un_tramo_cuadratico);
-		RUN_TEST(test_multi_spline_dos_tramos_cuadratico);
-		RUN_TEST(test_multi_spline_tres_tramos_cuadratico);
+		// RUN_TEST(test_vecinos_constante);
+		// RUN_TEST(test_vecinos_lineal);
+		// RUN_TEST(test_vecinos_cuadratico);
+        // RUN_TEST(test_lineal_constante);
+		// RUN_TEST(test_lineal_lineal);
+		// RUN_TEST(test_lineal_cuadratico);
+		// RUN_TEST(test_spline_constante);
+		// RUN_TEST(test_spline_lineal);
+		// RUN_TEST(test_spline_cuadratico);
+		// RUN_TEST(test_multi_spline_un_tramo_constante);
+		// RUN_TEST(test_multi_spline_dos_tramos_constante);
+		// RUN_TEST(test_multi_spline_tres_tramos_constante);
+		// RUN_TEST(test_multi_spline_un_tramo_lineal);
+		// RUN_TEST(test_multi_spline_dos_tramos_lineal);
+		// RUN_TEST(test_multi_spline_tres_tramos_lineal);
+		// RUN_TEST(test_multi_spline_un_tramo_cuadratico);
+		// RUN_TEST(test_multi_spline_dos_tramos_cuadratico);
+		// RUN_TEST(test_multi_spline_tres_tramos_cuadratico);
 
-    /*
         // RUN_TEST(test_vecinos_varios);
         // RUN_TEST(test_lineal_varios);
         // RUN_TEST(test_spline_varios);
         // RUN_TEST(test_multi_spline_varios);
-        // RUN_TEST(test_multi_spline_varios2);
-      */
 
         // exp grupo
 
