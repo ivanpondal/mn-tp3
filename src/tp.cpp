@@ -390,15 +390,25 @@ int main(int argc, char *argv[])
 
 
         // exp grupo
-        exp_error(VECINOS, 1, "data/messi.avi", "exp/error-messi-vecinos1");
-        exp_error(LINEAL, 1, "data/messi.avi", "exp/error-messi-lineal1");
-        exp_error(SPLINES, 1, "data/messi.avi", "exp/error-messi-spline1");
-        exp_error(VECINOS, 1, "data/sunrise.avi", "exp/error-sunrise-vecinos1");
-        exp_error(LINEAL, 1, "data/sunrise.avi", "exp/error-sunrise-lineal1");
-        exp_error(SPLINES, 1, "data/sunrise.avi", "exp/error-sunrise-spline1");
-        exp_error(VECINOS, 1, "data/skate.avi", "exp/error-skate-vecinos1");
-        exp_error(LINEAL, 1, "data/skate.avi", "exp/error-skate-lineal1");
-        exp_error(SPLINES, 1, "data/skate.avi", "exp/error-skate-spline1");
+        // exp_error(VECINOS, 1, "data/messi.avi", "exp/error-messi-vecinos1");
+        // exp_error(LINEAL, 1, "data/messi.avi", "exp/error-messi-lineal1");
+        // exp_error(SPLINES, 1, "data/messi.avi", "exp/error-messi-spline1");
+        // exp_error(VECINOS, 1, "data/sunrise.avi", "exp/error-sunrise-vecinos1");
+        // exp_error(LINEAL, 1, "data/sunrise.avi", "exp/error-sunrise-lineal1");
+        // exp_error(SPLINES, 1, "data/sunrise.avi", "exp/error-sunrise-spline1");
+        // exp_error(VECINOS, 1, "data/skate.avi", "exp/error-skate-vecinos1");
+        // exp_error(LINEAL, 1, "data/skate.avi", "exp/error-skate-lineal1");
+        // exp_error(SPLINES, 1, "data/skate.avi", "exp/error-skate-spline1");
+
+        exp_error(VECINOS, 5, "data/messi.avi", "exp/error-messi-vecinos5");
+        exp_error(LINEAL, 5, "data/messi.avi", "exp/error-messi-lineal5");
+        exp_error(SPLINES, 5, "data/messi.avi", "exp/error-messi-spline5");
+        exp_error(VECINOS, 5, "data/sunrise.avi", "exp/error-sunrise-vecinos5");
+        exp_error(LINEAL, 5, "data/sunrise.avi", "exp/error-sunrise-lineal5");
+        exp_error(SPLINES, 5, "data/sunrise.avi", "exp/error-sunrise-spline5");
+        exp_error(VECINOS, 5, "data/skate.avi", "exp/error-skate-vecinos5");
+        exp_error(LINEAL, 5, "data/skate.avi", "exp/error-skate-lineal5");
+        exp_error(SPLINES, 5, "data/skate.avi", "exp/error-skate-spline5");
 
         // const char* input_tiempo = "data/time_funnybaby";
         // FILE *file = fopen(input_tiempo, "w+");

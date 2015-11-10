@@ -120,7 +120,7 @@ En este experimento utilizamos los videos propuestos al inicio de la experimenta
 
 Los resultados obtenidos son los siguientes:
 
-\subsubsection{ECM}
+\subsubsection{ECM - Agregando 1 cuadro}
 
 \begin{figure}[H]
 	\centering
@@ -144,7 +144,7 @@ Los resultados obtenidos son los siguientes:
 		\legend{Vecinos, Lineal, Spline}
 		\end{axis}
 	\end{tikzpicture}
-	\caption{ECM para el video \textbf{Amanecer} con distintos métodos de Interpolación.}
+	\caption{ECM para el video \textbf{Amanecer} al agregar 1 cuadro con distintos métodos de Interpolación.}
 	\label{fig:ecm_sunrise}
 \end{figure}
 
@@ -170,7 +170,7 @@ Los resultados obtenidos son los siguientes:
 		\legend{Vecinos, Lineal, Spline}
 		\end{axis}
 	\end{tikzpicture}
-	\caption{ECM para el video \textbf{Skate} con distintos métodos de Interpolación.}
+	\caption{ECM para el video \textbf{Skate}  al agregar 1 cuadrocon distintos métodos de Interpolación.}
 	\label{fig:ecm_skate}
 \end{figure}
 
@@ -196,13 +196,13 @@ Los resultados obtenidos son los siguientes:
 		\legend{Vecinos, Lineal, Spline}
 		\end{axis}
 	\end{tikzpicture}
-	\caption{ECM para el video \textbf{Messi} con distintos métodos de Interpolación.}
+	\caption{ECM para el video \textbf{Messi}  al agregar 1 cuadrocon distintos métodos de Interpolación.}
 	\label{fig:ecm_messi}
 \end{figure}
 
 FALTA CONCLUSIONES ECM
 
-\subsubsection{PSNR}
+\subsubsection{PSNR - Agregando 1 cuadro}
 \begin{figure}[H]
 	\centering
 	\begin{tikzpicture}
@@ -225,7 +225,7 @@ FALTA CONCLUSIONES ECM
 		\legend{Vecinos, Lineal, Spline}
 		\end{axis}
 	\end{tikzpicture}
-	\caption{PSNR para el video \textbf{Amanecer} con distintos métodos de Interpolación.}
+	\caption{PSNR para el video \textbf{Amanecer} al agregar 1 cuadro con distintos métodos de Interpolación.}
 	\label{fig:psnr_sunrise}
 \end{figure}
 
@@ -251,7 +251,7 @@ FALTA CONCLUSIONES ECM
 		\legend{Vecinos, Lineal, Spline}
 		\end{axis}
 	\end{tikzpicture}
-	\caption{PSNR para el video \textbf{Skate} con distintos métodos de Interpolación.}
+	\caption{PSNR para el video \textbf{Skate} al agregar 1 cuadro con distintos métodos de Interpolación.}
 	\label{fig:psnr_skate}
 \end{figure}
 
@@ -277,7 +277,170 @@ FALTA CONCLUSIONES ECM
 		\legend{Vecinos, Lineal, Spline}
 		\end{axis}
 	\end{tikzpicture}
-	\caption{PSNR para el video \textbf{Messi} con distintos métodos de Interpolación.}
+	\caption{PSNR para el video \textbf{Messi} al agregar 1 cuadro con distintos métodos de Interpolación.}
+	\label{fig:psnr_messi}
+\end{figure}
+
+FALTA CONCLUSIONES PSNR
+
+\subsubsection{ECM - Agregando 5 cuadros}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			title={ },
+			xlabel=Frame,
+			ylabel=ECM,
+			width=0.8\textwidth,
+			height=0.5\textwidth,
+			yticklabel style={/pgf/number format/fixed},
+			scaled y ticks=false,
+			legend style={at={(1.015,1)},anchor=north west},
+			no markers,
+			thick,
+			cycle list name=exotic
+		]
+		\addplot table[x index=0,y index=1]{../src/exp/error-sunrise-vecinos5};
+        \addplot table[x index=0,y index=1]{../src/exp/error-sunrise-lineal5};
+        \addplot table[x index=0,y index=1]{../src/exp/error-sunrise-spline5};
+		\legend{Vecinos, Lineal, Spline}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{ECM para el video \textbf{Amanecer} al agregar 5 cuadros con distintos métodos de Interpolación.}
+	\label{fig:ecm_sunrise}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			title={ },
+			xlabel=Frame,
+			ylabel=ECM,
+			width=0.8\textwidth,
+			height=0.5\textwidth,
+			yticklabel style={/pgf/number format/fixed},
+			scaled y ticks=false,
+			legend style={at={(1.015,1)},anchor=north west},
+			no markers,
+			thick,
+			cycle list name=exotic
+		]
+		\addplot table[x index=0,y index=1]{../src/exp/error-skate-vecinos5};
+        \addplot table[x index=0,y index=1]{../src/exp/error-skate-lineal5};
+        \addplot table[x index=0,y index=1]{../src/exp/error-skate-spline5};
+		\legend{Vecinos, Lineal, Spline}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{ECM para el video \textbf{Skate} al agregar 5 cuadros con distintos métodos de Interpolación.}
+	\label{fig:ecm_skate}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			title={ },
+			xlabel=Frame,
+			ylabel=ECM,
+			width=0.8\textwidth,
+			height=0.5\textwidth,
+			yticklabel style={/pgf/number format/fixed},
+			scaled y ticks=false,
+			legend style={at={(1.015,1)},anchor=north west},
+			no markers,
+			thick,
+			cycle list name=exotic
+		]
+		\addplot table[x index=0,y index=1]{../src/exp/error-messi-vecinos5};
+        \addplot table[x index=0,y index=1]{../src/exp/error-messi-lineal5};
+        \addplot table[x index=0,y index=1]{../src/exp/error-messi-spline5};
+		\legend{Vecinos, Lineal, Spline}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{ECM para el video \textbf{Messi} al agregar 5 cuadros con distintos métodos de Interpolación.}
+	\label{fig:ecm_messi}
+\end{figure}
+
+FALTA CONCLUSIONES ECM
+
+\subsubsection{PSNR - Agregando 5 cuadros}
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			title={ },
+			xlabel=Frame,
+			ylabel=PSNR,
+			width=0.8\textwidth,
+			height=0.5\textwidth,
+			yticklabel style={/pgf/number format/fixed},
+			scaled y ticks=false,
+			legend style={at={(1.015,1)},anchor=north west},
+			no markers,
+			thick,
+			cycle list name=exotic
+		]
+		\addplot table[x index=0,y index=2]{../src/exp/error-sunrise-vecinos5};
+        \addplot table[x index=0,y index=2]{../src/exp/error-sunrise-lineal5};
+        \addplot table[x index=0,y index=2]{../src/exp/error-sunrise-spline5};
+		\legend{Vecinos, Lineal, Spline}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{PSNR para el video \textbf{Amanecer} al agregar 5 cuadros con distintos métodos de Interpolación.}
+	\label{fig:psnr_sunrise}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			title={ },
+			xlabel=Frame,
+			ylabel=PSNR,
+			width=0.8\textwidth,
+			height=0.5\textwidth,
+			yticklabel style={/pgf/number format/fixed},
+			scaled y ticks=false,
+			legend style={at={(1.015,1)},anchor=north west},
+			no markers,
+			thick,
+			cycle list name=exotic
+		]
+		\addplot table[x index=0,y index=2]{../src/exp/error-skate-vecinos5};
+        \addplot table[x index=0,y index=2]{../src/exp/error-skate-lineal5};
+        \addplot table[x index=0,y index=2]{../src/exp/error-skate-spline5};
+		\legend{Vecinos, Lineal, Spline}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{PSNR para el video \textbf{Skate} al agregar 5 cuadros con distintos métodos de Interpolación.}
+	\label{fig:psnr_skate}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			title={ },
+			xlabel=Frame,
+			ylabel=PSNR,
+			width=0.8\textwidth,
+			height=0.5\textwidth,
+			yticklabel style={/pgf/number format/fixed},
+			scaled y ticks=false,
+			legend style={at={(1.015,1)},anchor=north west},
+			no markers,
+			thick,
+			cycle list name=exotic
+		]
+		\addplot table[x index=0,y index=2]{../src/exp/error-messi-vecinos5};
+        \addplot table[x index=0,y index=2]{../src/exp/error-messi-lineal5};
+        \addplot table[x index=0,y index=2]{../src/exp/error-messi-spline5};
+		\legend{Vecinos, Lineal, Spline}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{PSNR para el video \textbf{Messi} al agregar 5 cuadros con distintos métodos de Interpolación.}
 	\label{fig:psnr_messi}
 \end{figure}
 
