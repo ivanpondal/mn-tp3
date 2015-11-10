@@ -738,7 +738,6 @@ Para analizar los artifacts producidos por las diferentes implementaciones de C�
 \begin{itemize}
   \item \textbf{Video 1 - Skate}: 426x240, cantidad de cuadros originales: 151 , fps: 30, duracion: 5s.
   \item \textbf{Video 2 - Messi}: 426x240, cantidad de cuadros originales: 151, fps: 30, duracion: 5s.
-  \item \textbf{Video 3 - Amanecer}: 426x240, cantidad de cuadros originales: 151, fps: 30, duracion: 5s.
 \end{itemize}
 
 A través de cada método de interpolación agregamos 10 cuadros entre cada par de frames de los videos.
@@ -787,3 +786,8 @@ Los resultados fueron los siguientes:
 \item En particular, en el video 'messi' se nota claramente como la pelota se congela en algunos momentos.
 \item Esto era de esperarse debido a los bloques de tamaño fijo ubicados a través del tiempo.
 \end{itemize}
+
+\subsection{Comparación}
+
+Como pudimos ver, cada método introduce diferentes artifacts. En el caso de la Interpolación lineal, llama la atención que el resultado parece peor con respecto al de Vecinos. Esto nos indica que, si bien el error matemático de un método puede ser peor, las irregularidades visuales que introduce Interpolación lineal son peores para una persona usuario desde su punto de vista subjetivo.
+Mas alla de eso, con los analisis podemos ver que si bien los Splines de a bloques parece una idea interesante, puede introducir artifacts como congelamiento. Por lo tanto, debido a las particularidades que introduce cada método, parecería que la interpolación mediante Splines normales genera los mejores resultados.
