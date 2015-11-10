@@ -21,8 +21,8 @@ class Video{
 	public:
 		Video();
 		Video(const char* entrada, int cuadrosNuevos);
-		vector<vector<vector<int> > > obtenerFramesOriginales();
-		vector<vector<vector<int> > > obtenerFramesCalculados();
+		vector<vector<vector<double> > > obtenerFramesOriginales();
+		vector<vector<vector<double> > > obtenerFramesCalculados();
 		void guardar(const char* salida);
 		void aplicarCamaraLenta(MetodoInterpolacion metodo);
 	private:
@@ -32,8 +32,8 @@ class Video{
 		int alto;
 		int fps;
 		int cuadros_nuevos;
-		vector<vector<vector<int> > > frames;
-		vector<vector<vector<int> > > frames_out;
+		vector<vector<vector<double> > > frames;
+		vector<vector<vector<double> > > frames_out;
 		void interpolarSplines();
 		void interpolarMultiSplines(int longitud_tramo);
 		void interpolarLineal();

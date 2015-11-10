@@ -22,8 +22,8 @@ Video::Video(const char* entrada, int cuadrosNuevos){
 		archivo_entrada >> this->fps;
 		this->cuadros_nuevos = cuadrosNuevos;
 		this->numero_frames_out = this->numero_frames + (this->numero_frames - 1)*this->cuadros_nuevos;
-		this->frames = vector<vector<vector<int> > >(this->ancho, vector<vector<int> >(this->alto, vector<int>(this->numero_frames, 0)));
-		this->frames_out = vector<vector<vector<int> > >(this->ancho, vector<vector<int> >(this->alto, vector<int>(this->numero_frames_out, 0)));
+		this->frames = vector<vector<vector<double> > >(this->ancho, vector<vector<double> >(this->alto, vector<double>(this->numero_frames, 0)));
+		this->frames_out = vector<vector<vector<double> > >(this->ancho, vector<vector<double> >(this->alto, vector<double>(this->numero_frames_out, 0)));
 
 		for(int i = 0; i < this->numero_frames_out ; i += this->cuadros_nuevos + 1){
 			for(int y = 0; y < this->alto; y++){
@@ -43,10 +43,10 @@ Video::Video(const char* entrada, int cuadrosNuevos){
 	}
 }
 
-vector<vector<vector<int> > > Video::obtenerFramesOriginales() {
+vector<vector<vector<double> > > Video::obtenerFramesOriginales() {
 	return frames;
 }
-vector<vector<vector<int> > > Video::obtenerFramesCalculados() {
+vector<vector<vector<double> > > Video::obtenerFramesCalculados() {
 	return frames_out;
 }
 
@@ -61,9 +61,9 @@ void Video::guardar(const char* salida){
 	for(int i = 0; i < this->numero_frames_out; i++){
 		for(int y = 0; y < this->alto; y++){
 			for(int x = 0; x < this->ancho - 1; x++){
-				archivo_salida << this->frames_out[x][y][i] << ",";
+				archivo_salida << lround(this->frames_out[x][y][i]) << ",";
 			}
-			archivo_salida << this->frames_out[this->ancho - 1][y][i] << endl;
+			archivo_salida << lround(this->frames_out[this->ancho - 1][y][i]) << endl;
 		}
 	}
 	archivo_salida.close();

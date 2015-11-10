@@ -7,12 +7,12 @@ MultiSpline::MultiSpline(int n, int tramo){
 	generarSistema(n, tramo);
 }
 
-MultiSpline::MultiSpline(const vector<int>&y, int tramo){
+MultiSpline::MultiSpline(const vector<double>&y, int tramo){
 	generarSistema(y.size(), tramo);
 	generarMultiSpline(y);
 }
 
-void MultiSpline::recalcular(const vector<int> &y){
+void MultiSpline::recalcular(const vector<double> &y){
 	generarMultiSpline(y);
 }
 
@@ -30,18 +30,18 @@ void MultiSpline::generarSistema(int n, int tramo){
 	}
 }
 
-void MultiSpline::generarMultiSpline(const vector<int> &y){
-	vector<int>::const_iterator it = y.begin();
+void MultiSpline::generarMultiSpline(const vector<double> &y){
+	vector<double>::const_iterator it = y.begin();
 	for(int i = 0; i < this->numero_tramos - 1; i++){
-		this->tramos[i].recalcular(vector<int>(it, it + this->longitud_tramo + 1));
+		this->tramos[i].recalcular(vector<double>(it, it + this->longitud_tramo + 1));
 		it += this->longitud_tramo;
 	}
 
 	if(this->longitud_tramo_menor != 0){
-		this->tramos[this->numero_tramos - 1].recalcular(vector<int>(it, it + this->longitud_tramo_menor + 1));
+		this->tramos[this->numero_tramos - 1].recalcular(vector<double>(it, it + this->longitud_tramo_menor + 1));
 	}
 	else{
-		this->tramos[this->numero_tramos - 1].recalcular(vector<int>(it, it + this->longitud_tramo + 1));
+		this->tramos[this->numero_tramos - 1].recalcular(vector<double>(it, it + this->longitud_tramo + 1));
 	}
 }
 

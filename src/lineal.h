@@ -19,8 +19,8 @@ using namespace std;
 class InterpolacionLineal: public Interpolador{
 	public:
 		InterpolacionLineal();
-		InterpolacionLineal(const vector<int> &y, int valores_a_agregar);
-		void recalcular(const vector<int> &y, int valores_a_agregar);
+		InterpolacionLineal(const vector<double> &y, int valores_a_agregar);
+		void recalcular(const vector<double> &y, int valores_a_agregar);
 		double evaluar(double x);
 	private:
 		vector<double> datos_generados;

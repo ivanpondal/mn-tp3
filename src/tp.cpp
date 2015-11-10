@@ -44,7 +44,7 @@ void test_texto_a_video() {
 
 // f(x) = 42
 void test_vecinos_constante(){
-	vector<int> y = {42, 42, 42, 42};
+	vector<double> y = {42, 42, 42, 42};
 	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
 	InterpolacionVecinos vecinos(y, 1);
 	assert_interpolacion(&vecinos, esperados, 0.5);
@@ -52,7 +52,7 @@ void test_vecinos_constante(){
 
 // f(x) = x
 void test_vecinos_lineal(){
-	vector<int> y = {0, 1, 2, 3};
+	vector<double> y = {0, 1, 2, 3};
 	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
 	InterpolacionVecinos vecinos(y, 1);
 	assert_interpolacion(&vecinos, esperados, 0.5, 1);
@@ -60,7 +60,7 @@ void test_vecinos_lineal(){
 
 // f(x) = x^2
 void test_vecinos_cuadratico(){
-	vector<int> y = {0, 1, 4, 9};
+	vector<double> y = {0, 1, 4, 9};
 	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
 	InterpolacionVecinos vecinos(y, 1);
 	assert_interpolacion(&vecinos, esperados, 0.5, 3);
@@ -68,7 +68,7 @@ void test_vecinos_cuadratico(){
 
 // f(x) = 42
 void test_lineal_constante(){
-	vector<int> y = {42, 42, 42, 42};
+	vector<double> y = {42, 42, 42, 42};
 	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
 	InterpolacionLineal lineal(y, 1);
 	assert_interpolacion(&lineal, esperados, 0.5);
@@ -76,7 +76,7 @@ void test_lineal_constante(){
 
 // f(x) = x
 void test_lineal_lineal(){
-	vector<int> y = {0, 1, 2, 3};
+	vector<double> y = {0, 1, 2, 3};
 	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
 	InterpolacionLineal lineal(y, 1);
 	assert_interpolacion(&lineal, esperados, 0.5);
@@ -84,7 +84,7 @@ void test_lineal_lineal(){
 
 // f(x) = x^2
 void test_lineal_cuadratico(){
-	vector<int> y = {0, 1, 4, 9};
+	vector<double> y = {0, 1, 4, 9};
 	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
 	InterpolacionLineal lineal(y, 1);
 	assert_interpolacion(&lineal, esperados, 0.5, 0.5);
@@ -92,7 +92,7 @@ void test_lineal_cuadratico(){
 
 // f(x) = 42
 void test_spline_constante(){
-	vector<int> y = {42, 42, 42, 42};
+	vector<double> y = {42, 42, 42, 42};
 	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
 	Spline spline(y);
 	assert_interpolacion(&spline, esperados, 0.5);
@@ -100,7 +100,7 @@ void test_spline_constante(){
 
 // f(x) = x
 void test_spline_lineal(){
-	vector<int> y = {0, 1, 2, 3};
+	vector<double> y = {0, 1, 2, 3};
 	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
 	Spline spline(y);
 	assert_interpolacion(&spline, esperados, 0.5);
@@ -108,7 +108,7 @@ void test_spline_lineal(){
 
 // f(x) = x^2
 void test_spline_cuadratico(){
-	vector<int> y = {0, 1, 4, 9};
+	vector<double> y = {0, 1, 4, 9};
 	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
 	Spline spline(y);
 	assert_interpolacion(&spline, esperados, 0.5, 0.5);
@@ -116,21 +116,21 @@ void test_spline_cuadratico(){
 
 // f(x) = 42
 void test_multi_spline_un_tramo_constante(){
-	vector<int> y = {42, 42, 42, 42};
+	vector<double> y = {42, 42, 42, 42};
 	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
 	MultiSpline multi_spline(y, 1);
 	assert_interpolacion(&multi_spline, esperados, 0.5);
 }
 
 void test_multi_spline_dos_tramos_constante(){
-	vector<int> y = {42, 42, 42, 42};
+	vector<double> y = {42, 42, 42, 42};
 	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
 	MultiSpline multi_spline(y, 2);
 	assert_interpolacion(&multi_spline, esperados, 0.5);
 }
 
 void test_multi_spline_tres_tramos_constante(){
-	vector<int> y = {42, 42, 42, 42};
+	vector<double> y = {42, 42, 42, 42};
 	vector<double> esperados = {42, 42, 42, 42, 42, 42, 42};
 	MultiSpline multi_spline(y, 3);
 	assert_interpolacion(&multi_spline, esperados, 0.5);
@@ -138,21 +138,21 @@ void test_multi_spline_tres_tramos_constante(){
 
 // f(x) = x
 void test_multi_spline_un_tramo_lineal(){
-	vector<int> y = {0, 1, 2, 3};
+	vector<double> y = {0, 1, 2, 3};
 	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
 	MultiSpline multi_spline(y, 1);
 	assert_interpolacion(&multi_spline, esperados, 0.5);
 }
 
 void test_multi_spline_dos_tramos_lineal(){
-	vector<int> y = {0, 1, 2, 3};
+	vector<double> y = {0, 1, 2, 3};
 	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
 	MultiSpline multi_spline(y, 2);
 	assert_interpolacion(&multi_spline, esperados, 0.5);
 }
 
 void test_multi_spline_tres_tramos_lineal(){
-	vector<int> y = {0, 1, 2, 3};
+	vector<double> y = {0, 1, 2, 3};
 	vector<double> esperados = {0, 0.5, 1, 1.5, 2, 2.5, 3};
 	MultiSpline multi_spline(y, 3);
 	assert_interpolacion(&multi_spline, esperados, 0.5);
@@ -160,21 +160,21 @@ void test_multi_spline_tres_tramos_lineal(){
 
 // f(x) = x^2
 void test_multi_spline_un_tramo_cuadratico(){
-	vector<int> y = {0, 1, 4, 9};
+	vector<double> y = {0, 1, 4, 9};
 	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
 	MultiSpline multi_spline(y, 1);
 	assert_interpolacion(&multi_spline, esperados, 0.5, 0.5);
 }
 
 void test_multi_spline_dos_tramos_cuadratico(){
-	vector<int> y = {0, 1, 4, 9};
+	vector<double> y = {0, 1, 4, 9};
 	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
 	MultiSpline multi_spline(y, 2);
 	assert_interpolacion(&multi_spline, esperados, 0.5, 0.5);
 }
 
 void test_multi_spline_tres_tramos_cuadratico(){
-	vector<int> y = {0, 1, 4, 9};
+	vector<double> y = {0, 1, 4, 9};
 	vector<double> esperados = {0, 0.25, 1, 2.25, 4, 6.25, 9};
 	MultiSpline multi_spline(y, 3);
 	assert_interpolacion(&multi_spline, esperados, 0.5, 0.5);
@@ -262,7 +262,7 @@ void exp_error(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * i
     // convierto a texto el video original
     video_a_texto(input_video.c_str(), real_text.c_str(), 1);
     Video video_real(real_text.c_str(), 0);
-    vector<vector<vector<int> > > frames_real = video_real.obtenerFramesOriginales();
+    vector<vector<vector<double> > > frames_real = video_real.obtenerFramesOriginales();
     int ancho = frames_real.size();
     int alto = frames_real[0].size();
 
@@ -272,7 +272,7 @@ void exp_error(MetodoInterpolacion metodo, int cuadros_a_agregar, const char * i
     // agrego cuadros_a_agregar frames entre cada frame del output_text
     Video video(aux_text.c_str(), cuadros_a_agregar);
 	  video.aplicarCamaraLenta(metodo);
-    vector<vector<vector<int> > > frames_out = video.obtenerFramesCalculados();
+    vector<vector<vector<double> > > frames_out = video.obtenerFramesCalculados();
 
     // calculo el error cuadratico por frame y el psnr
     int frames = frames_out[0][0].size();
@@ -431,7 +431,7 @@ int main(int argc, char *argv[])
 		// test_video_a_texto();
         // test_texto_a_video();
 
-/*		RUN_TEST(test_vecinos_constante);
+		RUN_TEST(test_vecinos_constante);
 		RUN_TEST(test_vecinos_lineal);
 		RUN_TEST(test_vecinos_cuadratico);
         RUN_TEST(test_lineal_constante);
@@ -440,8 +440,6 @@ int main(int argc, char *argv[])
 		RUN_TEST(test_spline_constante);
 		RUN_TEST(test_spline_lineal);
 		RUN_TEST(test_spline_cuadratico);
-		*/
-    /*
 		RUN_TEST(test_multi_spline_un_tramo_constante);
 		RUN_TEST(test_multi_spline_dos_tramos_constante);
 		RUN_TEST(test_multi_spline_tres_tramos_constante);
@@ -451,7 +449,6 @@ int main(int argc, char *argv[])
 		RUN_TEST(test_multi_spline_un_tramo_cuadratico);
 		RUN_TEST(test_multi_spline_dos_tramos_cuadratico);
 		RUN_TEST(test_multi_spline_tres_tramos_cuadratico);
-    */
 
     /*
         // RUN_TEST(test_vecinos_varios);
@@ -459,7 +456,6 @@ int main(int argc, char *argv[])
         // RUN_TEST(test_spline_varios);
         // RUN_TEST(test_multi_spline_varios);
         // RUN_TEST(test_multi_spline_varios2);
-
       */
         // exp grupo
         /*
