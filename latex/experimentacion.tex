@@ -545,8 +545,29 @@ FALTA CONCLUSIONES PSNR
 \subsection{Análisis cualitativos de los métodos, fenómeno de artifacts.}
 Los \textit{artifacts} son errores visuales resultantes de la aplicación de los métodos. Estos errores visuales se caracterizan por romper la coherencia entre imágenes al generar distorsiones evidentes.
 
-\subsubsection{Artifacts: Movimientos Bruscos}
+Para analizar los artifacts producidos por las diferentes implementaciones de Cámara Lenta, utilizamos los siguientes videos:
 
-\subsubsection{Artifacts: Cambios de Camara}
+\begin{itemize}
+  \item \textbf{Video 1 - Skate}: 426x240, cantidad de cuadros originales: 151 , fps: 30, duracion: 5s.
+  \item \textbf{Video 2 - Messi}: 426x240, cantidad de cuadros originales: 151, fps: 30, duracion: 5s.
+  \item \textbf{Video 3 - Amanecer}: 426x240, cantidad de cuadros originales: 151, fps: 30, duracion: 5s.
+\end{itemize}
 
-\subsubsection{Artifacts: Movimientos Armonicos}
+A través de cada método de interpolación agregamos 10 cuadros entre cada par de frames de los videos.
+Asi, nos propusimos analizar el funcionamiento de cada tipo de interpolación para verificar si hay movimientos bruscos, elementos falsos (por ejemplo cuando una persona se mueve y se duplica su pierna) u otros tipos de anomalías.
+Los resultados fueron los siguientes:
+
+\subsection{Interpolación por vecinos}
+
+\begin{itemize}
+\item Como era de esperar no hubieron elementos falsos
+\item Eso si, todos los movimientos parecieron bruscos, casi robóticos y sin ningún tipo de fluidez
+\item Por ejemplo, en el video 'messi' la pelota exhibe un movimiento claramente antinatural
+\item Concluimos que este método no produce resultados de movimientos naturales
+\end{itemize}
+
+\subsection{Interpolación lineal}
+
+\subsection{Interpolación por Splines}
+
+\subsection{Interpolación por Splines de a bloques}
