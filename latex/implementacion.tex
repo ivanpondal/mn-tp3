@@ -98,13 +98,15 @@ Sea K la cantidad de frames que queremos agregar entre cuadro y cuadro
 Crear un triple vector de enteros new_video[W][H][I+(I-1)*K]
 Para w = 0 hasta W-1 hacer
 	Para h = 0 hasta H-1 hacer
-		new_video[w][h] = GenerarSpline(video[w][h])
+		Crear un vector de enteros valores[I+(I-1)*K]
+		GenerarSpline(video[w][h], valores, I, K)
+		new_video[w][h] = valores
 	Fin para
 Fin para
 Devolver new_video
 
-GenerarSpline(y[n]):
-	Crear un vector de enteros valores[I+(I-1)*K]
+GenerarSpline(y, valores, I, K):
+	n = y.size()
 	Crear doble vector de enteros sistema[n][2]
 	sistema[0] = {1,0}
 	Para j = 1 hasta n-2 hacer
@@ -143,7 +145,6 @@ GenerarSpline(y[n]):
 		Fin para
 	Fin para
 	valores.push_back(y[n-1])
-	Devolver valores
 \end{lstlisting}
 
 \subsection{Interpolación por Splines de a bloques}
@@ -155,7 +156,7 @@ Sean W,H,I el ancho, alto y la cantidad de frames del video original
 Sea video[W][H][I] el triple vector de numeros enteros que representa el video original
 Sea K la cantidad de frames que queremos agregar entre cuadro y cuadro
 Sea T el tamano de bloque de los Splines
-Observacion: reutilizamos el metodo GenerarSpline(y) de los Splines normales
+Observacion: reutilizamos el metodo GenerarSpline() de los Splines normales
 Observacion: asumimos que I es divisible por T para simplificar este pseudocodigo
 
 Crear un triple vector de enteros new_video[W][H][I+(I-1)*K]
@@ -163,9 +164,11 @@ Para w = 0 hasta W-1 hacer
 	Para h = 0 hasta H-1 hacer
 		Para t = 0 hasta T-1 hacer
 			Crear subarreglo aux[T] = video[w][h][T*t..T*(t+1)-1]
-			Crear arreglo bloque[T] = GenerarSpline(aux)
-			Pushear a new_video[w][h] todos los valores de 'bloque'
+			Crear arreglo bloque
+			GenerarSpline(aux, bloque, T, K)
+			Pushear a new_video[w][h] todos los valores de 'bloque' excepto el ultimo
 		Fin para
+		new_video[w][h].push_back(video[w][h][I-1])
 	Fin para
 Fin para
 Devolver new_video
