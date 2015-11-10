@@ -61,3 +61,13 @@ src/data/*test*.txt
 src/data/*exp*.txt
 src/data/baby_re.avi
 !latex/datos/*
+src/data/out/baby.avi
+src/data/out/baby_out.txt
+src/data/out/funnybaby.avi
+src/data/out/funnybaby_out.txt
+src/data/out/messi.avi
+src/data/out/messi_out.txt
+src/data/out/skate.avi
+src/data/out/skate_out.txt
+src/data/out/sunrise.avi
+src/data/out/sunrise_out.txt
