@@ -39,7 +39,7 @@ El motivo de estas elecciones se debe a la busqueda de diversos \textit{artifact
 
 
 \subsection{Funcionamiento de los métodos implementados}
-En este experimento nuestro objetivo fue asegurarnos el correcto funcionamiento de nuestra implementación de la interpolación fragmentaria lineal, interpolación por splines, e interpolación por splines con tamaño de bloque fijo, tomando bloques de 2 cuadros, 4 cuadros y 8 cuadros.
+En este experimento nuestro objetivo fue asegurarnos el correcto funcionamiento de nuestra implementación de la interpolación fragmentaria lineal, interpolación por splines, e interpolación por splines con tamaño de bloque fijo, tomando bloques de 2, 4, 8, 16, 32 y 64 cuadros.
 
 Con este fin, realizamos una serie de tests que muestran el correcto funcionamiento de cada método para distintas familias de funciones:
 \begin{itemize}
@@ -57,7 +57,7 @@ Luego, cada método de interpolación fue testeado contra cada una de las famili
         Este nuevo array será el utilizado para realizar la interpolación, y lo que testearemos es la aproximación de  la
         interpolación a los elementos que quitamos.
     \item Una vez que tenemos la interpolación con cualquiera de los métodos mencionados, basta recorrer los elementos del array de valores esperados a la vez que evaluamos la interpolación obtenida.
-        Para cada par de valores: esperado e interpolado, querremos ver que la diferencia absoluta es menor que un epsilon que
+        Para cada par de valores: esperado e interpolado, querremos ver que la diferencia absoluta es menor que un epsilon/cota de precision que
         definiremos dependiendo del método utilizado y la función a interpolar.
 \end{itemize}
 
@@ -130,7 +130,6 @@ Para corroborar esta hipotesis planteamos un experimento con las siguientes cara
   \item Dado que $w$, $h$ y $i$ son valores fijos que no podemos cambiar, variamos el $k$.
   \item Generamos instancias para valores de $k$ entre 1 y 6.
   \item Para cada valor distinto de $k$ generamos 4 instancias, cuyos valores vamos a promediar para mitigar los posibles valores distorsionados por algun procedimiento del procesador.
-  \item Los tiempos fueron medidos en nanosegundos.
 \end{itemize}
 
 Los resultamos obtenidos fueron los siguientes:
