@@ -1,10 +1,23 @@
-Para utilizar los scripts en python, instalar python 2.7. Para ejecutar los scripts, desde una consolo ejecutar:
+Para compilar:
+    >> make tp
+    (Correr "make" solo también correrá los tests del grupo)
 
-python metnum.py opcion
+Para generar un archivo de video en slow motion
+    >> python tools/videoToTextfile.py video.avi video.txt 1
+    >> ./tp video.txt video_out.txt <metodo> <cuadros>
+    >> python tools/textfileToVideo.py video_out.txt video_out.avi
+Donde <metodo> puede ser:
+- 0 para Interpolación por Vecinos
+- 1 para Interpolación Fragmentaria Lineal
+- 2 para Interpolación por Splines
+- 3 para Interpolación por Splines (bloques de tamaño fijo, por default tamaño 4)
+Y <cuadros> es la cantidad de cuadros a agregar entre cada par de cuadros originales.
 
-donde opcion puede ser:
+Para correr los tests del grupo:
+    >> ./tp
 
-compile: Compila todos los *.cpp que haya en el directorio.
-link: Genera el ejecutable en base a los *.o generados previamente.
-build: compile + link
-clean: borra los *.o y el ejecutable.
+Para correr la experimentación del grupo:
+    >> Descomentar alguna de las lineas 473 a 514 de tp.cpp
+    >> Compilar
+    >> Correr ./tp
+    Se recomienda correr de a uno a la vez, ya que cada uno toma su buen tiempo.

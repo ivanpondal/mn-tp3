@@ -444,29 +444,29 @@ int main(int argc, char *argv[])
 		// test_video_a_texto();
         // test_texto_a_video();
 
-		// RUN_TEST(test_vecinos_constante);
-		// RUN_TEST(test_vecinos_lineal);
-		// RUN_TEST(test_vecinos_cuadratico);
-        // RUN_TEST(test_lineal_constante);
-		// RUN_TEST(test_lineal_lineal);
-		// RUN_TEST(test_lineal_cuadratico);
-		// RUN_TEST(test_spline_constante);
-		// RUN_TEST(test_spline_lineal);
-		// RUN_TEST(test_spline_cuadratico);
-		// RUN_TEST(test_multi_spline_un_tramo_constante);
-		// RUN_TEST(test_multi_spline_dos_tramos_constante);
-		// RUN_TEST(test_multi_spline_tres_tramos_constante);
-		// RUN_TEST(test_multi_spline_un_tramo_lineal);
-		// RUN_TEST(test_multi_spline_dos_tramos_lineal);
-		// RUN_TEST(test_multi_spline_tres_tramos_lineal);
-		// RUN_TEST(test_multi_spline_un_tramo_cuadratico);
-		// RUN_TEST(test_multi_spline_dos_tramos_cuadratico);
-		// RUN_TEST(test_multi_spline_tres_tramos_cuadratico);
+		RUN_TEST(test_vecinos_constante);
+		RUN_TEST(test_vecinos_lineal);
+		RUN_TEST(test_vecinos_cuadratico);
+        RUN_TEST(test_lineal_constante);
+		RUN_TEST(test_lineal_lineal);
+		RUN_TEST(test_lineal_cuadratico);
+		RUN_TEST(test_spline_constante);
+		RUN_TEST(test_spline_lineal);
+		RUN_TEST(test_spline_cuadratico);
+		RUN_TEST(test_multi_spline_un_tramo_constante);
+		RUN_TEST(test_multi_spline_dos_tramos_constante);
+		RUN_TEST(test_multi_spline_tres_tramos_constante);
+		RUN_TEST(test_multi_spline_un_tramo_lineal);
+		RUN_TEST(test_multi_spline_dos_tramos_lineal);
+		RUN_TEST(test_multi_spline_tres_tramos_lineal);
+		RUN_TEST(test_multi_spline_un_tramo_cuadratico);
+		RUN_TEST(test_multi_spline_dos_tramos_cuadratico);
+		RUN_TEST(test_multi_spline_tres_tramos_cuadratico);
 
-        // RUN_TEST(test_vecinos_varios);
-        // RUN_TEST(test_lineal_varios);
-        // RUN_TEST(test_spline_varios);
-        // RUN_TEST(test_multi_spline_varios);
+        RUN_TEST(test_vecinos_varios);
+        RUN_TEST(test_lineal_varios);
+        RUN_TEST(test_spline_varios);
+        RUN_TEST(test_multi_spline_varios);
 
         // exp grupo
 
@@ -500,7 +500,7 @@ int main(int argc, char *argv[])
         // exp_error(MULTI_SPLINES, 1, "data/messi.avi", "exp/error-messi-multisplines1-b16", 16);
         // exp_error(MULTI_SPLINES, 1, "data/messi.avi", "exp/error-messi-multisplines1-b32", 32);
         // exp_error(MULTI_SPLINES, 1, "data/messi.avi", "exp/error-messi-multisplines1-b64", 64);
-        
+
         // exp_error(MULTI_SPLINES, 5, "data/messi.avi", "exp/error-messi-multisplines5-b2", 2);
         // exp_error(MULTI_SPLINES, 5, "data/messi.avi", "exp/error-messi-multisplines5-b4", 4);
         // exp_error(MULTI_SPLINES, 5, "data/messi.avi", "exp/error-messi-multisplines5-b8", 8);
