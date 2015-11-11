@@ -1,5 +1,5 @@
 \setlength{\parindent}{15.0pt} % algún comando dejó en cero el parindent
-En este trabajo pudimos no solo modelar el problema planteado, sino 
+En este trabajo pudimos no solo modelar el problema planteado, sino
 apreciar y aprovechar las propiedades del mismo para así resolverlo con los
 métodos estudiados observando también las características de ellos.
 
@@ -11,7 +11,7 @@ pudimos ver que los valores que obtuvimos eran coherentes a su contexto.
 
 Todos los métodos de interpolación realizados en este trabajo cumplieron con la
 tarea de generar en mayor o menor medida el efecto de cámara lenta que
-buscábamos cada uno con sus características particulares. Mediante la
+buscábamos, aunque cada uno con sus características particulares. Mediante la
 experimentación pusimos bajo la lupa cada interpolador utilizado para así poder
 compararlos entre sí.
 
@@ -28,7 +28,7 @@ pudo observar su relación con la interpolación por splines de a bloques, que c
 bloques más grandes su cota se aproximaba a la del spline standard.
 
 En la siguiente prueba, donde lo que se analizó fue el error producido al
-elminar cuadros del video original e intentar recrearlos con nuestros
+eliminar cuadros del video original e intentar recrearlos con nuestros
 interpoladores, los resultados fueron similares al experimento anterior. Con
 ambas fórmulas de cálculo de error (ECM y PSNR) se pudo ver cómo vecinos era el
 método que peor se comportaba mientras que lineal y splines estuvieron
@@ -43,7 +43,7 @@ estudiadas. Para empezar, la interpolación de a vecinos dio mejores
 resultados que la lineal en términos de cantidad de artifacts y calidad general
 del video producido. El método por splines fue el que mejor llegó a producir la
 sensación de cámara lenta, con algunas anomalías pero no lo suficientemente
-signigicantes como las vistas en la interpolación lineal. Esto creemos que se
+significantes como las vistas en la interpolación lineal. Esto creemos que se
 podría explicar con el hecho de que las métricas seleccionadas para decidir qué
 interpolador era mejor estaban demasiado atadas a que interpolaran
 correctamente sin contemplar cómo resultaba visualmente esta interpolación.

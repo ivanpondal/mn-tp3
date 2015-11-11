@@ -1,7 +1,7 @@
 \subsection{Interpolación por vecinos}
 
 Este método consiste en reemplazar los cuadros intermedios a ser rellenados por el cuadro original mas cercano en el tiempo.
-Es decir, dados los cuadros del video sin camara lenta, generamos otro video en camara lenta copiando los cuadros originales de la siguiente manera:
+Es decir, dados los cuadros del video sin cámara lenta, generamos otro video en cámara lenta copiando los cuadros originales de la siguiente manera:
 
 % \begin{center}
 % \begin{bytefield}{16}
@@ -31,7 +31,7 @@ El pseudocódigo sería el siguiente:
 
 \begin{lstlisting}
 Sean W,H,I el ancho, alto y la cantidad de frames del video original
-Sea video[W][H][I] el triple vector de numeros enteros que representa el video original
+Sea video[W][H][I] el triple vector de números enteros que representa el video original
 Sea K la cantidad de frames que queremos agregar entre cuadro y cuadro
 
 Crear un triple vector de enteros new_video[W][H][I+(I-1)*K]
@@ -53,9 +53,9 @@ Devolver new_video
 
 \subsection{Interpolación lineal}
 
-En este caso, usamos el polinomio interpolador de Lagrange entre cada par de puntos/pixeles consecutivos para aproximar los valores intermedios que irían en el video de camara lenta. Esto genera una función lineal para los pixeles consecutivos en la misma posición.
+En este caso, usamos el polinomio interpolador de Lagrange entre cada par de puntos/píxeles consecutivos para aproximar los valores intermedios que irían en el video de cámara lenta. Esto genera una función lineal para los píxeles consecutivos en la misma posición.
 
-Por ejemplo, sean dos pixeles con valores 1 y 4:
+Por ejemplo, sean dos píxeles con valores 1 y 4:
 
 \begin{center}
 \begin{bytefield}{8}
@@ -63,7 +63,7 @@ Por ejemplo, sean dos pixeles con valores 1 y 4:
 \end{bytefield}
 \end{center}
 
-Si queremos un video en camara lenta con 5 cuadros intermedios por cada 2 del original, estos se replicarán de la siguiente forma:
+Si queremos un video en cámara lenta con 5 cuadros intermedios por cada 2 del original, estos se replicarán de la siguiente forma:
 
 \begin{center}
 \begin{bytefield}{28}
@@ -75,7 +75,7 @@ El procedimiento es el siguiente:
 
 \begin{lstlisting}
 Sean W,H,I el ancho, alto y la cantidad de frames del video original
-Sea video[W][H][I] el triple vector de numeros enteros que representa el video original
+Sea video[W][H][I] el triple vector de números enteros que representa el video original
 Sea K la cantidad de frames que queremos agregar entre cuadro y cuadro
 
 Crear un triple vector de enteros new_video[W][H][I+(I-1)*K]
@@ -85,10 +85,10 @@ Para w = 0 hasta W-1 hacer
 			coef_cero = video[w][h][i]
 			coef_uno = (video[w][h][i+1] - video[w][h][i]) / (K+1);
 			Para k = 0 hasta K hacer
-				pixel = coef_cero + coef_uno*k;
-				Si (pixel < 0) pixel = 0
-				Si (pixel > 255) pixel = 255
-				new_video.push_back(pixel)
+				píxel = coef_cero + coef_uno*k;
+				Si (píxel < 0) píxel = 0
+				Si (píxel > 255) píxel = 255
+				new_video.push_back(píxel)
 		Fin para
 		new_video.push_back(video[w][h][I-1])
 	Fin para
@@ -102,7 +102,7 @@ En este método aplicamos la técnica de Splines. Esta consiste en generar un si
 
 \begin{lstlisting}
 Sean W,H,I el ancho, alto y la cantidad de frames del video original
-Sea video[W][H][I] el triple vector de numeros enteros que representa el video original
+Sea video[W][H][I] el triple vector de números enteros que representa el video original
 Sea K la cantidad de frames que queremos agregar entre cuadro y cuadro
 
 Crear un triple vector de enteros new_video[W][H][I+(I-1)*K]
@@ -146,7 +146,7 @@ GenerarSpline(y, valores, I, K):
 		b[i] = a[i + 1] - a[i] - (2*c[i] + c[i + 1])/3;
 		d[i] = (c[i + 1] - c[i])/3;
 	Fin para
-	//Calculo los pixeles resultantes con el Spline
+	//Calculo los píxeles resultantes con el Spline
 	Para i = 0 hasta n-1 hacer
 		Para j = 0 hasta K hacer
 			dif = j/(K+1)
@@ -159,15 +159,15 @@ GenerarSpline(y, valores, I, K):
 
 \subsection{Interpolación por Splines de a bloques}
 
-A diferencia del método anterior, en este caso vamos a querer aplicar la técnica de Splines a bloques de pixeles de tamaño fijo. Es decir, para una misma posición del video, en vez de utilizar todos los valores del pixel a través del tiempo, generamos splines entre particiones de la misma longitud. El procedimiento es:
+A diferencia del método anterior, en este caso vamos a querer aplicar la técnica de Splines a bloques de píxeles de tamaño fijo. Es decir, para una misma posición del video, en vez de utilizar todos los valores del píxel a través del tiempo, generamos splines entre particiones de la misma longitud. El procedimiento es:
 
 \begin{lstlisting}
 Sean W,H,I el ancho, alto y la cantidad de frames del video original
-Sea video[W][H][I] el triple vector de numeros enteros que representa el video original
+Sea video[W][H][I] el triple vector de números enteros que representa el video original
 Sea K la cantidad de frames que queremos agregar entre cuadro y cuadro
-Sea T el tamano de bloque de los Splines
-Observacion: reutilizamos el metodo GenerarSpline() de los Splines normales
-Observacion: asumimos que I es divisible por T para simplificar este pseudocodigo
+Sea T el tamanio de bloque de los Splines
+Observación: reutilizamos el método GenerarSpline() de los Splines normales
+Observación: asumimos que I es divisible por T para simplificar este pseudocódigo
 
 Crear un triple vector de enteros new_video[W][H][I+(I-1)*K]
 Para w = 0 hasta W-1 hacer

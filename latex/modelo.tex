@@ -26,14 +26,14 @@ de interpolación.
         utilizaremos la información provista por todos los frames del video,
         y generaremos $k-1$ funciones, cada una de a lo sumo grado cúbico.
     \item \textit{Interpolación por Splines con tamaño de bloque variante}:
-        Simliar al anterior, pero con la posibilidad de variar la cantidad de frames
+        Similar al anterior, pero con la posibilidad de variar la cantidad de frames
         tomados en cuenta al generar las funciones.
 \end{itemize}
 
 En las siguientes secciones explicaremos con mayor detalle cada uno de los métodos.
 
 \subsection{Vecinos}\label{Vecinos}
-En este método, eligiremos para cada nuevo píxel el valor del frame original que se encuentre
+En este método, elegiremos para cada nuevo píxel el valor del frame original que se encuentre
 más cercano.
 Si definimos $c$ como la cantidad de frames a agregar entre cada par original, y
 $g_0, \dots, g_{c-1}$ los nuevos frames. Tenemos que:
@@ -152,7 +152,7 @@ c_n	&0		&0		&0		&\dots	&0			&0		&0			&\dots	&0			&0			&1		&\vrule	&0
 ~
 
 Ahora para el problema planteado, que es la interpolación de los cuadros de un
-video, nuesto $h_j$ será la distancia entre cada uno de ellos. Esta distancia la
+video, nuestro $h_j$ será la distancia entre cada uno de ellos. Esta distancia la
 podemos pensar como el tiempo entre cada captura del video, y como la duración
 del mismo se define por la cantidad de cuadros por segundo, podemos afirmar que
 son equidistantes, por lo tanto tenemos $h_j = 1$ para todo $j \in [0, \dots,

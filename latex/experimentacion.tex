@@ -3,8 +3,8 @@ En esta sección, se detallan los diferentes experimentos que realizamos para me
 Para lograr tal fin realizamos los siguientes tipos de experimentos:
 \begin{itemize}
   \item Funcionamiento de los métodos implementados: Mostraremos que los métodos
-        de interpolación funcionan correctamente comparandolos contra diferentes
-        familias de funciones. A su vez, basandonos en las precisiones obtenidas,
+        de interpolación funcionan correctamente comparándolos contra diferentes
+        familias de funciones. A su vez, basándonos en las precisiones obtenidas,
         determinaremos el tamaño de bloque óptimo para el método Interpolación por Splines.
   \item Medición del ECM y PSNR de los métodos: Compararemos los errores obtenidos
         en varias instancias de pruebas para los distintos métodos.
@@ -17,14 +17,14 @@ Para lograr tal fin realizamos los siguientes tipos de experimentos:
 Los videos utilizados para los diversos experimentos, fueron los siguientes:
 
 \begin{itemize}
-  \item \textbf{Video 1 - Skate}: 426x240, cantidad de cuadros originales: 151 , fps: 30, duracion: 5s.
-  \item \textbf{Video 2 - Messi}: 426x240, cantidad de cuadros originales: 151, fps: 30, duracion: 5s.
-  \item \textbf{Video 3 - Amanecer}: 426x240, cantidad de cuadros originales: 151, fps: 30, duracion: 5s.
+  \item \textbf{Video 1 - Skate}: 426x240, cantidad de cuadros originales: 151 , fps: 30, duración: 5s.
+  \item \textbf{Video 2 - Messi}: 426x240, cantidad de cuadros originales: 151, fps: 30, duración: 5s.
+  \item \textbf{Video 3 - Amanecer}: 426x240, cantidad de cuadros originales: 151, fps: 30, duración: 5s.
 \end{itemize}
 
-Es importante mencionar que cada video representa una clase de video distinto, en donde el Video 1 contiene movimientos bruscos, el Video 2 cambios de camara, y el Video 3 movimientos suaves.
+Es importante mencionar que cada video representa una clase de video distinto, en donde el Video 1 contiene movimientos bruscos, el Video 2 cambios de cámara, y el Video 3 movimientos suaves.
 
-El motivo de estas elecciones se debe a la busqueda de diversos \textit{artifacts} a partir de las caracteristicas de cada clase.
+El motivo de estas elecciones se debe a la búsqueda de diversos \textit{artifacts} a partir de las características de cada clase.
 
 \subsection{Detalles generales de la experimentación}
 
@@ -52,16 +52,16 @@ Con este fin, realizamos una serie de tests que muestran el correcto funcionamie
 Luego, cada método de interpolación fue testeado contra cada una de las familias de funciones mencionadas de la siguiente forma:
 \begin{itemize}
   \item Dada una familia de funciones, se generan aleatoriamente los coeficientes necesarios para definir una función de esa familia, i.e.: para una constante se genera solo el coeficiente independiente, mientras que para una cuadrática se generan 3 coeficientes.
-    \item Una vez generada la función, se la evalua en un rango de valores para obtener un array de valores esperados.
-    \item Luego, a partir del array de valores esperados se construye otro array quitandole elementos a intervalos fijos.
+    \item Una vez generada la función, se la evalúa en un rango de valores para obtener un array de valores esperados.
+    \item Luego, a partir del array de valores esperados se construye otro array quitándole elementos a intervalos fijos.
         Este nuevo array será el utilizado para realizar la interpolación, y lo que testearemos es la aproximación de  la
         interpolación a los elementos que quitamos.
     \item Una vez que tenemos la interpolación con cualquiera de los métodos mencionados, basta recorrer los elementos del array de valores esperados a la vez que evaluamos la interpolación obtenida.
-        Para cada par de valores: esperado e interpolado, querremos ver que la diferencia absoluta es menor que un epsilon/cota de precision que
+        Para cada par de valores: esperado e interpolado, querremos ver que la diferencia absoluta es menor que un épsilon/cota de precisión que
         definiremos dependiendo del método utilizado y la función a interpolar.
 \end{itemize}
 
-Es importante mencionar algunas carácterísticas de las instancias utilizadas:
+Es importante mencionar algunas características de las instancias utilizadas:
 \begin{itemize}
     \item Cantidad de puntos generados con la función(tamaño del array de valores esperados): 100
     \item Cantidad de puntos a interpolar: 50.
@@ -92,7 +92,7 @@ Analizando dichas cotas vemos que:
 \begin{itemize}
     \item La Interpolación por Vecinos resulta razonable solo para funciones con muy
         poca variación (derivada a lo sumo constante). Esto se ve claramente en la
-        cota de presición al interpolar una función Cuadrática.
+        cota de precisión al interpolar una función Cuadrática.
     \item La Interpolación Fragmentaria Lineal es sustancialmente mejor que por Vecinos,
         y devuelve resultados razonables para funciones a lo sumo Cuadráticas.
     \item La Interpolación por Splines utilizando solo 2 puntos para cada bloque es
@@ -111,14 +111,14 @@ Analizando dichas cotas vemos que:
 
 \subsection{Medición de los tiempos de ejecución de los métodos}
 A partir de la implementaciones descriptas en la Sección \ref{Implementacion},
-podemos inferir una complejidad temporal para los metodos vecinos, interpolacion fragmentaria lineal e interpolacion por splines.
+podemos inferir una complejidad temporal para los métodos vecinos, interpolación fragmentaria lineal e interpolación por splines.
 
 Sea $w$ la cantidad de filas de píxeles en cada imagen, $h$ la cantidad de
 columnas, $i$ la cantidad de cuadros originales y sea $k$ la cantidad de
 cuadros a agregar entre los originales:
 
-Todos los metodos enumerados previamente tienen la misma complejidad temporal que es
- $\Theta(w*h*i*k*)$. Esta conclusion surge del hecho de que, en todos los casos,
+Todos los métodos enumerados previamente tienen la misma complejidad temporal que es
+ $\Theta(w*h*i*k*)$. Esta conclusión surge del hecho de que, en todos los casos,
  tenemos 4 ciclos anidados, en donde el primero se ejecuta $w$ veces, el segundo
  $h$ veces, el tercero $i$ veces, y el cuarto $k$ veces.
 %\begin{itemize}
@@ -129,13 +129,13 @@ Todos los metodos enumerados previamente tienen la misma complejidad temporal qu
 %\end{itemize}
 \newline
 \newline
-Para corroborar esta hipotesis planteamos un experimento con las siguientes caracteristicas:
+Para corroborar esta hipótesis planteamos un experimento con las siguientes características:
 \begin{itemize}
-  \item Utilizamos el video provisto por la catedra llamado \textit{funnybaby}, el cual tiene 44 cuadros y es de 240x320.
-  \item Solo medimos la resolucion del sistema, no su creacion o los respectivos pasajes de video a texto y viceversa.
+  \item Utilizamos el video provisto por la cátedra llamado \textit{funnybaby}, el cual tiene 44 cuadros y es de 240x320.
+  \item Solo medimos la resolución del sistema, no su creación o los respectivos pasajes de video a texto y viceversa.
   \item Dado que $w$, $h$ y $i$ son valores fijos que no podemos cambiar, variamos el $k$.
   \item Generamos instancias para valores de $k$ entre 1 y 6.
-  \item Para cada valor distinto de $k$ generamos 4 instancias, cuyos valores vamos a promediar para mitigar los posibles valores distorsionados por algun procedimiento del procesador.
+  \item Para cada valor distinto de $k$ generamos 4 instancias, cuyos valores vamos a promediar para mitigar los posibles valores distorsionados por algún procedimiento del procesador.
 \end{itemize}
 
 Los resultamos obtenidos fueron los siguientes:
@@ -194,7 +194,7 @@ Si tomamos los tiempos que arrojó la experimentación, y los dividimos por su r
     \end{tikzpicture}
 \end{center}
 
-A partir de los graficos, queda de manifiesto que los metodos tienen la misma complejidad temporal, ya que solo difieren en una constante.
+A partir de los gráficos, queda de manifiesto que los métodos tienen la misma complejidad temporal, ya que solo difieren en una constante.
 
 \subsection{Medición del ECM y PSNR de los métodos.}\label{ECM}
 Sea $F$ un frame del vídeo real (ideal) , y $\bar{F}$ el mismo frame del vídeo efectivamente construidos por alguno de los métodos. Sea $m$ la cantidad de filas de píxeles en cada imagen y $n$ la cantidad de columnas.
@@ -211,8 +211,8 @@ A su vez definimos \emph{Peak to Signal Noise Ratio}, \texttt{PSNR}, como el rea
 
 Ambas medidas nos sirven para realizar un análisis cuantitativo de la calidad de los resultados obtenidos con los distintos métodos.
 
-En este experimento utilizamos los videos propuestos al inicio de la experimentacion, variando la cantidad de cuadros que agregamos.
-Dichos videos fueron elegidos especificamente para variar la dificultad de Interpolación:
+En este experimento utilizamos los videos propuestos al inicio de la experimentación, variando la cantidad de cuadros que agregamos.
+Dichos videos fueron elegidos específicamente para variar la dificultad de Interpolación:
 \begin{itemize}
     \item El video \textbf{Amanecer} no contiene movimientos bruscos ni cambios de cámaras
         por lo que, para cualquier método, el error debería ser en lineas generales
@@ -322,7 +322,7 @@ Viendo las Figuras \ref{fig:ecm_sunrise_1}, \ref{fig:ecm_skate_1} y \ref{fig:ecm
     \item El rango de error obtenido por todos los métodos en los videos \textbf{Skate} y \textbf{Messi},
         son similares, y ambos mayores al rango obtenido en el video \textbf{Amanecer}.
     \item El error obtenido en el video \textbf{Skate} es bastante irregular
-        al compararlo con el video \textbf{Amanecer}, encontrandose un pico de error
+        al compararlo con el video \textbf{Amanecer}, encontrándose un pico de error
         en el movimiento más brusco del video.
     \item A diferencia del caso anterior, el error obtenido en el video \textbf{Messi}
         es bastante regular, a excepción del pico de error que encontramos cuando
@@ -410,7 +410,7 @@ Viendo las Figuras \ref{fig:ecm_sunrise_1}, \ref{fig:ecm_skate_1} y \ref{fig:ecm
 
 Sabiendo que, mientras más grande es el \texttt{ECM} más chico es el \texttt{PSNR},
 encontramos que la información provista por este último no aporta nuevos elementos
-al análisis, ya que se condice con lo análizado previamente utilizando el \texttt{ECM}.
+al análisis, ya que se condice con lo analizado previamente utilizando el \texttt{ECM}.
 
 \subsubsection{ECM - Agregando 5 cuadros}
 
@@ -495,10 +495,10 @@ al análisis, ya que se condice con lo análizado previamente utilizando el \tex
 Viendo las Figuras \ref{fig:ecm_sunrise_5}, \ref{fig:ecm_skate_5} y \ref{fig:ecm_messi_5} podemos decir que:
 \begin{itemize}
     \item El comportamiento general de los métodos para cada video no varió con respecto
-        al escenario en el cual agregabamos 1 cuadro. Los análisis de movimiento brusco y
+        al escenario en el cual agregábamos 1 cuadro. Los análisis de movimiento brusco y
         cambios de cámaras se reafirman.
     \item En lineas generales, y en todos los videos, el error se incrementó con respecto al
-        escenario en el cual agregabamos 1 cuadro, a excepción del método de Interpolación
+        escenario en el cual agregábamos 1 cuadro, a excepción del método de Interpolación
         por Vecinos, que mantiene su rango de error.
 \end{itemize}
 
@@ -583,11 +583,11 @@ Viendo las Figuras \ref{fig:ecm_sunrise_5}, \ref{fig:ecm_skate_5} y \ref{fig:ecm
 
 Sabiendo que, mientras más grande es el \texttt{ECM} más chico es el \texttt{PSNR},
 encontramos que la información provista por este último no aporta nuevos elementos
-al análisis, ya que se condice con lo análizado previamente utilizando el \texttt{ECM}.
+al análisis, ya que se condice con lo analizado previamente utilizando el \texttt{ECM}.
 
 \subsubsection{Conclusiones}
 
-En base a lo análizado, podemos concluir que:
+En base a lo analizado, podemos concluir que:
 
 \begin{itemize}
     \item El error máximo cometido por el método de Interpolación por Vecinos, en comparación
@@ -610,7 +610,7 @@ En base a lo análizado, podemos concluir que:
         experimento extra a continuación para comparar el error de dichos métodos.
     \item El video con movimientos suaves es mucho más sencillo de interpolar que los demás, y
         permite que incluso el método de Interpolación por Vecinos logre errores bajos.
-        Al ir agregando movimientos bruscos y cambios de camaras, los videos se vuelven más
+        Al ir agregando movimientos bruscos y cambios de cámaras, los videos se vuelven más
         difíciles de interpolar, aumentando el error obtenido con los distintos métodos.
 \end{itemize}
 
@@ -736,12 +736,12 @@ Los \textit{artifacts} son errores visuales resultantes de la aplicación de los
 Para analizar los artifacts producidos por las diferentes implementaciones de Cámara Lenta, utilizamos los siguientes videos:
 
 \begin{itemize}
-  \item \textbf{Video 1 - Skate}: 426x240, cantidad de cuadros originales: 151 , fps: 30, duracion: 5s.
-  \item \textbf{Video 2 - Messi}: 426x240, cantidad de cuadros originales: 151, fps: 30, duracion: 5s.
+  \item \textbf{Video 1 - Skate}: 426x240, cantidad de cuadros originales: 151 , fps: 30, duración: 5s.
+  \item \textbf{Video 2 - Messi}: 426x240, cantidad de cuadros originales: 151, fps: 30, duración: 5s.
 \end{itemize}
 
 A través de cada método de interpolación agregamos 10 cuadros entre cada par de frames de los videos.
-Asi, nos propusimos analizar el funcionamiento de cada tipo de interpolación para verificar si hay movimientos bruscos, elementos falsos (por ejemplo cuando una persona se mueve y se duplica su pierna) u otros tipos de anomalías.
+Así, nos propusimos analizar el funcionamiento de cada tipo de interpolación para verificar si hay movimientos bruscos, elementos falsos (por ejemplo cuando una persona se mueve y se duplica su pierna) u otros tipos de anomalías.
 Los resultados fueron los siguientes:
 
 \subsubsection{Interpolación por vecinos}
@@ -758,7 +758,7 @@ Los resultados fueron los siguientes:
 
 \begin{itemize}
 \item En este caso no encontramos los movimientos bruscos de interpolación por vecinos.
-\item Si podemos ver que hay congelamientos de imágen cada aproximadamente 1 segundo.
+\item Si podemos ver que hay congelamientos de imagen cada aproximadamente 1 segundo.
 \item Parecería haber un retroceso de calidad con respecto al método anterior.
 \item Detectamos imágenes falsas cuando las personas se mueven como:
 \end{itemize}
@@ -770,7 +770,7 @@ Los resultados fueron los siguientes:
 \begin{itemize}
 \item Con seguridad, este hasta ahora es el método que genera los videos más fluidos.
 \item Los movimientos de las cosas parecen naturales y no hay congelamientos ni transformaciones bruscas.
-\item Esto se lo atribuimos a que el método en sí aprovecha todos los datos del pixel a tráves del tiempo para producir resultados mejores que tienen que ver con el marco teórico que le dan los polinomio interpoladores de Lagrange.
+\item Esto se lo atribuimos a que el método en sí aprovecha todos los datos del píxel a través del tiempo para producir resultados mejores que tienen que ver con el marco teórico que le dan los polinomio interpoladores de Lagrange.
 \item Eso si, siguen habiendo imágenes falsas a causa del movimiento y no son menores pero si ligeramente mejores que en la interpolación lineal.
 \item Por ejemplo, en la instancia \textbf{Skate}, los resultados son del estilo:
 \end{itemize}
