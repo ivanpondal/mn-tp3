@@ -777,17 +777,7 @@ Los resultados fueron los siguientes:
 
 \includegraphics[scale=1]{imagenes/art2.png}
 
-\subsubsection{Interpolación por Splines de a bloques de 4 pixeles}
-
-\begin{itemize}
-\item En este caso parece haber un retroceso de calidad con respecto al método anterior.
-\item Los movimientos de las cosas parecen naturales.
-\item Pero si hay congelamientos.
-\item En particular, en el video \textbf{Messi} se nota claramente como la pelota se congela en algunos momentos.
-\item Esto era de esperarse debido a los bloques de tamaño fijo ubicados a través del tiempo.
-\end{itemize}
-
 \subsection{Comparación}
 
 Como pudimos ver, cada método introduce diferentes artifacts. En el caso de la Interpolación lineal, llama la atención que el resultado parece peor con respecto al de Vecinos. Esto nos indica que, si bien el error matemático de un método puede ser peor, las irregularidades visuales que introduce Interpolación lineal son peores para una persona usuario desde su punto de vista subjetivo.
-Mas alla de eso, con los analisis podemos ver que si bien los Splines de a bloques parece una idea interesante, puede introducir artifacts como congelamiento. Por lo tanto, debido a las particularidades que introduce cada método, parecería que la interpolación mediante Splines normales genera los mejores resultados.
+Podemos concluir que, debido a las particularidades que introduce cada método, parecería que la interpolación mediante Splines genera los mejores resultados.
